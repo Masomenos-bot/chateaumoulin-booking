@@ -1,8 +1,8 @@
-const Stripe = require('stripe');
+import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-exports.handler = async function(event) {
+export async function handler(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
   }
@@ -53,4 +53,4 @@ exports.handler = async function(event) {
       body: JSON.stringify({ error: error.message }),
     };
   }
-};
+}
