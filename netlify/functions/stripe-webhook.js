@@ -1,21 +1,15 @@
-/**
- * Netlify Function: Stripe Webhook handler.
- * Confirms bookings after successful payment.
- * POST /api/stripe-webhook
- */
-
-import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+const Stripe = require('stripe');
+const { createClient } = require('@supabase/supabase-js');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY, // service role for admin ops
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
 );
 
-export async function handler(event) {
+exports.handler = async function(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
   }
@@ -52,9 +46,6 @@ export async function handler(event) {
         }
 
         console.log(`Booking ${bookingId} confirmed via Stripe`);
-
-        // TODO: Trigger confirmation email via Resend/SendGrid
-        // await sendConfirmationEmail(bookingId);
       } catch (err) {
         console.error('Webhook processing error:', err);
         return { statusCode: 500, body: 'Processing failed' };
@@ -66,4 +57,4 @@ export async function handler(event) {
     statusCode: 200,
     body: JSON.stringify({ received: true }),
   };
-}
+};

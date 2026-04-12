@@ -1,14 +1,8 @@
-/**
- * Netlify Function: Create a Stripe Checkout session for 30% deposit.
- * POST /api/create-checkout
- * Body: { bookingId, amount, email }
- */
-
-import Stripe from 'stripe';
+const Stripe = require('stripe');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export async function handler(event) {
+exports.handler = async function(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
   }
@@ -31,10 +25,10 @@ export async function handler(event) {
           price_data: {
             currency: 'eur',
             product_data: {
-              name: 'Châteaumoulin — Dépôt de réservation (30%)',
-              description: `Réservation #${bookingId.slice(0, 8)}`,
+              name: 'Châteaumoulin — Booking deposit (30%)',
+              description: `Booking #${bookingId.slice(0, 8)}`,
             },
-            unit_amount: Math.round(amount), // amount in cents
+            unit_amount: Math.round(amount),
           },
           quantity: 1,
         },
@@ -59,4 +53,4 @@ export async function handler(event) {
       body: JSON.stringify({ error: error.message }),
     };
   }
-}
+};
