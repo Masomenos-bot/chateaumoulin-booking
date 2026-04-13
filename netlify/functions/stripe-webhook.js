@@ -92,8 +92,8 @@ export async function handler(event) {
 
         <!-- Eye GIF animated -->
         <tr>
-          <td align="center" style="padding:0 0 20px;">
-            <img src="${imgBase}/eye.png" alt="Eye" width="40" height="40" style="display:block;" />
+          <td align="center" style="padding:0 0 20px; text-align:center;">
+            <img src="${imgBase}/eye.gif" alt="Eye" width="40" height="40" style="display:inline-block; margin:0 auto;" />
           </td>
         </tr>
 
@@ -110,7 +110,7 @@ export async function handler(event) {
           <td style="padding:28px 0 0;">
             <table cellpadding="0" cellspacing="0">
               <tr>
-                <td style="background-color:#F5C518; padding:5px 12px;">
+                <td style="background-color:#F5C518; padding:5px 12px; border:3px solid #000; box-shadow: 4px 4px 0 #000; display:inline-block;">
                   <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">CONFIRMED</span>
                 </td>
                 <td style="padding-left:10px;">
@@ -191,17 +191,13 @@ export async function handler(event) {
 
         <!-- Branding: globe + masomenos logo -->
         <tr>
-          <td align="center" style="padding:32px 0 0;">
-            <table cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="padding-right:8px; vertical-align:middle;">
-                  <img src="${imgBase}/globe.gif" alt="" width="20" height="20" style="display:block; border-radius:50%;" />
-                </td>
-                <td style="vertical-align:middle;">
-                  <img src="${imgBase}/masomenos-logo.png" alt="masomenos" height="14" style="display:block;" />
-                </td>
-              </tr>
-            </table>
+          <td align="center" style="padding:32px 0 0; text-align:center;">
+            <div style="text-align:center;">
+              <img src="${imgBase}/globe.gif" alt="Masomenos" width="48" height="48" style="display:inline-block; margin-bottom:12px; border-radius:50%;" />
+            </div>
+            <div style="text-align:center;">
+              <img src="${imgBase}/masomenos-logo.png" alt="masomenos" height="16" style="display:inline-block;" />
+            </div>
           </td>
         </tr>
 

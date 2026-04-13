@@ -9,7 +9,7 @@ export const SEASON_END   = '2026-09-15';
 
 // ─── Cascade Pricing ─────────────────────────────────────
 export const TIERS = [
-  { label: 'Tier 1', deadline: '2026-05-15' },
+  { label: 'Tier 1', deadline: '2026-05-20' },
   { label: 'Tier 2', deadline: '2026-07-01' },
   { label: 'Tier 3', deadline: null },
 ];
@@ -37,6 +37,8 @@ export const COLORS = {
   lav:     '#A0522D',
   lavBg:   '#A0522D',
   lavStr:  '#FFFFFF',
+  yellow:  '#F5C518',
+  yellowBg: '#FFFAED',
 };
 
 export const MONTHS = [
