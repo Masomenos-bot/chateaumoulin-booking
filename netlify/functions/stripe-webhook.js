@@ -93,7 +93,7 @@ export async function handler(event) {
         <!-- Eye GIF animated -->
         <tr>
           <td align="center" style="padding:0 0 20px; text-align:center;">
-            <img src="${imgBase}/eye.gif" alt="Eye" width="40" height="40" style="display:inline-block; margin:0 auto;" />
+            <img src="${imgBase}/eye.gif" alt="Eye" width="80" height="80" style="display:inline-block; margin:0 auto;" />
           </td>
         </tr>
 
@@ -125,10 +125,10 @@ export async function handler(event) {
         <tr>
           <td style="padding:24px 0 0;">
             <p style="font-family:'Courier New',Courier,monospace; font-size:14px; color:#000; margin:0; line-height:1.7;">
-              Dear ${firstName},
+              Dear Jo,
             </p>
             <p style="font-family:'Courier New',Courier,monospace; font-size:13px; color:#000; margin:12px 0 0; line-height:1.7;">
-              Your booking at Chateaumoulin has been confirmed. Welcome to the Masomenos World community — we can't wait to host you this summer.
+              Your booking has been confirmed. Looking forward welcoming you at Chateaumoulin. Thank you for being part of the Masomenos World community!
             </p>
           </td>
         </tr>
@@ -180,7 +180,7 @@ export async function handler(event) {
         <!-- Footer -->
         <tr>
           <td style="padding:24px 0 0;">
-            <p style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#999; margin:0; line-height:1.7;">
+            <p style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#000; margin:0; line-height:1.7;">
               Questions? Write to us at <a href="mailto:chateaumoulin@masomenos.fr" style="color:#000; text-decoration:underline;">chateaumoulin@masomenos.fr</a>
             </p>
             <p style="font-family:'Courier New',Courier,monospace; font-size:10px; color:#bbb; margin:8px 0 0; line-height:1.5;">
