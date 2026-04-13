@@ -20,6 +20,8 @@ function toFrontend(row) {
   return {
     id: row.id,
     roomIds: row.room_ids,
+    firstName: row.first_name || '',
+    lastName: row.last_name || '',
     guest: row.guest_name,
     email: row.email,
     guests: row.guests,
@@ -35,7 +37,9 @@ function toFrontend(row) {
 function toBackend(booking) {
   return {
     room_ids: booking.roomIds,
-    guest_name: booking.guest,
+    first_name: booking.firstName || '',
+    last_name: booking.lastName || '',
+    guest_name: booking.guest || `${booking.firstName || ''} ${booking.lastName || ''}`.trim(),
     email: booking.email,
     guests: booking.guests,
     ages: booking.ages,

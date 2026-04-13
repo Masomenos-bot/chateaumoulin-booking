@@ -119,7 +119,7 @@ export default function GuestBooking() {
   const ref = useRef(null);
 
   const [f, setF] = useState({
-    numRooms: 1, guest: '', email: '', guests: 1, ages: '', checkIn: '', checkOut: '', notes: '',
+    numRooms: 1, firstName: '', lastName: '', email: '', guests: 1, ages: '', checkIn: '', checkOut: '', notes: '',
   });
 
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
@@ -167,7 +167,7 @@ export default function GuestBooking() {
     return true;
   }, [f.checkIn, f.checkOut, nR, bookings]);
 
-  const canSubmit = f.guest && f.email && f.checkIn && f.checkOut && inSeason(f.checkIn) && nights > 0 && available && !nc;
+  const canSubmit = f.firstName && f.lastName && f.email && f.checkIn && f.checkOut && inSeason(f.checkIn) && nights > 0 && available && !nc;
 
   function assignRooms() {
     return ROOMS.filter(r => {
@@ -188,7 +188,7 @@ export default function GuestBooking() {
       const roomIds = assignRooms();
       if (roomIds.length < nR) { setError('Not enough rooms available for these dates.'); return; }
       const booking = await createBooking({
-        roomIds, guest: f.guest, email: f.email, guests: Math.min(f.guests || 1, mx),
+        roomIds, firstName: f.firstName, lastName: f.lastName, guest: `${f.firstName} ${f.lastName}`, email: f.email, guests: Math.min(f.guests || 1, mx),
         ages: f.ages, checkIn: f.checkIn, checkOut: f.checkOut, status: 'prebooking', bookedOn, notes: f.notes,
       });
       await redirectToCheckout(booking.id, deposit * 100, f.email);
@@ -381,7 +381,10 @@ export default function GuestBooking() {
               <div><label style={lbl}>Guests (max {mx})</label><input style={inp} type="number" min={1} max={mx} value={f.guests || 1} onChange={e => set('guests', Math.min(parseInt(e.target.value) || 1, mx))} /></div>
             </div>
 
-            <div style={{ marginBottom: 12 }}><label style={lbl}>Full name</label><input style={inp} value={f.guest} onChange={e => set('guest', e.target.value)} placeholder="First Last" /></div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+              <div style={{ flex: 1 }}><label style={lbl}>First name</label><input style={inp} value={f.firstName} onChange={e => set('firstName', e.target.value)} placeholder="Marie" /></div>
+              <div style={{ flex: 1 }}><label style={lbl}>Last name</label><input style={inp} value={f.lastName} onChange={e => set('lastName', e.target.value)} placeholder="Dupont" /></div>
+            </div>
             <div style={{ marginBottom: 12 }}><label style={lbl}>Email</label><input style={inp} type="email" value={f.email} onChange={e => set('email', e.target.value)} placeholder="you@email.com" /></div>
             <div style={{ marginBottom: 12 }}><label style={lbl}>Guest ages</label><input style={inp} value={f.ages} onChange={e => set('ages', e.target.value)} placeholder="32, 30, 10" /></div>
 
