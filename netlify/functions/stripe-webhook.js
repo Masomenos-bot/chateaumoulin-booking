@@ -93,13 +93,19 @@ export async function handler(event) {
           <p>Best regards,<br />The Châteaumoulin Team</p>
         `;
 
-        await resend.emails.send({
-          from: 'bookings@masomenos.com',
+        console.log('About to send email via Resend');
+        console.log(`Email to: ${booking.email}`);
+        console.log(`From: chateaumoulin@shop.masomenos.fr`);
+        console.log(`Resend API Key exists: ${!!process.env.RESEND_API_KEY}`);
+
+        const emailResponse = await resend.emails.send({
+          from: 'chateaumoulin@shop.masomenos.fr',
           to: booking.email,
           subject: `Booking Confirmation — Châteaumoulin #${bookingId.slice(0, 8).toUpperCase()}`,
           html: emailHtml,
         });
 
+        console.log(`Email response:`, emailResponse);
         console.log(`Confirmation email sent to ${booking.email}`);
       } catch (err) {
         console.error('Webhook processing error:', err);
