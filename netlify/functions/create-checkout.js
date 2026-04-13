@@ -25,7 +25,7 @@ export async function handler(event) {
           price_data: {
             currency: 'eur',
             product_data: {
-              name: 'Châteaumoulin — Booking deposit (30%)',
+              name: 'Chateaumoulin — Booking deposit (30%)',
               description: `Booking #${bookingId.slice(0, 8)}`,
             },
             unit_amount: Math.round(amount),

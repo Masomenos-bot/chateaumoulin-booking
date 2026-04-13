@@ -232,7 +232,7 @@ export default function GuestBooking() {
       <div style={{ padding: `${isMobile ? 16 : 24}px ${px}px` }}>
         <h2 style={{ fontFamily: H, fontSize: isMobile ? 20 : 28, fontWeight: 700, marginBottom: 10 }}>Come Together</h2>
         <p style={{ fontSize: isMobile ? 11 : 12, color: MU, lineHeight: 1.7, maxWidth: 640 }}>
-          Châteaumoulin is a hosted estate in the south of France, created as a physical location for the Masomenos World community to thrive together. It runs on an open format — where art, music, and design naturally blend with the surrounding environment. Part house, part creative playground, it's a place to experience the Masomenos lifestyle in real life. 2026 edition runs from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
+          Chateaumoulin is a hosted estate in the south of France, created as a physical location for the Masomenos World community to thrive together. It runs on an open format — where art, music, and design naturally blend with the surrounding environment. Part house, part creative playground, it's a place to experience the Masomenos lifestyle in real life. 2026 edition runs from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
         </p>
       </div>
 
@@ -342,27 +342,50 @@ export default function GuestBooking() {
       </div>
 
       {/* Pricing grid */}
-      <div style={{ padding: `16px ${px}px`, borderTop: `1px solid ${BD}`, maxWidth: 500 }}>
-        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', color: MU, marginBottom: 10 }}>RATES €/NIGHT/ROOM</div>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, fontFamily: C }}>
+      <div style={{ padding: `16px ${px}px`, borderTop: `1px solid ${BD}` }}>
+        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', color: MU, marginBottom: 10 }}>PRICING GRID</div>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, fontFamily: C, marginBottom: 24 }}>
           <thead>
-            <tr style={{ borderBottom: `1px solid ${BD}` }}>
-              <td style={{ padding: '6px 4px' }}></td>
-              <td style={{ padding: '6px 4px', textAlign: 'center', fontWeight: 700, fontFamily: H, fontSize: 10 }}>Tier 1<br /><span style={{ fontWeight: 400, fontSize: 8, color: MU }}>before May 20</span></td>
-              <td style={{ padding: '6px 4px', textAlign: 'center', fontWeight: 700, fontFamily: H, fontSize: 10 }}>Tier 2<br /><span style={{ fontWeight: 400, fontSize: 8, color: MU }}>before Jul 1</span></td>
-              <td style={{ padding: '6px 4px', textAlign: 'center', fontWeight: 700, fontFamily: H, fontSize: 10 }}>Tier 3<br /><span style={{ fontWeight: 400, fontSize: 8, color: MU }}>after Jul 1</span></td>
+            <tr style={{ background: '#000', color: '#fff' }}>
+              <td style={{ padding: '8px 6px', fontWeight: 700 }}>Length of Stay</td>
+              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 700 }}>Tier 1<br /><span style={{ fontWeight: 400, fontSize: 8 }}>before May 20</span></td>
+              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 700 }}>Tier 2<br /><span style={{ fontWeight: 400, fontSize: 8 }}>before Jul 1</span></td>
+              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 700 }}>Tier 3<br /><span style={{ fontWeight: 400, fontSize: 8 }}>after Jul 1</span></td>
             </tr>
           </thead>
           <tbody>
-            {[['1-2 nights', 200, 270, 320], ['3-5 nights', 185, 265, 305], ['6+ nights', 170, 255, 290]].map(([l, ...v], i) => (
+            {[['1-2 nights', '200€', '270€', '320€'], ['3-5 nights', '185€', '265€', '305€'], ['6+ nights', '170€', '255€', '290€']].map(([l, ...v], i) => (
               <tr key={i} style={{ borderBottom: `1px solid ${BD}` }}>
-                <td style={{ padding: '6px 4px', color: MU, fontSize: 10 }}>{l}</td>
-                {v.map((x, j) => <td key={j} style={{ padding: '6px 4px', textAlign: 'center' }}>€{x}</td>)}
+                <td style={{ padding: '8px 6px', color: FG, fontSize: 11 }}>{l}</td>
+                {v.map((x, j) => <td key={j} style={{ padding: '8px 6px', textAlign: 'center', fontSize: 11 }}>{x}</td>)}
               </tr>
             ))}
           </tbody>
         </table>
-        <p style={{ fontSize: 9, color: MU, marginTop: 8, lineHeight: 1.5 }}>30% deposit at booking, balance on arrival. Free cancellation until end of tier, 30% retained after.</p>
+
+        {/* Proposal Details */}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', color: FG, marginBottom: 10, fontFamily: C }}>PROPOSAL DETAILS</div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 11, lineHeight: 1.7, color: FG, fontFamily: C }}>
+            <li style={{ marginBottom: 6 }}>• Only 5 rooms - community vibe, or take over the whole playground</li>
+            <li style={{ marginBottom: 6 }}>• Max 2 per room</li>
+            <li style={{ marginBottom: 6 }}>• Rooms flow on a first-come, first-served basis</li>
+            <li style={{ marginBottom: 6 }}>• Breakfast à la carte - Open community style coordinated kitchen</li>
+            <li style={{ marginBottom: 6 }}>• Kids welcome from 8+</li>
+            <li>• Little ones? Reach out — or go all in and book the full space.</li>
+          </ul>
+        </div>
+
+        {/* Terms of Payment */}
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', color: FG, marginBottom: 10, fontFamily: C }}>TERMS OF PAYMENT</div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 11, lineHeight: 1.7, color: FG, fontFamily: C }}>
+            <li style={{ marginBottom: 6 }}>• 30% deposit at reservation</li>
+            <li style={{ marginBottom: 6 }}>• Balance due upon arrival</li>
+            <li style={{ marginBottom: 6 }}>• Free cancellation until the last day of the tier the booking was made in</li>
+            <li>• 30% retained otherwise</li>
+          </ul>
+        </div>
       </div>
 
       {/* Footer */}
