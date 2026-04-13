@@ -222,7 +222,7 @@ export default function GuestBooking() {
           <img src={EYE} alt="" style={{ height: isMobile ? 24 : 32, opacity: 0.8 }} />
           <div>
             <div style={{ fontSize: isMobile ? 14 : 18, fontWeight: 700, letterSpacing: '0.12em', fontFamily: H }}>CHATEAUMOULIN</div>
-            {!isMobile && <div style={{ fontSize: 9, color: MU, letterSpacing: '0.2em', marginTop: 2 }}>SEASON 2026 · MAY 15 — SEP 15</div>}
+            {!isMobile && <div style={{ fontSize: 9, color: MU, letterSpacing: '0.2em', marginTop: 2 }}>SEASON 2026 · JUN 15 — SEP 15</div>}
           </div>
         </div>
         <button onClick={() => setShowForm(true)} style={{ padding: isMobile ? '6px 12px' : '8px 20px', border: '2px solid #000', background: '#000', color: BG, cursor: 'pointer', fontFamily: C, fontSize: isMobile ? 9 : 10, fontWeight: 700, letterSpacing: '0.1em' }}>+ NEW BOOKING</button>
@@ -342,7 +342,7 @@ export default function GuestBooking() {
       </div>
 
       {/* Pricing grid */}
-      <div style={{ padding: `16px ${px}px`, borderTop: `1px solid ${BD}` }}>
+      <div style={{ padding: `16px ${px}px`, borderTop: `1px solid ${BD}`, maxWidth: 600 }}>
         <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', color: MU, marginBottom: 10 }}>PRICING GRID</div>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, fontFamily: C, marginBottom: 24 }}>
           <thead>
@@ -418,8 +418,8 @@ export default function GuestBooking() {
             {nc && <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 12, color: '#C62828' }}>Children under 8 — please book the full estate (5 rooms) or <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline' }}>contact us</a>.</div>}
 
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
-              <div><label style={lbl}>Check-in</label><input style={inp} type="date" value={f.checkIn} min="2026-05-15" max="2026-09-14" onChange={e => set('checkIn', e.target.value)} /></div>
-              <div><label style={lbl}>Check-out</label><input style={inp} type="date" value={f.checkOut} min="2026-05-16" max="2026-09-15" onChange={e => set('checkOut', e.target.value)} /></div>
+              <div><label style={lbl}>Check-in</label><input style={inp} type="date" value={f.checkIn} min="2026-06-15" max="2026-09-14" onChange={e => set('checkIn', e.target.value)} /></div>
+              <div><label style={lbl}>Check-out</label><input style={inp} type="date" value={f.checkOut} min="2026-06-16" max="2026-09-15" onChange={e => set('checkOut', e.target.value)} /></div>
             </div>
 
             {!available && f.checkIn && f.checkOut && <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 12, color: '#C62828' }}>Not enough rooms available for these dates.</div>}

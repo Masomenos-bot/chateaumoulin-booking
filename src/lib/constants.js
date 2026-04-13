@@ -4,7 +4,7 @@ export const ROOMS = [
 ];
 
 // ─── Season ──────────────────────────────────────────────
-export const SEASON_START = '2026-05-15';
+export const SEASON_START = '2026-06-15';
 export const SEASON_END   = '2026-09-15';
 
 // ─── Cascade Pricing ─────────────────────────────────────
