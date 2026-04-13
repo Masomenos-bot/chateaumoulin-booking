@@ -36,11 +36,11 @@ function PaymentSuccess() {
       padding: 40,
     }}>
       <div>
-        <img src="/eye.gif" alt="Confirmed" style={{ height: 60, marginBottom: 20, display: 'block', margin: '0 auto 20px' }} />
-        <h1 style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: 24, marginBottom: 12 }}>
+        <img src="/eye.gif" alt="Confirmed" style={{ height: 80, marginBottom: 20, display: 'block', margin: '0 auto 20px' }} />
+        <h1 style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: 26, marginBottom: 12 }}>
           Booking confirmed
         </h1>
-        <p style={{ color: '#999', fontSize: 14, maxWidth: 400 }}>
+        <p style={{ color: '#000', fontSize: 15, maxWidth: 400 }}>
           Your deposit has been received. You'll get a confirmation email shortly.
         </p>
         <a href="/" style={{
@@ -75,10 +75,10 @@ function PaymentCancel() {
     }}>
       <div>
         <div style={{ fontSize: 48, marginBottom: 20 }}>✕</div>
-        <h1 style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: 24, marginBottom: 12 }}>
+        <h1 style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: 26, marginBottom: 12 }}>
           Payment cancelled
         </h1>
-        <p style={{ color: '#999', fontSize: 14, maxWidth: 400 }}>
+        <p style={{ color: '#000', fontSize: 15, maxWidth: 400 }}>
           Your booking is pending. You can retry the payment or contact us.
         </p>
         <a href="/" style={{

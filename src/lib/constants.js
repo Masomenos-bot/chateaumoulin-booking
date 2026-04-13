@@ -4,7 +4,7 @@ export const ROOMS = [
 ];
 
 // ─── Season ──────────────────────────────────────────────
-export const SEASON_START = '2026-06-15';
+export const SEASON_START = '2026-05-15';
 export const SEASON_END   = '2026-09-15';
 
 // ─── Cascade Pricing ─────────────────────────────────────
@@ -29,7 +29,7 @@ export const FONTS = {
 export const COLORS = {
   bg:      '#F5F3ED',
   fg:      '#000',
-  muted:   '#999',
+  muted:   '#000',
   border:  '#e0dcd0',
   rose:    '#E91E7A',
   roseBg:  '#E91E7A',
