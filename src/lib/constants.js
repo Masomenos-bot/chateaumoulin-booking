@@ -38,7 +38,8 @@ export const COLORS = {
   lavBg:   '#A0522D',
   lavStr:  '#FFFFFF',
   yellow:  '#F5C518',
-  yellowBg: '#FFFAED',
+  yellowBg: '#F5C518',
+  yellowStr: '#000000',
 };
 
 export const MONTHS = [

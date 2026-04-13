@@ -36,7 +36,7 @@ function PaymentSuccess() {
       padding: 40,
     }}>
       <div>
-        <div style={{ fontSize: 48, marginBottom: 20 }}>✓</div>
+        <img src="/eye.gif" alt="Confirmed" style={{ height: 60, marginBottom: 20, display: 'block', margin: '0 auto 20px' }} />
         <h1 style={{ fontFamily: "'Helvetica Neue', sans-serif", fontSize: 24, marginBottom: 12 }}>
           Booking confirmed
         </h1>
