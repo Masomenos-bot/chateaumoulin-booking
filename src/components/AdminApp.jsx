@@ -7,9 +7,10 @@ const RATES=[{"1-2":200,"3-5":185,"6+":170},{"1-2":270,"3-5":265,"6+":255},{"1-2
 const MS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const SS="2026-06-15",SE="2026-09-15";
 const H="'Helvetica Neue',Helvetica,Arial,sans-serif",C="'Courier New',Courier,monospace";
-const BG="#F5F3ED",FG="#000",MU="#999",BD="#e0dcd0";
+const BG="#F5F3ED",FG="#000",MU="#000",BD="#e0dcd0";
 const ROSE="#E91E7A",ROSE_BG="#E91E7A",RS="#FFFFFF";
 const LAV="#A0522D",LAV_BG="#A0522D",LS="#FFFFFF";
+const YELLOW="#F5C518",YELLOW_BG="#F5C518",YS="#000000";
 const EYE="data:image/png;base64,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";
 
 function dk(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -106,10 +107,10 @@ function DayPanel({dk:dKey,bookings,rooms,onClose,onEdit,isMobile}){
   const d=parseD(dKey);const label=dn(dKey)+", "+d.getDate()+" "+MS[d.getMonth()];
   const Itm=({b,accent})=>{
     const nights=Math.round((parseD(b.checkOut)-parseD(b.checkIn))/86400000);const isPre=b.status==="prebooking";
-    return(<div onClick={()=>onEdit(b)} style={{padding:"6px 8px",marginBottom:3,borderLeft:`2px solid ${accent||(isPre?LAV:ROSE)}`,background:isPre?LAV_BG:ROSE_BG,cursor:"pointer"}}>
+    return(<div onClick={()=>onEdit(b)} style={{padding:"6px 8px",marginBottom:3,borderLeft:`2px solid ${accent||(isPre?LAV:YELLOW)}`,background:isPre?LAV_BG:YELLOW_BG,cursor:"pointer"}}>
       <span style={{fontWeight:700,fontFamily:H,fontSize:11}}>{b.guest}</span>
       <span style={{color:MU,marginLeft:8,fontFamily:C,fontSize:9}}>{b.roomIds.length}rm · {b.guests}p · {nights}n · {isPre?"pre":"conf"}</span>
-      {b.notes&&<div style={{fontSize:8,color:"#bbb",fontFamily:C}}>{b.notes}</div>}
+      {b.notes&&<div style={{fontSize:8,color:"#000",fontFamily:C}}>{b.notes}</div>}
     </div>);
   };
   return(<div style={{padding:isMobile?"12px 14px":"16px 20px",background:"#fff",border:"1px solid #000",marginBottom:12}}>
@@ -139,11 +140,11 @@ function OccBar({bookings,rooms,refDay,label}){
 
 function Card({b,onClick}){
   const nights=Math.round((parseD(b.checkOut)-parseD(b.checkIn))/86400000);const nr=b.roomIds.length;const isPre=b.status==="prebooking";
-  return(<div onClick={()=>onClick(b)} style={{padding:"8px 10px",marginBottom:4,cursor:"pointer",borderLeft:isPre?`2px solid ${LAV}`:`2px solid ${ROSE}`,background:isPre?LAV_BG:ROSE_BG,transition:"padding-left 0.15s"}}
+  return(<div onClick={()=>onClick(b)} style={{padding:"8px 10px",marginBottom:4,cursor:"pointer",borderLeft:isPre?`2px solid ${LAV}`:`2px solid ${YELLOW}`,background:isPre?LAV_BG:YELLOW_BG,transition:"padding-left 0.15s"}}
     onMouseEnter={e=>e.currentTarget.style.paddingLeft="14px"} onMouseLeave={e=>e.currentTarget.style.paddingLeft="10px"}>
     <div style={{fontSize:12,fontWeight:700,color:FG,fontFamily:H}}>{b.guest}</div>
     <div style={{fontSize:10,color:MU,marginTop:2,fontFamily:C}}>{nr}rm · {b.guests}p · {nights}n · {b.checkIn.slice(5)} → {b.checkOut.slice(5)}</div>
-    {b.notes&&<div style={{fontSize:9,color:"#bbb",marginTop:2,fontFamily:C}}>{b.notes}</div>}
+    {b.notes&&<div style={{fontSize:9,color:"#000",marginTop:2,fontFamily:C}}>{b.notes}</div>}
   </div>);
 }
 
@@ -168,7 +169,29 @@ function Sidebar({bookings,rooms,occDay,occLabel,selDay,onEdit}){
   </>);
 }
 
-export default function App(){
+function Login({onAuth}){
+  const[pwd,setPwd]=useState("");
+  const[error,setError]=useState("");
+  const submit=()=>{
+    if(pwd===process.env.REACT_APP_ADMIN_PASSWORD||pwd==="chateaumoulin"){
+      localStorage.setItem("adminAuth","true");
+      onAuth();
+    }else{
+      setError("Invalid password");
+      setPwd("");
+    }
+  };
+  return(<div style={{fontFamily:C,background:BG,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:FG}}>
+    <div style={{padding:32,border:"1px solid #000",background:"#fff",maxWidth:300,textAlign:"center"}}>
+      <div style={{fontSize:16,fontWeight:700,marginBottom:20,fontFamily:H}}>ADMIN ACCESS</div>
+      <input style={{...inp,marginBottom:12}} type="password" placeholder="Enter password" value={pwd} onChange={e=>setPwd(e.target.value)} onKeyPress={e=>e.key==="Enter"&&submit()} autoFocus />
+      {error&&<div style={{fontSize:12,color:"#c00",marginBottom:12,fontFamily:C}}>{error}</div>}
+      <button onClick={submit} style={{width:"100%",padding:"8px 16px",border:"1px solid #000",background:"#000",color:BG,cursor:"pointer",fontFamily:C,fontSize:11,fontWeight:700}}>LOGIN</button>
+    </div>
+  </div>);
+}
+
+function AdminContent(){
   const isMobile=useIsMobile();
   const[year,setYear]=useState(2026);
   const[month,setMonth]=useState(5);
@@ -205,7 +228,7 @@ export default function App(){
       <div style={{display:"flex",alignItems:"center",gap:isMobile?10:16}}>
         <img src={EYE} alt="" style={{height:isMobile?24:32,opacity:0.8}} />
         <div>
-          <div style={{fontSize:isMobile?14:18,fontWeight:700,letterSpacing:"0.12em",fontFamily:H}}>CHÂTEAUMOULIN</div>
+          <div style={{fontSize:isMobile?14:18,fontWeight:700,letterSpacing:"0.12em",fontFamily:H}}>CHATEAUMOULIN</div>
           {!isMobile&&<div style={{fontSize:9,color:MU,letterSpacing:"0.2em",marginTop:2,fontFamily:C}}>BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>}
         </div>
       </div>
@@ -235,7 +258,7 @@ export default function App(){
         </div>
       ):(
         <div style={{display:"flex",gap:16,fontSize:9,letterSpacing:"0.1em",fontFamily:C}}>
-          <span><span style={{display:"inline-block",width:10,height:10,background:ROSE,marginRight:4,verticalAlign:"middle"}} /> CONFIRMED</span>
+          <span><span style={{display:"inline-block",width:10,height:10,background:YELLOW,marginRight:4,verticalAlign:"middle"}} /> CONFIRMED</span>
           <span><span style={{display:"inline-block",width:10,height:10,background:LAV,marginRight:4,verticalAlign:"middle"}} /> PRE-BOOKING</span>
           <span style={{color:MU,opacity:0.5}}>/// OFF</span>
         </div>
@@ -286,8 +309,8 @@ export default function App(){
                       if(off)return <div key={d} style={{width:CW,height:isMobile?34:38,flexShrink:0,background:"repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px)"}} />;
                       if(b){const isPre=b.status==="prebooking";
                         return(<div key={d} style={{width:CW,height:isMobile?34:38,flexShrink:0,display:"flex",alignItems:"center",cursor:"pointer",position:"relative",background:isSel?"rgba(0,0,0,0.04)":"transparent"}} onClick={()=>setModal({type:"edit",data:b})} title={b.guest}>
-                          <div style={{position:"absolute",left:isCI?2:0,right:0,top:4,bottom:4,background:isPre?LAV_BG:ROSE_BG,borderLeft:isCI?`2px solid ${isPre?LAV:ROSE}`:"none"}}>
-                            {isCI&&<div style={{fontSize:isMobile?7:8,fontWeight:700,padding:"1px 3px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",color:isPre?LS:RS,fontFamily:C}}>{b.guest.split(" ")[0].toUpperCase()}</div>}
+                          <div style={{position:"absolute",left:isCI?2:0,right:0,top:4,bottom:4,background:isPre?LAV_BG:YELLOW_BG,borderLeft:isCI?`2px solid ${isPre?LAV:YELLOW}`:"none"}}>
+                            {isCI&&<div style={{fontSize:isMobile?7:8,fontWeight:700,padding:"1px 3px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",color:isPre?LS:YS,fontFamily:C}}>{b.guest.split(" ")[0].toUpperCase()}</div>}
                           </div>
                         </div>);
                       }
@@ -315,4 +338,16 @@ export default function App(){
         bookings={bookings} onSave={save} onCancel={()=>setModal(null)} onDelete={modal.type==="edit"?del:null} isMobile={isMobile} />
     </Modal>)}
   </div>);
+}
+
+export default function AdminApp() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('adminAuth') === 'true';
+  });
+
+  if (!isAuthenticated) {
+    return <Login onAuth={() => setIsAuthenticated(true)} />;
+  }
+
+  return <AdminContent />;
 }
