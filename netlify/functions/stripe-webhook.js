@@ -209,7 +209,7 @@ export async function handler(event) {
         `;
 
         const emailResponse = await resend.emails.send({
-          from: 'Chateaumoulin <chateaumoulin@shop.masomenos.fr>',
+          from: 'Chateaumoulin <chateaumoulin@world.masomenos.fr>',
           to: booking.email,
           subject: `Booking Confirmed — Chateaumoulin #${bookingId.slice(0, 8).toUpperCase()}`,
           html: emailHtml,
