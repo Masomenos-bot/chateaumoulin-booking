@@ -8,11 +8,11 @@ import { dateKey } from '../lib/constants';
  */
 
 const SAMPLE_BOOKINGS = [
-  { id: 'b1', room_ids: ['r1'], guest_name: 'Marie Dupont', email: 'marie@email.com', guests: 2, ages: '32, 30', check_in: '2026-06-20', check_out: '2026-06-25', status: 'confirmed', booked_on: '2026-04-01', notes: '' },
-  { id: 'b2', room_ids: ['r2'], guest_name: 'James Wheeler', email: 'james@email.com', guests: 2, ages: '28, 27', check_in: '2026-06-18', check_out: '2026-06-22', status: 'confirmed', booked_on: '2026-03-20', notes: '' },
-  { id: 'b3', room_ids: ['r3', 'r4'], guest_name: 'Lucia Fernandez', email: 'lucia@email.com', guests: 4, ages: '35, 33, 10, 8', check_in: '2026-06-25', check_out: '2026-06-30', status: 'prebooking', booked_on: '2026-04-08', notes: 'Arriving late ~22h' },
-  { id: 'b4', room_ids: ['r1', 'r2'], guest_name: 'Karim Bensaid', email: 'karim@email.com', guests: 3, ages: '40, 38, 12', check_in: '2026-07-01', check_out: '2026-07-06', status: 'prebooking', booked_on: '2026-04-05', notes: '' },
-  { id: 'b5', room_ids: ['r1', 'r2', 'r3', 'r4', 'r5'], guest_name: 'Anna Schmidt', email: 'anna@email.com', guests: 8, ages: '45, 42, 15, 12, 10, 8, 4, 2', check_in: '2026-07-10', check_out: '2026-07-20', status: 'prebooking', booked_on: '2026-04-09', notes: 'Full estate — young children' },
+  { id: 'b1', room_ids: ['r1'], first_name: 'Marie', last_name: 'Dupont', guest_name: 'Marie Dupont', email: 'marie@email.com', guests: 2, ages: '32, 30', check_in: '2026-06-20', check_out: '2026-06-25', status: 'confirmed', booked_on: '2026-04-01', notes: '', show_initials: false, with_children: false, kids_ages: '' },
+  { id: 'b2', room_ids: ['r2'], first_name: 'James', last_name: 'Wheeler', guest_name: 'James Wheeler', email: 'james@email.com', guests: 2, ages: '28, 27', check_in: '2026-06-18', check_out: '2026-06-22', status: 'confirmed', booked_on: '2026-03-20', notes: '', show_initials: true, with_children: false, kids_ages: '' },
+  { id: 'b3', room_ids: ['r3', 'r4'], first_name: 'Lucia', last_name: 'Fernandez', guest_name: 'Lucia Fernandez', email: 'lucia@email.com', guests: 4, ages: '35, 33, 10, 8', check_in: '2026-06-25', check_out: '2026-06-30', status: 'prebooking', booked_on: '2026-04-08', notes: 'Arriving late ~22h', show_initials: false, with_children: true, kids_ages: '10, 8' },
+  { id: 'b4', room_ids: ['r1', 'r2'], first_name: 'Karim', last_name: 'Bensaid', guest_name: 'Karim Bensaid', email: 'karim@email.com', guests: 3, ages: '40, 38, 12', check_in: '2026-07-01', check_out: '2026-07-06', status: 'prebooking', booked_on: '2026-04-05', notes: '', show_initials: true, with_children: true, kids_ages: '12' },
+  { id: 'b5', room_ids: ['r1', 'r2', 'r3', 'r4', 'r5'], first_name: 'Anna', last_name: 'Schmidt', guest_name: 'Anna Schmidt', email: 'anna@email.com', guests: 8, ages: '45, 42, 15, 12, 10, 8, 4, 2', check_in: '2026-07-10', check_out: '2026-07-20', status: 'prebooking', booked_on: '2026-04-09', notes: 'Full estate — young children', show_initials: false, with_children: true, kids_ages: '15, 12, 10, 8, 4, 2' },
 ];
 
 // Map DB column names to frontend field names
@@ -31,6 +31,9 @@ function toFrontend(row) {
     status: row.status,
     bookedOn: row.booked_on,
     notes: row.notes || '',
+    initials: row.show_initials || false,
+    withChildren: row.with_children || false,
+    kidsAges: row.kids_ages || '',
   };
 }
 
@@ -48,6 +51,9 @@ function toBackend(booking) {
     status: booking.status,
     booked_on: booking.bookedOn,
     notes: booking.notes || '',
+    show_initials: booking.initials || false,
+    with_children: booking.withChildren || false,
+    kids_ages: booking.kidsAges || '',
   };
 }
 

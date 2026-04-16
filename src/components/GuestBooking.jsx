@@ -3,34 +3,14 @@ import { useBookings } from '../hooks/useBookings';
 import { redirectToCheckout } from '../lib/stripe';
 import {
   ROOMS, SEASON_START, SEASON_END, TIERS, RATES, MONTHS,
-  FONTS, COLORS, DEPOSIT_PERCENT, CONTACT_EMAIL,
+  DEPOSIT_PERCENT, CONTACT_EMAIL,
   dateKey, addDays, parseDate, daysInMonth, inSeason,
   getTier, getBucket, getPrice, dayName, nightsBetween,
 } from '../lib/constants';
 
-const H = FONTS.heading;
-const C = FONTS.mono;
-const BG = COLORS.bg;
-const FG = COLORS.fg;
-const MU = COLORS.muted;
-const BD = COLORS.border;
-const ROSE = COLORS.rose;
-const ROSE_BG = COLORS.roseBg;
-const RS = COLORS.roseStr;
-const LAV = COLORS.lav;
-const LAV_BG = COLORS.lavBg;
-const LS = COLORS.lavStr;
-const YELLOW = COLORS.yellow;
-const YELLOW_BG = COLORS.yellowBg;
-const YS = COLORS.yellowStr;
-
-const EYE = "data:image/png;base64,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";
-
 const TODAY = new Date();
 const todayKey = dateKey(TODAY);
-
-const lbl = { display: 'block', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: MU, marginBottom: 4, fontFamily: C };
-const inp = { width: '100%', padding: '9px 10px', border: '1px solid #ccc', fontSize: 13, fontFamily: C, background: '#FDFBF5', outline: 'none', boxSizing: 'border-box', color: FG };
+const pad = n => String(n).padStart(2, '0');
 
 function useIsMobile() {
   const [m, setM] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
@@ -42,86 +22,32 @@ function useIsMobile() {
   return m;
 }
 
-/* ─── Day Panel (read-only for guests) ──────────────── */
-function DayPanel({ dk: dKey, bookings, rooms, onClose, onBook, isMobile }) {
-  const dayB = bookings.filter(b => b.checkIn <= dKey && b.checkOut > dKey);
-  const arr = bookings.filter(b => b.checkIn === dKey);
-  const dep = bookings.filter(b => b.checkOut === dKey);
-  const occ = dayB.flatMap(b => b.roomIds);
-  const free = 5 - new Set(occ).size;
-  const d = parseDate(dKey);
-  const label = dayName(dKey) + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()];
-
-  return (
-    <div style={{ padding: isMobile ? '12px 14px' : '16px 20px', background: '#fff', border: '1px solid #000', marginBottom: 12 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <div style={{ fontSize: isMobile ? 13 : 14, fontWeight: 700, fontFamily: H }}>{label}</div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, fontFamily: H, color: FG }}>✕</button>
-      </div>
-      <div style={{ display: 'flex', gap: 3, marginBottom: 6 }}>
-        {rooms.map(r => {
-          const o = occ.includes(r.id);
-          return <div key={r.id} style={{ flex: 1, height: 5, background: o ? '#000' : BD }} />;
-        })}
-      </div>
-      <div style={{ fontSize: 10, color: MU, fontFamily: C, marginBottom: 10 }}>
-        {free} slot{free !== 1 ? 's' : ''} free · {dayB.length} booking{dayB.length !== 1 ? 's' : ''}
-      </div>
-
-      {arr.length > 0 && (
-        <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', color: MU, fontFamily: C, marginBottom: 4 }}>ARRIVING</div>
-          {arr.map(b => <GuestItem key={b.id} b={b} accent="#2E7D32" />)}
-        </div>
-      )}
-      {dep.length > 0 && (
-        <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', color: MU, fontFamily: C, marginBottom: 4 }}>DEPARTING</div>
-          {dep.map(b => <GuestItem key={b.id} b={b} accent="#C62828" />)}
-        </div>
-      )}
-      {dayB.length > 0 && (
-        <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', color: MU, fontFamily: C, marginBottom: 4 }}>IN HOUSE</div>
-          {dayB.map(b => <GuestItem key={b.id} b={b} />)}
-        </div>
-      )}
-      {dayB.length === 0 && dep.length === 0 && (
-        <div style={{ fontSize: 11, color: MU, fontFamily: C, fontStyle: 'italic' }}>No bookings</div>
-      )}
-
-      {free > 0 && (
-        <button onClick={() => onBook(dKey)} style={{ marginTop: 10, width: '100%', padding: '10px 20px', border: '2px solid #000', background: '#000', color: BG, cursor: 'pointer', fontFamily: C, fontSize: 10, fontWeight: 700, letterSpacing: '0.1em' }}>
-          BOOK THIS DATE · {free} SLOT{free !== 1 ? 'S' : ''} FREE
-        </button>
-      )}
-    </div>
-  );
+function displayName(b) {
+  if (b.initials) {
+    return ((b.firstName?.[0] || '') + (b.lastName?.[0] || '')).toUpperCase();
+  }
+  return b.firstName || b.guest?.split(' ')[0] || '';
 }
 
-function GuestItem({ b, accent }) {
-  const nights = nightsBetween(b.checkIn, b.checkOut);
-  const isPre = b.status === 'prebooking';
-  return (
-    <div style={{ padding: '6px 8px', marginBottom: 3, borderLeft: `2px solid ${accent || (isPre ? LAV : YELLOW)}`, background: isPre ? LAV_BG : YELLOW_BG }}>
-      <span style={{ fontWeight: 700, fontFamily: H, fontSize: 11 }}>{b.guest}</span>
-      <span style={{ color: MU, marginLeft: 8, fontFamily: C, fontSize: 10 }}>{b.roomIds.length}rm · {b.guests}p · {nights}n</span>
-    </div>
-  );
-}
-
-/* ─── Main Guest Component ──────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   GuestBooking — matches frontend-mockup-v1.html
+   ═══════════════════════════════════════════════════════════ */
 export default function GuestBooking() {
   const isMobile = useIsMobile();
   const { bookings, createBooking } = useBookings();
   const [showForm, setShowForm] = useState(false);
+  const [editBooking, setEditBooking] = useState(null);
   const [selDay, setSelDay] = useState(null);
   const [error, setError] = useState(null);
   const [weekStart, setWeekStart] = useState(parseDate("2026-06-15"));
   const [view, setView] = useState("week");
 
   const [f, setF] = useState({
-    numRooms: 1, firstName: '', lastName: '', email: '', guests: 1, ages: '', checkIn: '', checkOut: '', notes: '',
+    firstName: '', lastName: '', initials: false,
+    numRooms: 1, guests: 2, status: 'prebooking',
+    checkIn: '', checkOut: '',
+    withChildren: false, kidsAges: '',
+    notes: '',
   });
 
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
@@ -133,25 +59,20 @@ export default function GuestBooking() {
   const deposit = Math.round(total * DEPOSIT_PERCENT);
   const ti = getTier(bookedOn);
   const mx = nR * 2;
-  const full = nR === 5;
-  const ages = f.ages ? f.ages.split(',').map(a => parseInt(a.trim())).filter(n => !isNaN(n)) : [];
-  const u8 = ages.some(a => a < 8);
-  const nc = u8 && !full;
 
+  // Calendar state
   const curMonth = weekStart.getMonth();
   const curYear = weekStart.getFullYear();
   const dimMonth = daysInMonth(curYear, curMonth);
   const days = view === "week"
     ? Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
     : Array.from({ length: dimMonth }, (_, i) => new Date(curYear, curMonth, i + 1));
-  const CW = view === "week" ? (isMobile ? 52 : 120) : (isMobile ? 28 : 36);
-  const ROW_H = view === "week" ? (isMobile ? 44 : 60) : (isMobile ? 24 : 28);
 
   // Build occupancy map
   const map = useMemo(() => {
     const m = {};
     bookings.forEach(b => {
-      b.roomIds.forEach(rid => {
+      (b.roomIds || []).forEach(rid => {
         let c = parseDate(b.checkIn);
         const e = parseDate(b.checkOut);
         while (c < e) { m[rid + '_' + dateKey(c)] = b; c = addDays(c, 1); }
@@ -160,28 +81,28 @@ export default function GuestBooking() {
     return m;
   }, [bookings]);
 
-  // Check availability
+  // Availability check
   const available = useMemo(() => {
     if (!f.checkIn || !f.checkOut) return true;
     for (let d = parseDate(f.checkIn); d < parseDate(f.checkOut); d = addDays(d, 1)) {
       const key = dateKey(d);
       const occupied = new Set();
       bookings.forEach(b => {
-        if (b.checkIn <= key && b.checkOut > key) b.roomIds.forEach(rid => occupied.add(rid));
+        if (b.checkIn <= key && b.checkOut > key) (b.roomIds || []).forEach(rid => occupied.add(rid));
       });
       if (5 - occupied.size < nR) return false;
     }
     return true;
   }, [f.checkIn, f.checkOut, nR, bookings]);
 
-  const canSubmit = f.firstName && f.lastName && f.email && f.checkIn && f.checkOut && inSeason(f.checkIn) && nights > 0 && available && !nc;
+  const canSubmit = f.firstName && f.checkIn && f.checkOut && inSeason(f.checkIn) && nights > 0 && available;
 
   function assignRooms() {
     return ROOMS.filter(r => {
       for (let d = parseDate(f.checkIn); d < parseDate(f.checkOut); d = addDays(d, 1)) {
         const key = dateKey(d);
         for (const b of bookings) {
-          if (b.checkIn <= key && b.checkOut > key && b.roomIds.includes(r.id)) return false;
+          if (b.checkIn <= key && b.checkOut > key && (b.roomIds || []).includes(r.id)) return false;
         }
       }
       return true;
@@ -195,8 +116,21 @@ export default function GuestBooking() {
       const roomIds = assignRooms();
       if (roomIds.length < nR) { setError('Not enough rooms available for these dates.'); return; }
       const booking = await createBooking({
-        roomIds, firstName: f.firstName, lastName: f.lastName, guest: `${f.firstName} ${f.lastName}`, email: f.email, guests: Math.min(f.guests || 1, mx),
-        ages: f.ages, checkIn: f.checkIn, checkOut: f.checkOut, status: 'prebooking', bookedOn, notes: f.notes,
+        roomIds,
+        firstName: f.firstName,
+        lastName: f.lastName,
+        guest: `${f.firstName} ${f.lastName}`.trim(),
+        email: f.email || '',
+        guests: Math.min(f.guests || 1, mx),
+        ages: f.kidsAges || '',
+        checkIn: f.checkIn,
+        checkOut: f.checkOut,
+        status: 'prebooking',
+        bookedOn,
+        notes: f.notes,
+        initials: f.initials,
+        withChildren: f.withChildren,
+        kidsAges: f.kidsAges,
       });
       await redirectToCheckout(booking.id, deposit * 100, f.email);
     } catch (e) {
@@ -205,252 +139,342 @@ export default function GuestBooking() {
     }
   }
 
-  // Open booking form pre-filled with date
-  function bookFromDay(dKey) {
-    setF(prev => ({ ...prev, checkIn: dKey, checkOut: dateKey(addDays(parseDate(dKey), 2)) }));
-    setSelDay(null);
+  function openBookingForm(dKey) {
+    setF({
+      firstName: '', lastName: '', initials: false,
+      numRooms: 1, guests: 2, status: 'prebooking',
+      checkIn: dKey || '', checkOut: dKey ? dateKey(addDays(parseDate(dKey), 2)) : '',
+      withChildren: false, kidsAges: '',
+      notes: '',
+    });
+    setEditBooking(null);
     setShowForm(true);
   }
 
-  const weekEnd = addDays(weekStart, 6);
-  const navLabel = view === "week"
-    ? `${weekStart.getDate()} ${MONTHS[curMonth].slice(0,3).toUpperCase()} — ${weekEnd.getDate()} ${MONTHS[weekEnd.getMonth()].slice(0,3).toUpperCase()} ${curYear}`
+  function openBookingDetail(b) {
+    setF({
+      firstName: b.firstName || b.guest?.split(' ')[0] || '',
+      lastName: b.lastName || b.guest?.split(' ').slice(1).join(' ') || '',
+      initials: b.initials || false,
+      numRooms: (b.roomIds || []).length || 1,
+      guests: b.guests || 1,
+      status: b.status || 'prebooking',
+      checkIn: b.checkIn,
+      checkOut: b.checkOut,
+      withChildren: b.withChildren || false,
+      kidsAges: b.kidsAges || '',
+      notes: b.notes || '',
+    });
+    setEditBooking(b);
+    setShowForm(true);
+  }
+
+  // Nav
+  const isWeek = view === "week";
+  const weekEnd = addDays(weekStart, 7);
+  const navLabel = isWeek
+    ? `${pad(weekStart.getDate())}/${pad(weekStart.getMonth() + 1)} — ${pad(weekEnd.getDate())}/${pad(weekEnd.getMonth() + 1)}`
     : `${MONTHS[curMonth].toUpperCase()} ${curYear}`;
-  const prev = () => { setSelDay(null); view === "week" ? setWeekStart(d => addDays(d, -7)) : setWeekStart(new Date(curYear, curMonth - 1, 1)); };
-  const next = () => { setSelDay(null); view === "week" ? setWeekStart(d => addDays(d, 7)) : setWeekStart(new Date(curYear, curMonth + 1, 1)); };
-  const jumpMonth = (d) => { setSelDay(null); setWeekStart(d); };
 
-  const px = isMobile ? 14 : 28;
+  const prev = () => { setSelDay(null); isWeek ? setWeekStart(d => addDays(d, -7)) : setWeekStart(new Date(curYear, curMonth - 1, 1)); };
+  const next = () => { setSelDay(null); isWeek ? setWeekStart(d => addDays(d, 7)) : setWeekStart(new Date(curYear, curMonth + 1, 1)); };
+  const pickDay = (k) => setSelDay(selDay === k ? null : k);
 
-  return (
-    <div style={{ fontFamily: C, background: BG, minHeight: '100vh', color: FG }}>
-      {/* Header */}
-      <div style={{ padding: `12px ${px}px`, borderBottom: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 16 }}>
-          <img src="/eye.gif" alt="" style={{ height: isMobile ? 24 : 40, width: isMobile ? 24 : 40, objectFit: 'contain' }} />
-          <div>
-            <div style={{ fontSize: isMobile ? 14 : 18, fontWeight: 700, letterSpacing: '0.12em', fontFamily: H }}>CHATEAUMOULIN</div>
-            {!isMobile && <div style={{ fontSize: 9, color: MU, letterSpacing: '0.2em', marginTop: 2 }}>SEASON 2026 · JUN 15 — SEP 15</div>}
+  // Sidebar: occupancy for selected day
+  const refDay = selDay || todayKey;
+  const dayB = bookings.filter(b => b.checkIn <= refDay && b.checkOut > refDay);
+  const occRooms = new Set(dayB.flatMap(b => b.roomIds || []));
+  const occCount = occRooms.size;
+  const freeCount = 5 - occCount;
+  const occLabel = selDay
+    ? (() => { const d = parseDate(selDay); return dayName(selDay).toUpperCase() + ' · ' + d.getDate() + ' ' + MONTHS[d.getMonth()].toUpperCase() + ' 2026'; })()
+    : '— SELECT A DATE —';
+
+  // Inner width for month view
+  const innerWidth = days.length * 52 + days.length * 6 + 80;
+
+  // ═══ RENDER ═══════════════════════════════════════════
+
+  const renderTimeline = () => {
+    const DN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return (
+      <div className={`cm-tl-inner ${isWeek ? 'week' : 'month'}`} style={!isWeek ? { minWidth: innerWidth } : undefined}>
+        {/* Header row */}
+        <div className="cm-tl-header">
+          <div className="cm-tl-slots">SLOTS</div>
+          <div className="cm-tl-dates">
+            {days.map(dt => {
+              const key = dateKey(dt);
+              const off = !inSeason(key);
+              const isT = key === todayKey;
+              const isSel = selDay === key;
+              const dow = dt.getDay();
+              const we = dow === 0 || dow === 6;
+              const cls = ['cm-date-col'];
+              if (off) cls.push('off');
+              if (isT) cls.push('today');
+              if (isSel) cls.push('selected');
+              if (we && !off) cls.push('we');
+              return (
+                <div key={key} className={cls.join(' ')} onClick={() => !off && pickDay(key)}>
+                  <div className="dow">{DN[dow]}</div>
+                  <div>{dt.getDate()}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
-        <button onClick={() => setShowForm(true)} style={{ padding: isMobile ? '6px 12px' : '8px 20px', border: '2px solid #000', background: '#000', color: BG, cursor: 'pointer', fontFamily: C, fontSize: isMobile ? 9 : 10, fontWeight: 700, letterSpacing: '0.1em' }}>+ NEW BOOKING</button>
-      </div>
 
-      {/* Intro */}
-      <div style={{ padding: `${isMobile ? 16 : 24}px ${px}px` }}>
-        <h2 style={{ fontFamily: H, fontSize: isMobile ? 20 : 28, fontWeight: 700, marginBottom: 10 }}>Come Together</h2>
-        <p style={{ fontSize: isMobile ? 11 : 12, color: MU, lineHeight: 1.7, maxWidth: 640 }}>
-          Chateaumoulin is a hosted estate in the south of France, created as a physical location for the Masomenos World community to thrive together. It runs on an open format — where art, music, and design naturally blend with the surrounding environment. Part house, part creative playground, it's a place to experience the Masomenos lifestyle in real life. 2026 edition runs from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
-        </p>
-      </div>
+        {/* Room rows */}
+        {ROOMS.map((room, ri) => (
+          <div key={room.id} className="cm-tl-row">
+            <div className="cm-room-lbl">{ri + 1}</div>
+            <div className="cm-slots">
+              {days.map(dt => {
+                const key = dateKey(dt);
+                const off = !inSeason(key);
+                const b = map[room.id + '_' + key];
+                const isCI = b && b.checkIn === key;
+                const isSel = selDay === key;
 
-      {/* Timeline nav */}
-      <div style={{ padding: `10px ${px}px`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${BD}`, borderTop: `1px solid ${BD}`, flexWrap: 'wrap', gap: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button onClick={prev} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 10px', cursor: 'pointer', fontFamily: H, fontSize: 14, color: FG }}>←</button>
-          <span style={{ minWidth: isMobile ? 130 : 200, textAlign: 'center', fontSize: isMobile ? 11 : 12, fontWeight: 700, letterSpacing: '0.08em', fontFamily: C }}>{navLabel}</span>
-          <button onClick={next} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 10px', cursor: 'pointer', fontFamily: H, fontSize: 14, color: FG }}>→</button>
-          <div style={{ width: 1, height: 20, background: BD, margin: '0 2px' }} />
-          {[["JUN", parseDate("2026-06-15")], ["JUL", parseDate("2026-07-01")], ["AUG", parseDate("2026-08-01")], ["SEP", parseDate("2026-09-01")]].map(([lbl, d]) => {
-            const active = curMonth === d.getMonth() && curYear === d.getFullYear();
-            return (<button key={lbl} onClick={() => jumpMonth(d)} style={{ background: active ? '#000' : 'none', border: '1px solid ' + (active ? '#000' : '#ccc'), padding: '4px 8px', cursor: 'pointer', fontFamily: C, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', color: active ? BG : FG }}>{lbl}</button>);
-          })}
-          {!isMobile && <>
-            <div style={{ width: 1, height: 20, background: BD, margin: '0 2px' }} />
-            {[["WEEK", "week"], ["MONTH", "month"]].map(([lbl, v]) => (
-              <button key={v} onClick={() => setView(v)} style={{ background: view === v ? '#000' : 'none', border: '1px solid ' + (view === v ? '#000' : '#ccc'), padding: '4px 10px', cursor: 'pointer', fontFamily: C, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', color: view === v ? BG : FG }}>{lbl}</button>
-            ))}
-          </>}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          {isMobile && [["WEEK", "week"], ["MONTH", "month"]].map(([lbl, v]) => (
-            <button key={v} onClick={() => setView(v)} style={{ background: view === v ? '#000' : 'none', border: '1px solid ' + (view === v ? '#000' : '#ccc'), padding: '3px 8px', cursor: 'pointer', fontFamily: C, fontSize: 8, fontWeight: 700, color: view === v ? BG : FG }}>{lbl}</button>
-          ))}
-          {!isMobile && (
-            <div style={{ display: 'flex', gap: 16, fontSize: 9, letterSpacing: '0.1em', fontFamily: C }}>
-              <span><span style={{ display: 'inline-block', width: 10, height: 10, background: YELLOW, marginRight: 4, verticalAlign: 'middle' }} /> CONFIRMED</span>
-              <span><span style={{ display: 'inline-block', width: 10, height: 10, background: LAV, marginRight: 4, verticalAlign: 'middle' }} /> PRE-BOOKING</span>
-            </div>
-          )}
-        </div>
-      </div>
+                if (off) return <div key={key} className="cm-slot off" />;
 
-      {/* Day panel — opens when clicking a date */}
-      {selDay && (
-        <div style={{ padding: `12px ${px}px 0` }}>
-          <DayPanel dk={selDay} bookings={bookings} rooms={ROOMS} onClose={() => setSelDay(null)} onBook={bookFromDay} isMobile={isMobile} />
-        </div>
-      )}
-
-      {/* Timeline — 5 slots */}
-      <div style={{ padding: `0 ${px}px 16px` }}>
-        <div style={{ overflowX: 'auto' }}>
-          <div style={{ width: days.length * CW + (isMobile ? 50 : 80) }}>
-            {/* Day headers */}
-            <div style={{ display: 'flex', borderBottom: '2px solid #000' }}>
-              <div style={{ width: isMobile ? 50 : 80, flexShrink: 0, padding: '6px 8px', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', fontFamily: C }}>{isMobile ? '#' : 'SLOTS'}</div>
-              <div style={{ display: 'flex' }}>
-                {days.map(day => {
-                  const key = dateKey(day);
-                  const isT = key === todayKey;
-                  const dow = day.getDay();
-                  const we = dow === 0 || dow === 6;
-                  const off = !inSeason(key);
-                  const isSel = selDay === key;
-                  const isMonth = view === "month";
+                if (b) {
+                  const isPre = b.status === 'prebooking';
+                  const barCls = 'cm-booking-bar ' + (isPre ? 'lav' : 'rose') + (isCI ? ' ci' : '');
                   return (
-                    <div key={key} onClick={() => inSeason(key) ? setSelDay(selDay === key ? null : key) : null}
-                      style={{ width: CW, textAlign: 'center', padding: isMonth ? '3px 0' : '6px 0', fontSize: isMobile ? 10 : isMonth ? 10 : 13, fontFamily: H, fontWeight: isT ? 800 : isSel ? 700 : 400, color: off ? '#d0ccc0' : isT ? '#000' : we ? '#555' : '#888', background: isSel ? 'rgba(0,0,0,0.08)' : isT ? 'rgba(0,0,0,0.04)' : 'transparent', cursor: off ? 'default' : 'pointer', borderBottom: isSel ? '3px solid #000' : '3px solid transparent', flexShrink: 0 }}>
-                      {!isMonth && <div style={{ fontSize: isMobile ? 8 : 10, color: off ? '#d0ccc0' : MU, fontFamily: C, letterSpacing: '0.1em' }}>{dayName(key).toUpperCase()}</div>}
-                      <div style={{ fontSize: isMonth ? (isMobile ? 9 : 11) : isMobile ? 16 : 22, fontWeight: isT || isSel ? 700 : 400, lineHeight: 1.2, marginTop: isMonth ? 0 : 2 }}>{day.getDate()}</div>
-                      {isMonth && <div style={{ fontSize: 7, color: we ? '#555' : MU, fontFamily: C }}>{dayName(key).slice(0, 1)}</div>}
+                    <div key={key} className={`cm-booking ${isSel ? 'sel' : ''}`} onClick={() => openBookingDetail(b)}>
+                      <div className={barCls}>
+                        <div className="name">{displayName(b).toUpperCase()}</div>
+                      </div>
                     </div>
                   );
-                })}
-              </div>
+                }
+
+                return (
+                  <div key={key} className={`cm-slot ${isSel ? 'sel' : ''}`} onClick={() => pickDay(key)}>
+                    <div className="dot" />
+                  </div>
+                );
+              })}
             </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
-            {/* Room rows */}
-            {ROOMS.map((room, ri) => (
-              <div key={room.id} style={{ display: 'flex', borderBottom: `1px solid ${BD}` }}>
-                <div style={{ width: isMobile ? 50 : 80, flexShrink: 0, padding: '8px', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', color: MU, fontFamily: H }}>{ri + 1}</div>
-                <div style={{ display: 'flex', alignItems: 'center', minHeight: ROW_H }}>
-                  {days.map(day => {
-                    const key = dateKey(day);
-                    const k = room.id + '_' + key;
-                    const b = map[k];
-                    const off = !inSeason(key);
-                    const isCI = b && b.checkIn === key;
-                    const isSel = selDay === key;
-                    const isMonth = view === "month";
-
-                    if (off) return <div key={key} style={{ width: CW, height: ROW_H, flexShrink: 0, background: 'repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px)' }} />;
-
-                    if (b) {
-                      const isPre = b.status === 'prebooking';
-                      const bg = isPre ? LAV_BG : YELLOW_BG;
-                      const lft = isCI ? (isMonth ? 2 : 6) : 0;
-                      const rgt = isMonth ? 5 : 5;
-                      const vpad = isMonth ? 3 : 8;
-                      return (
-                        <div key={key} onClick={() => setSelDay(selDay === key ? null : key)} style={{ width: CW, height: ROW_H, flexShrink: 0, display: 'flex', alignItems: 'center', cursor: 'pointer', position: 'relative', background: isSel ? 'rgba(0,0,0,0.06)' : 'transparent' }}>
-                          <div style={{ position: 'absolute', left: lft, right: rgt, top: vpad, bottom: vpad, background: bg, border: '2px solid #000', boxShadow: '3px 3px 0 #000' }}>
-                            {isCI && !isMonth && <div style={{ fontSize: isMobile ? 8 : 10, fontWeight: 700, padding: '3px 6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: FG, fontFamily: C }}>{b.guest.split(' ')[0].toUpperCase()}</div>}
-                          </div>
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <div key={key} onClick={() => setSelDay(selDay === key ? null : key)} style={{ width: CW, height: ROW_H, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: isSel ? 'rgba(0,0,0,0.04)' : 'transparent' }}>
-                        <div style={{ width: 2, height: 2, borderRadius: '50%', background: '#d0ccc0' }} />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+  return (
+    <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
+      {/* ─── Header ─── */}
+      <div className="cm-header">
+        <div className="cm-brand">
+          <img className="cm-eye" src="/eye.gif" alt="" />
+          <div>
+            <div className="cm-brand-title">CHATEAUMOULIN</div>
+            <div className="cm-brand-sub">BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>
           </div>
         </div>
+        <button className="cm-btn-new" onClick={() => openBookingForm(null)}>+ NEW BOOKING</button>
       </div>
 
-      {/* Pricing grid */}
-      <div style={{ padding: `16px ${px}px`, borderTop: `1px solid ${BD}`, maxWidth: 600 }}>
-        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', color: MU, marginBottom: 10 }}>PRICING GRID</div>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, fontFamily: C, marginBottom: 24 }}>
-          <thead>
-            <tr style={{ background: '#000', color: '#fff' }}>
-              <td style={{ padding: '8px 6px', fontWeight: 700 }}>Length of Stay</td>
-              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 700 }}>Tier 1<br /><span style={{ fontWeight: 400, fontSize: 8 }}>before May 20</span></td>
-              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 700 }}>Tier 2<br /><span style={{ fontWeight: 400, fontSize: 8 }}>before Jul 1</span></td>
-              <td style={{ padding: '8px 6px', textAlign: 'center', fontWeight: 700 }}>Tier 3<br /><span style={{ fontWeight: 400, fontSize: 8 }}>after Jul 1</span></td>
-            </tr>
-          </thead>
-          <tbody>
-            {[['1-2 nights', '200€', '270€', '320€'], ['3-5 nights', '185€', '265€', '305€'], ['6+ nights', '170€', '255€', '290€']].map(([l, ...v], i) => (
-              <tr key={i} style={{ borderBottom: `1px solid ${BD}` }}>
-                <td style={{ padding: '8px 6px', color: FG, fontSize: 11 }}>{l}</td>
-                {v.map((x, j) => <td key={j} style={{ padding: '8px 6px', textAlign: 'center', fontSize: 11 }}>{x}</td>)}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* ─── Nav ─── */}
+      <div className="cm-nav">
+        <div className="cm-nav-left">
+          <button className="cm-nav-btn" onClick={prev}>←</button>
+          <span className="cm-nav-label">{navLabel}</span>
+          <button className="cm-nav-btn" onClick={next}>→</button>
+          <div className="cm-divider" />
+          <div className="cm-toggle">
+            <button className={view === 'week' ? 'active' : ''} onClick={() => { setSelDay(null); setView('week'); setWeekStart(parseDate("2026-06-15")); }}>WEEK</button>
+            <button className={view === 'month' ? 'active' : ''} onClick={() => { setSelDay(null); setView('month'); }}>MONTH</button>
+          </div>
+        </div>
+        <div className="cm-legend">
+          <span><span className="swatch" style={{ background: 'var(--rose)' }} /> CONFIRMED</span>
+          <span><span className="swatch" style={{ background: 'var(--lav)' }} /> PRE-BOOKING</span>
+        </div>
+      </div>
 
-        {/* Proposal Details */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', color: FG, marginBottom: 10, fontFamily: C }}>PROPOSAL DETAILS</div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 11, lineHeight: 1.7, color: FG, fontFamily: C }}>
-            <li style={{ marginBottom: 6 }}>• Only 5 rooms - community vibe, or take over the whole playground</li>
-            <li style={{ marginBottom: 6 }}>• Max 2 per room</li>
-            <li style={{ marginBottom: 6 }}>• Rooms flow on a first-come, first-served basis</li>
-            <li style={{ marginBottom: 6 }}>• Breakfast à la carte - Open community style coordinated kitchen</li>
-            <li style={{ marginBottom: 6 }}>• Kids welcome from 8+</li>
-            <li>• Little ones? Reach out — or go all in and book the full space.</li>
+      {/* ─── Main ─── */}
+      <div className="cm-main">
+        <div className="cm-timeline-wrap">
+          <div className={`cm-timeline ${isWeek ? 'week-mode' : ''}`}>
+            {renderTimeline()}
+          </div>
+          <div className="cm-desc">
+            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
+          </div>
+        </div>
+
+        {/* ─── Sidebar ─── */}
+        <aside className="cm-sidebar">
+          {/* Occupancy */}
+          <div className="cm-sb-block">
+            <div className="cm-sb-title">OCCUPANCY</div>
+            <div className="cm-occ-label">{occLabel}</div>
+            <div className="cm-occ-bars">
+              {ROOMS.map(r => (
+                <div key={r.id} className={`cm-occ-bar ${occRooms.has(r.id) ? 'on' : ''}`} />
+              ))}
+            </div>
+            <div className="cm-occ-count">{occCount}/5</div>
+            {freeCount === 0 ? (
+              <button className="cm-book-btn" disabled>FULLY BOOKED</button>
+            ) : (
+              <button
+                className="cm-book-btn"
+                disabled={!selDay}
+                onClick={() => openBookingForm(selDay)}
+              >
+                + BOOK THIS DATE{freeCount < 5 ? ` (${freeCount} room${freeCount > 1 ? 's' : ''} free)` : ''}
+              </button>
+            )}
+          </div>
+
+          {/* Pricing */}
+          <div className="cm-sb-block cm-pricing">
+            <div className="cm-sb-title">PRICING — €/NIGHT/ROOM</div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>T1<div style={{ fontSize: 8, fontWeight: 400 }}>till May 20</div></th>
+                  <th>T2<div style={{ fontSize: 8, fontWeight: 400 }}>till Jul 1</div></th>
+                  <th>T3<div style={{ fontSize: 8, fontWeight: 400 }}>after Jul 1</div></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style={{ fontWeight: 700 }}>1-2n</td><td>200€</td><td>270€</td><td>320€</td></tr>
+                <tr><td style={{ fontWeight: 700 }}>3-5n</td><td>185€</td><td>265€</td><td>305€</td></tr>
+                <tr><td style={{ fontWeight: 700 }}>6+n</td><td>170€</td><td>255€</td><td>290€</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </aside>
+      </div>
+
+      {/* ─── Details ─── */}
+      <div className="cm-details">
+        <div style={{ flex: 1 }}>
+          <h3>DETAILS</h3>
+          <ul>
+            <li>Only 5 rooms — community vibe, or take over the whole playground</li>
+            <li>Max 2 per room</li>
+            <li>Rooms flow on a first-come, first-served basis</li>
+            <li>Breakfast à la carte — open community style coordinated kitchen</li>
+            <li>Kids welcome from 8+</li>
+            <li>Little ones? Reach out — or go all in and book the full space.</li>
           </ul>
         </div>
-
-        {/* Terms of Payment */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', color: FG, marginBottom: 10, fontFamily: C }}>TERMS OF PAYMENT</div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 11, lineHeight: 1.7, color: FG, fontFamily: C }}>
-            <li style={{ marginBottom: 6 }}>• 30% deposit at reservation</li>
-            <li style={{ marginBottom: 6 }}>• Balance due upon arrival</li>
-            <li style={{ marginBottom: 6 }}>• Free cancellation until the last day of the tier the booking was made in</li>
-            <li>• 30% retained otherwise</li>
+        <div style={{ flex: 1 }}>
+          <h3>PAYMENT & CANCELLATION</h3>
+          <ul>
+            <li>30% deposit due at reservation via Stripe</li>
+            <li>Balance payable on arrival</li>
+            <li>Free cancellation until end of booking tier window</li>
+            <li>30% deposit retained for late cancellations</li>
           </ul>
         </div>
       </div>
 
-      {/* Footer */}
-      <div style={{ padding: `24px ${px}px 40px`, textAlign: 'center' }}>
-        <img src="/eye.gif" alt="" style={{ height: 28, opacity: 0.15 }} />
-        <div style={{ fontSize: 8, color: MU, marginTop: 8, letterSpacing: '0.1em' }}>
-          <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: MU, textDecoration: 'none' }}>{CONTACT_EMAIL}</a>
-        </div>
+      {/* ─── Footer ─── */}
+      <div className="cm-footer">
+        <span>CHATEAUMOULIN · MASOMENOS WORLD · 2026</span>
+        <span>{CONTACT_EMAIL}</span>
       </div>
 
-      {/* Booking modal */}
+      {/* ─── Modal ─── */}
       {showForm && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: isMobile ? 'flex-end' : 'center', justifyContent: 'center' }} onClick={() => setShowForm(false)}>
-          <div style={{ background: BG, maxWidth: isMobile ? '100%' : 500, width: isMobile ? '100%' : '92%', maxHeight: isMobile ? '95vh' : '90vh', overflowY: 'auto', padding: isMobile ? 20 : 32, border: '1px solid #000', borderRadius: isMobile ? '16px 16px 0 0' : 0 }} onClick={e => e.stopPropagation()}>
+        <div className="cm-modal-bg" onClick={() => setShowForm(false)}>
+          <div className="cm-modal" onClick={e => e.stopPropagation()}>
+            <div className="cm-modal-title">{editBooking ? 'BOOKING DETAILS' : 'REQUEST A BOOKING'}</div>
 
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', borderBottom: '1px solid #000', paddingBottom: 10, marginBottom: 20, fontFamily: C }}>BOOK YOUR STAY</div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
-              <div><label style={lbl}>Rooms</label><select style={{ ...inp, cursor: 'pointer' }} value={nR} onChange={e => set('numRooms', parseInt(e.target.value))}>{[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}{n === 5 ? ' (full)' : ''}</option>)}</select></div>
-              <div><label style={lbl}>Guests (max {mx})</label><input style={inp} type="number" min={1} max={mx} value={f.guests || 1} onChange={e => set('guests', Math.min(parseInt(e.target.value) || 1, mx))} /></div>
+            <div className="cm-grid-2">
+              <div><label className="cm-lbl">First name</label><input className="cm-inp" value={f.firstName} onChange={e => set('firstName', e.target.value)} placeholder="Marie" /></div>
+              <div><label className="cm-lbl">Last name</label><input className="cm-inp" value={f.lastName} onChange={e => set('lastName', e.target.value)} placeholder="Dupont" /></div>
             </div>
 
-            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-              <div style={{ flex: 1 }}><label style={lbl}>First name</label><input style={inp} value={f.firstName} onChange={e => set('firstName', e.target.value)} placeholder="Marie" /></div>
-              <div style={{ flex: 1 }}><label style={lbl}>Last name</label><input style={inp} value={f.lastName} onChange={e => set('lastName', e.target.value)} placeholder="Dupont" /></div>
-            </div>
-            <div style={{ marginBottom: 12 }}><label style={lbl}>Email</label><input style={inp} type="email" value={f.email} onChange={e => set('email', e.target.value)} placeholder="you@email.com" /></div>
-            <div style={{ marginBottom: 12 }}><label style={lbl}>Guest ages</label><input style={inp} value={f.ages} onChange={e => set('ages', e.target.value)} placeholder="32, 30, 10" /></div>
-
-            {nc && <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 12, color: '#C62828' }}>Children under 8 — please book the full estate (5 rooms) or <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'inherit', fontWeight: 700, textDecoration: 'underline' }}>contact us</a>.</div>}
-
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
-              <div><label style={lbl}>Check-in</label><input style={inp} type="date" value={f.checkIn} min="2026-06-15" max="2026-09-14" onChange={e => set('checkIn', e.target.value)} /></div>
-              <div><label style={lbl}>Check-out</label><input style={inp} type="date" value={f.checkOut} min="2026-06-16" max="2026-09-15" onChange={e => set('checkOut', e.target.value)} /></div>
+            <div className="cm-check-row" onClick={e => { if (e.target.tagName !== 'INPUT') set('initials', !f.initials); }}>
+              <input type="checkbox" checked={f.initials} onChange={e => set('initials', e.target.checked)} />
+              <div>
+                <label>Only show my initials on the booking block</label>
+                <div className="hint">When checked, the timeline will show only first-letter initials (e.g. "MD") instead of the first name.</div>
+              </div>
             </div>
 
-            {!available && f.checkIn && f.checkOut && <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 12, color: '#C62828' }}>Not enough rooms available for these dates.</div>}
+            <div className="cm-grid-3">
+              <div>
+                <label className="cm-lbl">Rooms</label>
+                <select className="cm-inp" value={nR} onChange={e => set('numRooms', parseInt(e.target.value))}>
+                  {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}{n === 5 ? ' (full estate)' : ''}</option>)}
+                </select>
+              </div>
+              <div><label className="cm-lbl">Guests</label><input className="cm-inp" type="number" min={1} max={mx} value={f.guests} onChange={e => set('guests', Math.min(parseInt(e.target.value) || 1, mx))} /></div>
+              <div>
+                <label className="cm-lbl">Status</label>
+                <select className="cm-inp" value={f.status} onChange={e => set('status', e.target.value)}>
+                  <option value="prebooking">Pre-booking</option>
+                  <option value="confirmed">Confirmed</option>
+                </select>
+              </div>
+            </div>
 
-            {nights > 0 && (
-              <div style={{ padding: '10px 12px', background: '#000', color: BG, display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, marginBottom: 12, fontFamily: C }}>
-                <span>{nR}rm × {nights}n × €{ppn} — {TIERS[ti].label}<br /><span style={{ fontSize: 9, color: '#999' }}>Deposit (30%): €{deposit} · Balance: €{total - deposit}</span></span>
-                <span style={{ fontSize: 18, fontWeight: 700 }}>€{total}</span>
+            <div className="cm-grid-2">
+              <div><label className="cm-lbl">Check-in</label><input className="cm-inp" type="date" value={f.checkIn} min="2026-06-15" max="2026-09-14" onChange={e => set('checkIn', e.target.value)} /></div>
+              <div><label className="cm-lbl">Check-out</label><input className="cm-inp" type="date" value={f.checkOut} min="2026-06-16" max="2026-09-15" onChange={e => set('checkOut', e.target.value)} /></div>
+            </div>
+
+            <div className="cm-check-row" onClick={e => { if (e.target.tagName !== 'INPUT') set('withChildren', !f.withChildren); }}>
+              <input type="checkbox" checked={f.withChildren} onChange={e => set('withChildren', e.target.checked)} />
+              <div>
+                <label>Travelling with children</label>
+                <div className="hint">Kids welcome from 8+. Tick if any of the guests are under 18.</div>
+              </div>
+            </div>
+
+            {f.withChildren && (
+              <div className="cm-field">
+                <label className="cm-lbl">Children ages</label>
+                <input className="cm-inp" value={f.kidsAges} onChange={e => set('kidsAges', e.target.value)} placeholder="e.g. 8, 10, 12" />
               </div>
             )}
 
-            <div style={{ marginBottom: 16 }}><label style={lbl}>Notes / requests</label><textarea style={{ ...inp, minHeight: 40, resize: 'vertical' }} value={f.notes} onChange={e => set('notes', e.target.value)} placeholder="Arrival time, dietary needs, etc." /></div>
+            {!available && f.checkIn && f.checkOut && (
+              <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 14, color: '#C62828', fontFamily: 'var(--C)' }}>
+                Not enough rooms available for these dates.
+              </div>
+            )}
 
-            {error && <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 12, color: '#C62828' }}>{error}</div>}
+            {nights > 0 && (
+              <div className="cm-price-bar">
+                <div>
+                  {nR}rm × {nights}n × €{ppn} — {TIERS[ti].label}
+                  <div className="detail">Deposit (30%): €{deposit} · Balance: €{total - deposit}</div>
+                </div>
+                <div className="total">€{total}</div>
+              </div>
+            )}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <button onClick={() => setShowForm(false)} style={{ padding: '8px 16px', border: '1px solid #ccc', background: 'transparent', cursor: 'pointer', fontFamily: C, fontSize: 11 }}>CANCEL</button>
-              <button onClick={handleSubmit} disabled={!canSubmit} style={{ padding: '8px 20px', border: '1px solid #000', background: canSubmit ? '#000' : '#999', color: BG, cursor: canSubmit ? 'pointer' : 'not-allowed', fontFamily: C, fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', opacity: canSubmit ? 1 : 0.4 }}>{nights > 0 ? `BOOK · €${deposit} DEPOSIT` : 'BOOK'}</button>
+            <div className="cm-field">
+              <label className="cm-lbl">Notes / requests</label>
+              <textarea className="cm-inp" style={{ minHeight: 50, resize: 'vertical' }} value={f.notes} onChange={e => set('notes', e.target.value)} placeholder="Arrival time, dietary needs, etc." />
+            </div>
+
+            {error && (
+              <div style={{ padding: '10px 12px', background: 'rgba(198,40,40,0.06)', borderLeft: '3px solid #C62828', fontSize: 12, marginBottom: 14, color: '#C62828', fontFamily: 'var(--C)' }}>
+                {error}
+              </div>
+            )}
+
+            <div className="cm-modal-actions">
+              <div />
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button className="cm-btn-cancel" onClick={() => setShowForm(false)}>CANCEL</button>
+                <button className="cm-btn-save" onClick={handleSubmit} disabled={!canSubmit} style={!canSubmit ? { opacity: 0.4, cursor: 'not-allowed' } : {}}>
+                  {nights > 0 ? `REQUEST BOOKING · €${deposit}` : 'REQUEST BOOKING'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
