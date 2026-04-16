@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useBookings } from "../hooks/useBookings";
 
 const ROOMS=[{id:"r1"},{id:"r2"},{id:"r3"},{id:"r4"},{id:"r5"}];
@@ -7,10 +7,9 @@ const RATES=[{"1-2":200,"3-5":185,"6+":170},{"1-2":270,"3-5":265,"6+":255},{"1-2
 const MS=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const SS="2026-06-15",SE="2026-09-15";
 const H="'Helvetica Neue',Helvetica,Arial,sans-serif",C="'Courier New',Courier,monospace";
-const BG="#F5F3ED",FG="#000",MU="#000",BD="#e0dcd0";
-const ROSE="#E91E7A",ROSE_BG="#E91E7A",RS="#FFFFFF";
-const LAV="#A0522D",LAV_BG="#A0522D",LS="#FFFFFF";
-const YELLOW="#F5C518",YELLOW_BG="#F5C518",YS="#000000";
+const BG="#F5F3ED",FG="#000",MU="#999",BD="#e0dcd0";
+const ROSE="#E8A0B4",ROSE_BG="#E8A0B4",RS="#000000";
+const LAV="#8B9DC3",LAV_BG="#8B9DC3",LS="#000000";
 const EYE="data:image/png;base64,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";
 
 function dk(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -23,7 +22,7 @@ function getBucket(n){return n<=2?"1-2":n<=5?"3-5":"6+"}
 function getPrice(bd,n){return RATES[getTier(bd)][getBucket(n)]}
 function dn(k){return["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][parseD(k).getDay()]}
 
-const TODAY=new Date(2026,3,10);
+const TODAY=new Date();
 
 function useIsMobile(){
   const[m,setM]=useState(typeof window!=="undefined"&&window.innerWidth<768);
@@ -107,7 +106,7 @@ function DayPanel({dk:dKey,bookings,rooms,onClose,onEdit,isMobile}){
   const d=parseD(dKey);const label=dn(dKey)+", "+d.getDate()+" "+MS[d.getMonth()];
   const Itm=({b,accent})=>{
     const nights=Math.round((parseD(b.checkOut)-parseD(b.checkIn))/86400000);const isPre=b.status==="prebooking";
-    return(<div onClick={()=>onEdit(b)} style={{padding:"6px 8px",marginBottom:3,borderLeft:`2px solid ${accent||(isPre?LAV:YELLOW)}`,background:isPre?LAV_BG:YELLOW_BG,cursor:"pointer"}}>
+    return(<div onClick={()=>onEdit(b)} style={{padding:"6px 8px",marginBottom:3,borderLeft:`2px solid ${accent||(isPre?LAV:ROSE)}`,background:isPre?LAV_BG:ROSE_BG,cursor:"pointer"}}>
       <span style={{fontWeight:700,fontFamily:H,fontSize:11}}>{b.guest}</span>
       <span style={{color:MU,marginLeft:8,fontFamily:C,fontSize:9}}>{b.roomIds.length}rm · {b.guests}p · {nights}n · {isPre?"pre":"conf"}</span>
       {b.notes&&<div style={{fontSize:8,color:"#000",fontFamily:C}}>{b.notes}</div>}
@@ -127,45 +126,58 @@ function DayPanel({dk:dKey,bookings,rooms,onClose,onEdit,isMobile}){
   </div>);
 }
 
-function OccBar({bookings,rooms,refDay,label}){
+function OccBar({bookings,rooms,refDay,label,hasSelection,onBookDay}){
   const dayB=bookings.filter(b=>b.checkIn<=refDay&&b.checkOut>refDay);
-  const occ=dayB.flatMap(b=>b.roomIds);const cnt=new Set(occ).size;
-  return(<div style={{marginBottom:20}}>
-    <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>OCCUPANCY</div>
-    <div style={{display:"flex",gap:3,marginBottom:6}}>{rooms.map(r=>{const o=occ.includes(r.id);return <div key={r.id} style={{flex:1,height:6,background:o?"#000":BD}} />})}</div>
-    <div style={{fontSize:28,fontWeight:700,marginBottom:2,fontFamily:H}}>{cnt}/5</div>
-    <div style={{fontSize:9,color:MU,letterSpacing:"0.1em",fontFamily:C}}>{label}</div>
+  const occ=dayB.flatMap(b=>b.roomIds);const cnt=new Set(occ).size;const free=5-cnt;
+  return(<div style={{marginBottom:20,paddingBottom:16,borderBottom:`1px solid ${BD}`}}>
+    <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",borderBottom:"2px solid #000",paddingBottom:8,marginBottom:10,fontFamily:C}}>OCCUPANCY</div>
+    <div style={{fontSize:10,letterSpacing:"0.12em",color:hasSelection?"#000":MU,marginBottom:10,fontFamily:C,fontWeight:hasSelection?700:400}}>{label}</div>
+    <div style={{display:"flex",gap:4,marginBottom:8}}>{rooms.map(r=>{const o=occ.includes(r.id);return <div key={r.id} style={{flex:1,height:4,background:o?"#000":BD}} />})}</div>
+    <div style={{fontSize:32,fontWeight:700,marginBottom:4,fontFamily:H,lineHeight:1,color:hasSelection?FG:MU}}>{cnt}/5</div>
+    {hasSelection&&(free>0?(
+      <button onClick={onBookDay} style={{marginTop:12,width:"100%",padding:"10px 0",border:"2px solid #000",background:"#000",color:BG,cursor:"pointer",fontFamily:C,fontSize:10,fontWeight:700,letterSpacing:"0.12em"}}>
+        + BOOK THIS DATE{free<5?` (${free} free)`:""}
+      </button>
+    ):(
+      <div style={{marginTop:10,padding:"8px",textAlign:"center",border:"1px solid #ccc",fontSize:10,letterSpacing:"0.1em",color:MU,fontFamily:C}}>FULLY BOOKED</div>
+    ))}
   </div>);
 }
 
 function Card({b,onClick}){
   const nights=Math.round((parseD(b.checkOut)-parseD(b.checkIn))/86400000);const nr=b.roomIds.length;const isPre=b.status==="prebooking";
-  return(<div onClick={()=>onClick(b)} style={{padding:"8px 10px",marginBottom:4,cursor:"pointer",borderLeft:isPre?`2px solid ${LAV}`:`2px solid ${YELLOW}`,background:isPre?LAV_BG:YELLOW_BG,transition:"padding-left 0.15s"}}
-    onMouseEnter={e=>e.currentTarget.style.paddingLeft="14px"} onMouseLeave={e=>e.currentTarget.style.paddingLeft="10px"}>
-    <div style={{fontSize:12,fontWeight:700,color:FG,fontFamily:H}}>{b.guest}</div>
-    <div style={{fontSize:10,color:MU,marginTop:2,fontFamily:C}}>{nr}rm · {b.guests}p · {nights}n · {b.checkIn.slice(5)} → {b.checkOut.slice(5)}</div>
-    {b.notes&&<div style={{fontSize:9,color:"#000",marginTop:2,fontFamily:C}}>{b.notes}</div>}
+  return(<div onClick={()=>onClick(b)} style={{padding:"4px 8px",marginBottom:3,cursor:"pointer",borderLeft:`2px solid #000`,background:isPre?LAV_BG:ROSE_BG,boxShadow:"2px 2px 0 #000"}}
+    onMouseEnter={e=>e.currentTarget.style.paddingLeft="12px"} onMouseLeave={e=>e.currentTarget.style.paddingLeft="8px"}>
+    <div style={{fontSize:11,fontWeight:700,color:FG,fontFamily:H}}>{b.guest}</div>
+    <div style={{fontSize:9,color:MU,fontFamily:C}}>{nr}rm · {b.guests}p · {nights}n · {b.checkIn.slice(5)} → {b.checkOut.slice(5)}</div>
+    {b.notes&&<div style={{fontSize:8,color:"#000",fontFamily:C}}>{b.notes}</div>}
   </div>);
 }
 
-function Sidebar({bookings,rooms,occDay,occLabel,selDay,onEdit}){
+function Sidebar({bookings,rooms,occDay,occLabel,selDay,onEdit,onBookDay}){
   const occDayB=bookings.filter(b=>b.checkIn<=occDay&&b.checkOut>occDay);
   const hereNow=occDayB.filter(b=>b.status==="confirmed");
-  const prebs=bookings.filter(b=>b.status==="prebooking").sort((a,b)=>a.checkIn.localeCompare(b.checkIn));
-  const upcoming=bookings.filter(b=>b.checkIn>occDay&&b.status==="confirmed").sort((a,b)=>a.checkIn.localeCompare(b.checkIn)).slice(0,5);
+  const prebs=occDayB.filter(b=>b.status==="prebooking").sort((a,b)=>a.checkIn.localeCompare(b.checkIn));
+  const upcoming=occDayB.filter(b=>b.status==="confirmed").sort((a,b)=>a.checkIn.localeCompare(b.checkIn));
   return(<>
-    <OccBar bookings={bookings} rooms={rooms} refDay={occDay} label={occLabel} />
-    {hereNow.length>0&&(<div style={{marginBottom:20}}><div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>{selDay?"IN HOUSE":"HERE NOW"}</div>{hereNow.map(b=><Card key={b.id} b={b} onClick={onEdit} />)}</div>)}
-    {prebs.length>0&&(<div style={{marginBottom:20}}><div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>PRE-BOOKINGS ({prebs.length})</div>{prebs.map(b=><Card key={b.id} b={b} onClick={onEdit} />)}</div>)}
-    {upcoming.length>0&&(<div style={{marginBottom:20}}><div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>UPCOMING</div>{upcoming.map(b=><Card key={b.id} b={b} onClick={onEdit} />)}</div>)}
+    <OccBar bookings={bookings} rooms={rooms} refDay={occDay} label={occLabel} hasSelection={!!selDay} onBookDay={onBookDay} />
+    {selDay&&hereNow.length>0&&(<div style={{marginBottom:20}}><div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>IN HOUSE</div>{hereNow.map(b=><Card key={b.id} b={b} onClick={onEdit} />)}</div>)}
+    {selDay&&prebs.length>0&&(<div style={{marginBottom:20}}><div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>PRE-BOOKINGS ({prebs.length})</div>{prebs.map(b=><Card key={b.id} b={b} onClick={onEdit} />)}</div>)}
+    {selDay&&upcoming.length>0&&(<div style={{marginBottom:20}}><div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",color:MU,marginBottom:8,fontFamily:C}}>UPCOMING</div>{upcoming.map(b=><Card key={b.id} b={b} onClick={onEdit} />)}</div>)}
     <div style={{marginTop:16,fontSize:9,color:MU}}>
-      <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",marginBottom:8,fontFamily:C}}>PRICING — €/NIGHT</div>
+      <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.2em",marginBottom:10,borderBottom:"2px solid #000",paddingBottom:8,fontFamily:C}}>PRICING — €/NIGHT/ROOM</div>
       <table style={{width:"100%",borderCollapse:"collapse",fontSize:10,fontFamily:C}}>
-        <thead><tr style={{borderBottom:`1px solid ${BD}`}}><td style={{padding:"3px 4px"}}></td><td style={{padding:"3px 4px",textAlign:"center",fontWeight:700,fontFamily:H}}>T1</td><td style={{padding:"3px 4px",textAlign:"center",fontWeight:700,fontFamily:H}}>T2</td><td style={{padding:"3px 4px",textAlign:"center",fontWeight:700,fontFamily:H}}>T3</td></tr></thead>
-        <tbody>{[["1-2n",200,270,320],["3-5n",185,265,305],["6+n",170,255,290]].map(([l,...v],i)=>(<tr key={i} style={{borderBottom:`1px solid ${BD}`}}><td style={{padding:"3px 4px",color:MU}}>{l}</td>{v.map((x,j)=><td key={j} style={{padding:"3px 4px",textAlign:"center",color:FG}}>{x}</td>)}</tr>))}</tbody>
+        <thead>
+          <tr style={{borderBottom:`1px solid ${BD}`}}>
+            <td style={{padding:"4px 4px"}}></td>
+            <td style={{padding:"4px 4px",textAlign:"center",fontWeight:700,fontFamily:H}}>T1<div style={{fontSize:8,fontWeight:400,color:MU,fontFamily:C}}>till May 20</div></td>
+            <td style={{padding:"4px 4px",textAlign:"center",fontWeight:700,fontFamily:H}}>T2<div style={{fontSize:8,fontWeight:400,color:MU,fontFamily:C}}>till Jul 1</div></td>
+            <td style={{padding:"4px 4px",textAlign:"center",fontWeight:700,fontFamily:H}}>T3<div style={{fontSize:8,fontWeight:400,color:MU,fontFamily:C}}>after Jul 1</div></td>
+          </tr>
+        </thead>
+        <tbody>{[["1-2n",200,270,320],["3-5n",185,265,305],["6+n",170,255,290]].map(([l,...v],i)=>(<tr key={i} style={{borderBottom:`1px solid ${BD}`}}><td style={{padding:"4px 4px",color:MU,fontWeight:700}}>{l}</td>{v.map((x,j)=><td key={j} style={{padding:"4px 4px",textAlign:"center",color:FG}}>{x}€</td>)}</tr>))}</tbody>
       </table>
     </div>
-    <div style={{marginTop:30,textAlign:"center"}}><img src={EYE} alt="" style={{height:24,opacity:0.15}} /></div>
   </>);
 }
 
@@ -173,7 +185,7 @@ function Login({onAuth}){
   const[pwd,setPwd]=useState("");
   const[error,setError]=useState("");
   const submit=()=>{
-    if(pwd===process.env.REACT_APP_ADMIN_PASSWORD||pwd==="chateaumoulin"){
+    if(pwd==="chateaumoulin"){
       localStorage.setItem("adminAuth","true");
       onAuth();
     }else{
@@ -193,26 +205,45 @@ function Login({onAuth}){
 
 function AdminContent(){
   const isMobile=useIsMobile();
-  const[year,setYear]=useState(2026);
-  const[month,setMonth]=useState(5);
+  const[weekStart,setWeekStart]=useState(parseD("2026-06-15"));
+  const[view,setView]=useState("week");
   const{bookings,saveBooking,deleteBooking}=useBookings();
   const[modal,setModal]=useState(null);
   const[selDay,setSelDay]=useState(null);
   const[mobileTab,setMobileTab]=useState("calendar");
-  const ref=useRef(null);
-  const todayKey=dk(TODAY);const dim=daysIn(year,month);
-  const days=Array.from({length:dim},(_,i)=>i+1);
-  const CW=isMobile?38:42;
+  const todayKey=dk(TODAY);
+
+  // Derive current month from weekStart
+  const curMonth=weekStart.getMonth();
+  const curYear=weekStart.getFullYear();
+  const dimMonth=daysIn(curYear,curMonth);
+
+  const days=view==="week"
+    ?Array.from({length:7},(_,i)=>addD(weekStart,i))
+    :Array.from({length:dimMonth},(_,i)=>new Date(curYear,curMonth,i+1));
+
+  const CW=view==="week"?(isMobile?52:120):(isMobile?28:36);
+  const ROW_H=view==="week"?(isMobile?44:60):(isMobile?24:28);
 
   const map=useMemo(()=>{const m={};bookings.forEach(b=>{b.roomIds.forEach(rid=>{let c=parseD(b.checkIn);const e=parseD(b.checkOut);while(c<e){m[rid+"_"+dk(c)]=b;c=addD(c,1)}})});return m},[bookings]);
 
   const occDay=selDay||todayKey;
-  const occLabel=selDay?(()=>{const d=parseD(selDay);return dn(selDay)+" "+d.getDate()+" "+MS[d.getMonth()]})():"today ("+todayKey.slice(5)+")";
+  const weekEnd=addD(weekStart,6);
+  const navLabel=view==="week"
+    ?`${weekStart.getDate()} ${MS[curMonth].slice(0,3).toUpperCase()} — ${weekEnd.getDate()} ${MS[weekEnd.getMonth()].slice(0,3).toUpperCase()} ${curYear}`
+    :`${MS[curMonth].toUpperCase()} ${curYear}`;
+  const occLabel=selDay?(()=>{const d=parseD(selDay);return dn(selDay).toUpperCase()+" · "+d.getDate()+" "+MS[d.getMonth()].toUpperCase()+" "+d.getFullYear()})():"— SELECT A DATE —";
 
-  const prev=()=>{setSelDay(null);if(month===0){setMonth(11);setYear(y=>y-1)}else setMonth(m=>m-1)};
-  const next=()=>{setSelDay(null);if(month===11){setMonth(0);setYear(y=>y+1)}else setMonth(m=>m+1)};
-  const goNow=()=>{setSelDay(null);setYear(2026);setMonth(TODAY.getMonth())};
-  const sw=(dir)=>{if(ref.current)ref.current.scrollLeft+=dir*CW*7};
+  const prev=()=>{setSelDay(null);
+    if(view==="week") setWeekStart(d=>addD(d,-7));
+    else setWeekStart(new Date(curYear,curMonth-1,1));
+  };
+  const next=()=>{setSelDay(null);
+    if(view==="week") setWeekStart(d=>addD(d,7));
+    else setWeekStart(new Date(curYear,curMonth+1,1));
+  };
+  const goNow=()=>{setSelDay(null);setWeekStart(parseD("2026-06-15"))};
+  const jumpMonth=(d)=>{setSelDay(null);setWeekStart(d);if(view==="month")setWeekStart(d)};
 
   const save=async(f)=>{try{await saveBooking(f)}catch(e){console.error(e)}setModal(null)};
   const del=async(id)=>{try{await deleteBooking(id)}catch(e){console.error(e)}setModal(null)};
@@ -224,43 +255,52 @@ function AdminContent(){
     <style>{`*{box-sizing:border-box}::-webkit-scrollbar{height:6px;width:4px}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}`}</style>
 
     {/* Header */}
-    <div style={{padding:`12px ${px}px`,borderBottom:"2px solid #000",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-      <div style={{display:"flex",alignItems:"center",gap:isMobile?10:16}}>
-        <img src={EYE} alt="" style={{height:isMobile?24:32,opacity:0.8}} />
+    <div style={{padding:isMobile?`12px ${px}px`:`24px ${px}px`,borderBottom:"3px solid #000",display:"flex",justifyContent:"space-between",alignItems:"center",background:"#fff"}}>
+      <div style={{display:"flex",alignItems:"center",gap:isMobile?10:20}}>
+        <img src="/eye.gif" alt="" style={{height:isMobile?28:48,width:isMobile?28:48,objectFit:"contain"}} />
         <div>
-          <div style={{fontSize:isMobile?14:18,fontWeight:700,letterSpacing:"0.12em",fontFamily:H}}>CHATEAUMOULIN</div>
-          {!isMobile&&<div style={{fontSize:9,color:MU,letterSpacing:"0.2em",marginTop:2,fontFamily:C}}>BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>}
+          <div style={{fontSize:isMobile?15:28,fontWeight:700,letterSpacing:"0.16em",fontFamily:H,lineHeight:1}}>CHATEAUMOULIN</div>
+          {!isMobile&&<div style={{fontSize:10,color:"#666",letterSpacing:"0.22em",marginTop:6,fontFamily:C}}>BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>}
         </div>
       </div>
-      <button onClick={()=>setModal({type:"new",data:null})} style={{padding:isMobile?"6px 12px":"8px 20px",border:"2px solid #000",background:"#000",color:BG,cursor:"pointer",fontFamily:C,fontSize:isMobile?9:10,fontWeight:700,letterSpacing:"0.1em"}}>+ NEW</button>
+      <button onClick={()=>setModal({type:"new",data:null})} style={{padding:isMobile?"8px 14px":"14px 28px",border:"3px solid #000",background:"#000",color:BG,cursor:"pointer",fontFamily:C,fontSize:isMobile?9:11,fontWeight:700,letterSpacing:"0.12em"}}>+ NEW BOOKING</button>
     </div>
 
     {/* Nav */}
-    <div style={{padding:`10px ${px}px`,display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:`1px solid ${BD}`,flexWrap:isMobile?"wrap":"nowrap",gap:isMobile?8:0}}>
-      <div style={{display:"flex",alignItems:"center",gap:isMobile?8:12}}>
-        <button onClick={prev} style={{background:"none",border:"1px solid #ccc",padding:"4px 8px",cursor:"pointer",fontFamily:H,fontSize:isMobile?12:14,color:FG}}>←</button>
-        <span style={{minWidth:isMobile?110:160,textAlign:"center",fontSize:isMobile?13:15,fontWeight:700,letterSpacing:"0.08em",fontFamily:H}}>{MS[month].toUpperCase().slice(0,isMobile?3:99)} {year}</span>
-        <button onClick={next} style={{background:"none",border:"1px solid #ccc",padding:"4px 8px",cursor:"pointer",fontFamily:H,fontSize:isMobile?12:14,color:FG}}>→</button>
-        {!isMobile&&<button onClick={goNow} style={{background:"none",border:"1px solid #000",padding:"5px 12px",cursor:"pointer",fontFamily:C,fontSize:9,fontWeight:700,letterSpacing:"0.1em",color:FG}}>TODAY</button>}
-        {!isMobile&&<><div style={{width:1,height:20,background:BD,margin:"0 4px"}} />
-        <button onClick={()=>sw(-1)} style={{background:"none",border:"1px solid #ccc",padding:"5px 8px",cursor:"pointer",fontFamily:C,fontSize:9,color:FG}}>◄ WEEK</button>
-        <button onClick={()=>sw(1)} style={{background:"none",border:"1px solid #ccc",padding:"5px 8px",cursor:"pointer",fontFamily:C,fontSize:9,color:FG}}>WEEK ►</button></>}
+    <div style={{padding:`10px ${px}px`,display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:`1px solid ${BD}`,flexWrap:"wrap",gap:8}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        {/* Prev/next */}
+        <button onClick={prev} style={{background:"none",border:"1px solid #ccc",padding:"4px 10px",cursor:"pointer",fontFamily:H,fontSize:14,color:FG}}>←</button>
+        <span style={{minWidth:isMobile?130:200,textAlign:"center",fontSize:isMobile?11:12,fontWeight:700,letterSpacing:"0.08em",fontFamily:C}}>{navLabel}</span>
+        <button onClick={next} style={{background:"none",border:"1px solid #ccc",padding:"4px 10px",cursor:"pointer",fontFamily:H,fontSize:14,color:FG}}>→</button>
+        {/* Month jump */}
+        <div style={{width:1,height:20,background:BD,margin:"0 2px"}} />
+        {[["JUN",parseD("2026-06-15")],["JUL",parseD("2026-07-01")],["AUG",parseD("2026-08-01")],["SEP",parseD("2026-09-01")]].map(([lbl,d])=>{
+          const active=curMonth===d.getMonth()&&curYear===d.getFullYear();
+          return(<button key={lbl} onClick={()=>jumpMonth(d)} style={{background:active?"#000":"none",border:"1px solid "+(active?"#000":"#ccc"),padding:"4px 8px",cursor:"pointer",fontFamily:C,fontSize:9,fontWeight:700,letterSpacing:"0.1em",color:active?BG:FG}}>{lbl}</button>);
+        })}
+        {/* View toggle */}
+        {!isMobile&&(<>
+          <div style={{width:1,height:20,background:BD,margin:"0 2px"}} />
+          {[["WEEK","week"],["MONTH","month"]].map(([lbl,v])=>(
+            <button key={v} onClick={()=>setView(v)} style={{background:view===v?"#000":"none",border:"1px solid "+(view===v?"#000":"#ccc"),padding:"4px 10px",cursor:"pointer",fontFamily:C,fontSize:9,fontWeight:700,letterSpacing:"0.1em",color:view===v?BG:FG}}>{lbl}</button>
+          ))}
+        </>)}
       </div>
-      {isMobile?(
-        <div style={{display:"flex",gap:6,width:"100%"}}>
-          <button onClick={goNow} style={{background:"none",border:"1px solid #000",padding:"4px 10px",cursor:"pointer",fontFamily:C,fontSize:8,fontWeight:700,color:FG}}>TODAY</button>
-          <button onClick={()=>sw(-1)} style={{background:"none",border:"1px solid #ccc",padding:"4px 8px",cursor:"pointer",fontFamily:C,fontSize:8,color:FG}}>◄ WK</button>
-          <button onClick={()=>sw(1)} style={{background:"none",border:"1px solid #ccc",padding:"4px 8px",cursor:"pointer",fontFamily:C,fontSize:8,color:FG}}>WK ►</button>
-          <div style={{flex:1}} />
-          <div style={{display:"flex",gap:6,fontSize:8,alignItems:"center",fontFamily:C}}>
-            <span style={{display:"inline-block",width:8,height:8,background:ROSE}} /> <span style={{display:"inline-block",width:8,height:8,background:LAV,marginLeft:6}} />
-          </div>
-        </div>
-      ):(
+      {!isMobile&&(
         <div style={{display:"flex",gap:16,fontSize:9,letterSpacing:"0.1em",fontFamily:C}}>
-          <span><span style={{display:"inline-block",width:10,height:10,background:YELLOW,marginRight:4,verticalAlign:"middle"}} /> CONFIRMED</span>
-          <span><span style={{display:"inline-block",width:10,height:10,background:LAV,marginRight:4,verticalAlign:"middle"}} /> PRE-BOOKING</span>
-          <span style={{color:MU,opacity:0.5}}>/// OFF</span>
+          <span style={{display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:14,height:14,background:ROSE,border:"2px solid #000"}} /> CONFIRMED</span>
+          <span style={{display:"flex",alignItems:"center",gap:8}}><span style={{display:"inline-block",width:14,height:14,background:LAV,border:"2px solid #000"}} /> PRE-BOOKING</span>
+        </div>
+      )}
+      {isMobile&&(
+        <div style={{display:"flex",gap:6,width:"100%",alignItems:"center"}}>
+          {[["WEEK","week"],["MONTH","month"]].map(([lbl,v])=>(
+            <button key={v} onClick={()=>setView(v)} style={{background:view===v?"#000":"none",border:"1px solid "+(view===v?"#000":"#ccc"),padding:"3px 8px",cursor:"pointer",fontFamily:C,fontSize:8,fontWeight:700,color:view===v?BG:FG}}>{lbl}</button>
+          ))}
+          <div style={{flex:1}} />
+          <span style={{display:"inline-block",width:8,height:8,background:ROSE}} />
+          <span style={{display:"inline-block",width:8,height:8,background:LAV,marginLeft:4}} />
         </div>
       )}
     </div>
@@ -274,27 +314,26 @@ function AdminContent(){
       </div>
     )}
 
-    {/* Day panel */}
-    {selDay&&(mobileTab==="calendar"||!isMobile)&&(
-      <div style={{padding:`12px ${px}px 0`}}><DayPanel dk={selDay} bookings={bookings} rooms={ROOMS} onClose={()=>setSelDay(null)} onEdit={onEdit} isMobile={isMobile} /></div>
-    )}
 
     {/* Content */}
-    <div style={{display:isMobile?"block":"flex",padding:`16px ${px}px`}}>
-      {/* Timeline */}
+    <div style={{display:isMobile?"block":"flex",padding:`16px ${px}px`,alignItems:"flex-start"}}>
+      {/* Timeline + text below */}
       {(mobileTab==="calendar"||!isMobile)&&(
         <div style={{flex:1,minWidth:0}}>
-          <div ref={ref} style={{overflowX:"auto",scrollBehavior:"smooth",WebkitOverflowScrolling:"touch"}}>
-            <div style={{width:dim*CW+(isMobile?50:80)}}>
+          <div style={{overflowX:"auto"}}>
+            <div style={{width:days.length*CW+(isMobile?50:80)}}>
               <div style={{display:"flex",borderBottom:"2px solid #000"}}>
                 <div style={{width:isMobile?50:80,flexShrink:0,padding:"6px 8px",fontSize:9,fontWeight:700,letterSpacing:"0.1em",fontFamily:C}}>{isMobile?"#":"SLOTS"}</div>
                 <div style={{display:"flex"}}>
-                  {days.map(d=>{
-                    const key=`${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-                    const isT=key===todayKey;const dow=new Date(year,month,d).getDay();const we=dow===0||dow===6;const off=!inS(key);const isSel=selDay===key;
-                    return(<div key={d} onClick={()=>inS(key)?setSelDay(selDay===key?null:key):null}
-                      style={{width:CW,textAlign:"center",padding:"3px 0",fontSize:isMobile?10:11,fontFamily:H,fontWeight:isT?800:isSel?700:400,color:off?"#d0ccc0":isT?"#000":we?"#aaa":"#888",background:isSel?"rgba(0,0,0,0.08)":isT?"rgba(0,0,0,0.04)":"transparent",cursor:off?"default":"pointer",borderBottom:isSel?"2px solid #000":"2px solid transparent",flexShrink:0}}>
-                      <div style={{fontSize:7,color:off?"#d0ccc0":MU,fontFamily:C}}>{dn(key).slice(0,isMobile?2:3)}</div><div>{d}</div>
+                  {days.map(day=>{
+                    const key=dk(day);
+                    const isT=key===todayKey;const dow=day.getDay();const we=dow===0||dow===6;const off=!inS(key);const isSel=selDay===key;
+                    const isMonth=view==="month";
+                    return(<div key={key} onClick={()=>inS(key)?setSelDay(selDay===key?null:key):null}
+                      style={{width:CW,textAlign:"center",padding:isMonth?"3px 0":"6px 0",fontSize:isMobile?10:isMonth?10:13,fontFamily:H,fontWeight:isT?800:isSel?700:400,color:off?"#d0ccc0":isT?"#000":we?"#555":"#888",background:isSel?"rgba(0,0,0,0.08)":isT?"rgba(0,0,0,0.04)":"transparent",cursor:off?"default":"pointer",borderBottom:isSel?"3px solid #000":"3px solid transparent",flexShrink:0}}>
+                      {!isMonth&&<div style={{fontSize:isMobile?8:10,color:off?"#d0ccc0":MU,fontFamily:C,letterSpacing:"0.1em"}}>{dn(key).toUpperCase()}</div>}
+                      <div style={{fontSize:isMonth?(isMobile?9:11):isMobile?16:22,fontWeight:isT||isSel?700:400,lineHeight:1.2,marginTop:isMonth?0:2}}>{day.getDate()}</div>
+                      {isMonth&&<div style={{fontSize:7,color:we?"#555":MU,fontFamily:C}}>{dn(key).slice(0,1)}</div>}
                     </div>);
                   })}
                 </div>
@@ -302,36 +341,69 @@ function AdminContent(){
               {ROOMS.map((room,ri)=>(
                 <div key={room.id} style={{display:"flex",borderBottom:`1px solid ${BD}`}}>
                   <div style={{width:isMobile?50:80,flexShrink:0,padding:"8px",fontSize:12,fontWeight:600,display:"flex",alignItems:"center",color:MU,fontFamily:H}}>{ri+1}</div>
-                  <div style={{display:"flex",alignItems:"center",minHeight:isMobile?34:38}}>
-                    {days.map(d=>{
-                      const key=`${year}-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+                  <div style={{display:"flex",alignItems:"center",minHeight:ROW_H}}>
+                    {days.map(day=>{
+                      const key=dk(day);
                       const k=room.id+"_"+key;const b=map[k];const off=!inS(key);const isCI=b&&b.checkIn===key;const isSel=selDay===key;
-                      if(off)return <div key={d} style={{width:CW,height:isMobile?34:38,flexShrink:0,background:"repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px)"}} />;
+                      const isMonth=view==="month";
+                      if(off)return <div key={key} style={{width:CW,height:ROW_H,flexShrink:0,background:"repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px)"}} />;
                       if(b){const isPre=b.status==="prebooking";
-                        return(<div key={d} style={{width:CW,height:isMobile?34:38,flexShrink:0,display:"flex",alignItems:"center",cursor:"pointer",position:"relative",background:isSel?"rgba(0,0,0,0.04)":"transparent"}} onClick={()=>setModal({type:"edit",data:b})} title={b.guest}>
-                          <div style={{position:"absolute",left:isCI?2:0,right:0,top:4,bottom:4,background:isPre?LAV_BG:YELLOW_BG,borderLeft:isCI?`2px solid ${isPre?LAV:YELLOW}`:"none"}}>
-                            {isCI&&<div style={{fontSize:isMobile?7:8,fontWeight:700,padding:"1px 3px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",color:isPre?LS:YS,fontFamily:C}}>{b.guest.split(" ")[0].toUpperCase()}</div>}
+                        const vpad=isMonth?3:8;
+                        const lft=isCI?(isMonth?2:6):0;
+                        const rgt=isMonth?5:5;
+                        return(<div key={key} style={{width:CW,height:ROW_H,flexShrink:0,display:"flex",alignItems:"center",cursor:"pointer",position:"relative",background:isSel?"rgba(0,0,0,0.06)":"transparent"}} onClick={()=>{setSelDay(selDay===key?null:key);setModal({type:"edit",data:b})}} title={b.guest}>
+                          <div style={{position:"absolute",left:lft,right:rgt,top:vpad,bottom:vpad,background:isPre?LAV_BG:ROSE_BG,border:"2px solid #000",boxShadow:"3px 3px 0 #000"}}>
+                            {isCI&&!isMonth&&<div style={{fontSize:isMobile?8:10,fontWeight:700,padding:"3px 6px",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",color:FG,fontFamily:C}}>{b.guest.split(" ")[0].toUpperCase()}</div>}
                           </div>
                         </div>);
                       }
-                      return(<div key={d} style={{width:CW,height:isMobile?34:38,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",background:isSel?"rgba(0,0,0,0.04)":"transparent"}}
-                        onClick={()=>setModal({type:"new",data:{checkIn:key,checkOut:dk(addD(parseD(key),2))}})}><div style={{width:2,height:2,borderRadius:"50%",background:"#d0ccc0"}} /></div>);
+                      return(<div key={key} style={{width:CW,height:ROW_H,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",background:isSel?"rgba(0,0,0,0.04)":"transparent"}}
+                        onClick={()=>setSelDay(selDay===key?null:key)}><div style={{width:2,height:2,borderRadius:"50%",background:"#d0ccc0"}} /></div>);
                     })}
                   </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Description text — anchored below timeline */}
+          {!isMobile&&(<>
+            <div style={{paddingTop:24,paddingBottom:24,borderTop:`1px solid ${BD}`,marginTop:16}}>
+              <p style={{fontSize:13,lineHeight:1.9,color:"#444",letterSpacing:"0.02em",fontFamily:C,margin:0,maxWidth:680}}>Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.</p>
+            </div>
+            <div style={{borderTop:"2px solid #000",paddingTop:28,paddingBottom:28,display:"flex",gap:60}}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.22em",borderBottom:"2px solid #000",paddingBottom:8,marginBottom:14,fontFamily:C}}>DETAILS</div>
+                <ul style={{listStyle:"none",padding:0,margin:0,fontSize:12,lineHeight:2,color:"#333",fontFamily:C}}>
+                  {["Only 5 rooms — community vibe, or take over the whole playground","Max 2 per room","Rooms flow on a first-come, first-served basis","Breakfast à la carte — open community style coordinated kitchen","Kids welcome from 8+","Little ones? Reach out — or go all in and book the full space."].map((t,i)=><li key={i} style={{paddingLeft:12,position:"relative"}}><span style={{position:"absolute",left:0}}>—</span>{t}</li>)}
+                </ul>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.22em",borderBottom:"2px solid #000",paddingBottom:8,marginBottom:14,fontFamily:C}}>PAYMENT & CANCELLATION</div>
+                <ul style={{listStyle:"none",padding:0,margin:0,fontSize:12,lineHeight:2,color:"#333",fontFamily:C}}>
+                  {["30% deposit due at reservation via Stripe","Balance payable on arrival","Free cancellation until end of booking tier window","30% deposit retained for late cancellations"].map((t,i)=><li key={i} style={{paddingLeft:12,position:"relative"}}><span style={{position:"absolute",left:0}}>—</span>{t}</li>)}
+                </ul>
+              </div>
+            </div>
+          </>)}
         </div>
       )}
 
       {/* Sidebar — desktop: right column, mobile: tab */}
       {(!isMobile||mobileTab==="info")&&(
-        <div style={isMobile?{paddingTop:8}:{width:240,flexShrink:0,paddingLeft:20,borderLeft:`1px solid ${BD}`}}>
-          <Sidebar bookings={bookings} rooms={ROOMS} occDay={occDay} occLabel={occLabel} selDay={selDay} onEdit={onEdit} />
+        <div style={isMobile?{paddingTop:8}:{width:260,flexShrink:0,paddingLeft:24,borderLeft:`1px solid ${BD}`}}>
+          <Sidebar bookings={bookings} rooms={ROOMS} occDay={occDay} occLabel={occLabel} selDay={selDay} onEdit={onEdit} onBookDay={()=>setModal({type:"new",data:{checkIn:selDay,checkOut:dk(addD(parseD(selDay),2))}})} />
         </div>
       )}
     </div>
+
+    {/* Footer */}
+    {!isMobile&&(
+      <div style={{borderTop:"3px solid #000",padding:"18px 40px",display:"flex",justifyContent:"space-between",background:"#000",color:BG}}>
+        <span style={{fontSize:10,letterSpacing:"0.14em",fontFamily:C}}>CHATEAUMOULIN · MASOMENOS WORLD · 2026</span>
+        <span style={{fontSize:10,letterSpacing:"0.14em",fontFamily:C}}>chateaumoulin@masomenos.fr</span>
+      </div>
+    )}
 
     {modal&&(<Modal onClose={()=>setModal(null)} isMobile={isMobile}>
       <BForm data={modal.type==="edit"?{...modal.data,numRooms:modal.data.roomIds.length}:{numRooms:1,guest:"",email:"",guests:1,ages:"",checkIn:modal.data?.checkIn||"",checkOut:modal.data?.checkOut||"",status:"prebooking",bookedOn:dk(TODAY),notes:""}}

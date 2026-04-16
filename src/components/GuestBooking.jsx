@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useBookings } from '../hooks/useBookings';
 import { redirectToCheckout } from '../lib/stripe';
 import {
@@ -117,9 +117,8 @@ export default function GuestBooking() {
   const [showForm, setShowForm] = useState(false);
   const [selDay, setSelDay] = useState(null);
   const [error, setError] = useState(null);
-  const [year] = useState(2026);
-  const [month, setMonth] = useState(5);
-  const ref = useRef(null);
+  const [weekStart, setWeekStart] = useState(parseDate("2026-06-15"));
+  const [view, setView] = useState("week");
 
   const [f, setF] = useState({
     numRooms: 1, firstName: '', lastName: '', email: '', guests: 1, ages: '', checkIn: '', checkOut: '', notes: '',
@@ -139,9 +138,14 @@ export default function GuestBooking() {
   const u8 = ages.some(a => a < 8);
   const nc = u8 && !full;
 
-  const dim = daysInMonth(year, month);
-  const days = Array.from({ length: dim }, (_, i) => i + 1);
-  const CW = isMobile ? 38 : 42;
+  const curMonth = weekStart.getMonth();
+  const curYear = weekStart.getFullYear();
+  const dimMonth = daysInMonth(curYear, curMonth);
+  const days = view === "week"
+    ? Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+    : Array.from({ length: dimMonth }, (_, i) => new Date(curYear, curMonth, i + 1));
+  const CW = view === "week" ? (isMobile ? 52 : 120) : (isMobile ? 28 : 36);
+  const ROW_H = view === "week" ? (isMobile ? 44 : 60) : (isMobile ? 24 : 28);
 
   // Build occupancy map
   const map = useMemo(() => {
@@ -208,9 +212,13 @@ export default function GuestBooking() {
     setShowForm(true);
   }
 
-  const prev = () => { if (month > 5) setMonth(m => m - 1); };
-  const next = () => { if (month < 8) setMonth(m => m + 1); };
-  const sw = (dir) => { if (ref.current) ref.current.scrollLeft += dir * CW * 7; };
+  const weekEnd = addDays(weekStart, 6);
+  const navLabel = view === "week"
+    ? `${weekStart.getDate()} ${MONTHS[curMonth].slice(0,3).toUpperCase()} — ${weekEnd.getDate()} ${MONTHS[weekEnd.getMonth()].slice(0,3).toUpperCase()} ${curYear}`
+    : `${MONTHS[curMonth].toUpperCase()} ${curYear}`;
+  const prev = () => { setSelDay(null); view === "week" ? setWeekStart(d => addDays(d, -7)) : setWeekStart(new Date(curYear, curMonth - 1, 1)); };
+  const next = () => { setSelDay(null); view === "week" ? setWeekStart(d => addDays(d, 7)) : setWeekStart(new Date(curYear, curMonth + 1, 1)); };
+  const jumpMonth = (d) => { setSelDay(null); setWeekStart(d); };
 
   const px = isMobile ? 14 : 28;
 
@@ -219,7 +227,7 @@ export default function GuestBooking() {
       {/* Header */}
       <div style={{ padding: `12px ${px}px`, borderBottom: '2px solid #000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 16 }}>
-          <img src={EYE} alt="" style={{ height: isMobile ? 24 : 32, opacity: 0.8 }} />
+          <img src="/eye.gif" alt="" style={{ height: isMobile ? 24 : 40, width: isMobile ? 24 : 40, objectFit: 'contain' }} />
           <div>
             <div style={{ fontSize: isMobile ? 14 : 18, fontWeight: 700, letterSpacing: '0.12em', fontFamily: H }}>CHATEAUMOULIN</div>
             {!isMobile && <div style={{ fontSize: 9, color: MU, letterSpacing: '0.2em', marginTop: 2 }}>SEASON 2026 · JUN 15 — SEP 15</div>}
@@ -237,34 +245,34 @@ export default function GuestBooking() {
       </div>
 
       {/* Timeline nav */}
-      <div style={{ padding: `10px ${px}px`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${BD}`, borderTop: `1px solid ${BD}`, flexWrap: isMobile ? 'wrap' : 'nowrap', gap: isMobile ? 8 : 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 12 }}>
-          <button onClick={prev} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 8px', cursor: 'pointer', fontFamily: H, fontSize: isMobile ? 12 : 14, color: FG }}>←</button>
-          <span style={{ minWidth: isMobile ? 110 : 160, textAlign: 'center', fontSize: isMobile ? 13 : 15, fontWeight: 700, letterSpacing: '0.08em', fontFamily: H }}>{MONTHS[month].toUpperCase().slice(0, isMobile ? 3 : 99)} {year}</span>
-          <button onClick={next} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 8px', cursor: 'pointer', fontFamily: H, fontSize: isMobile ? 12 : 14, color: FG }}>→</button>
+      <div style={{ padding: `10px ${px}px`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: `1px solid ${BD}`, borderTop: `1px solid ${BD}`, flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={prev} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 10px', cursor: 'pointer', fontFamily: H, fontSize: 14, color: FG }}>←</button>
+          <span style={{ minWidth: isMobile ? 130 : 200, textAlign: 'center', fontSize: isMobile ? 11 : 12, fontWeight: 700, letterSpacing: '0.08em', fontFamily: C }}>{navLabel}</span>
+          <button onClick={next} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 10px', cursor: 'pointer', fontFamily: H, fontSize: 14, color: FG }}>→</button>
+          <div style={{ width: 1, height: 20, background: BD, margin: '0 2px' }} />
+          {[["JUN", parseDate("2026-06-15")], ["JUL", parseDate("2026-07-01")], ["AUG", parseDate("2026-08-01")], ["SEP", parseDate("2026-09-01")]].map(([lbl, d]) => {
+            const active = curMonth === d.getMonth() && curYear === d.getFullYear();
+            return (<button key={lbl} onClick={() => jumpMonth(d)} style={{ background: active ? '#000' : 'none', border: '1px solid ' + (active ? '#000' : '#ccc'), padding: '4px 8px', cursor: 'pointer', fontFamily: C, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', color: active ? BG : FG }}>{lbl}</button>);
+          })}
           {!isMobile && <>
-            <div style={{ width: 1, height: 20, background: BD, margin: '0 4px' }} />
-            <button onClick={() => sw(-1)} style={{ background: 'none', border: '1px solid #ccc', padding: '5px 8px', cursor: 'pointer', fontFamily: C, fontSize: 9, color: FG }}>◄ WEEK</button>
-            <button onClick={() => sw(1)} style={{ background: 'none', border: '1px solid #ccc', padding: '5px 8px', cursor: 'pointer', fontFamily: C, fontSize: 9, color: FG }}>WEEK ►</button>
+            <div style={{ width: 1, height: 20, background: BD, margin: '0 2px' }} />
+            {[["WEEK", "week"], ["MONTH", "month"]].map(([lbl, v]) => (
+              <button key={v} onClick={() => setView(v)} style={{ background: view === v ? '#000' : 'none', border: '1px solid ' + (view === v ? '#000' : '#ccc'), padding: '4px 10px', cursor: 'pointer', fontFamily: C, fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', color: view === v ? BG : FG }}>{lbl}</button>
+            ))}
           </>}
         </div>
-        {isMobile ? (
-          <div style={{ display: 'flex', gap: 6, width: '100%' }}>
-            <button onClick={() => sw(-1)} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 8px', cursor: 'pointer', fontFamily: C, fontSize: 8, color: FG }}>◄ WK</button>
-            <button onClick={() => sw(1)} style={{ background: 'none', border: '1px solid #ccc', padding: '4px 8px', cursor: 'pointer', fontFamily: C, fontSize: 8, color: FG }}>WK ►</button>
-            <div style={{ flex: 1 }} />
-            <div style={{ display: 'flex', gap: 8, fontSize: 8, alignItems: 'center', fontFamily: C }}>
-              <span style={{ display: 'inline-block', width: 8, height: 8, background: YELLOW }} /> booked
-              <span style={{ display: 'inline-block', width: 8, height: 8, background: LAV, marginLeft: 4 }} /> pre
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          {isMobile && [["WEEK", "week"], ["MONTH", "month"]].map(([lbl, v]) => (
+            <button key={v} onClick={() => setView(v)} style={{ background: view === v ? '#000' : 'none', border: '1px solid ' + (view === v ? '#000' : '#ccc'), padding: '3px 8px', cursor: 'pointer', fontFamily: C, fontSize: 8, fontWeight: 700, color: view === v ? BG : FG }}>{lbl}</button>
+          ))}
+          {!isMobile && (
+            <div style={{ display: 'flex', gap: 16, fontSize: 9, letterSpacing: '0.1em', fontFamily: C }}>
+              <span><span style={{ display: 'inline-block', width: 10, height: 10, background: YELLOW, marginRight: 4, verticalAlign: 'middle' }} /> CONFIRMED</span>
+              <span><span style={{ display: 'inline-block', width: 10, height: 10, background: LAV, marginRight: 4, verticalAlign: 'middle' }} /> PRE-BOOKING</span>
             </div>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', gap: 16, fontSize: 9, letterSpacing: '0.1em', fontFamily: C }}>
-            <span><span style={{ display: 'inline-block', width: 10, height: 10, background: YELLOW, marginRight: 4, verticalAlign: 'middle' }} /> CONFIRMED</span>
-            <span><span style={{ display: 'inline-block', width: 10, height: 10, background: LAV, marginRight: 4, verticalAlign: 'middle' }} /> PRE-BOOKING</span>
-            <span style={{ color: MU, opacity: 0.5 }}>/// OFF</span>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Day panel — opens when clicking a date */}
@@ -276,25 +284,26 @@ export default function GuestBooking() {
 
       {/* Timeline — 5 slots */}
       <div style={{ padding: `0 ${px}px 16px` }}>
-        <div ref={ref} style={{ overflowX: 'auto', scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
-          <div style={{ width: dim * CW + (isMobile ? 50 : 80) }}>
+        <div style={{ overflowX: 'auto' }}>
+          <div style={{ width: days.length * CW + (isMobile ? 50 : 80) }}>
             {/* Day headers */}
             <div style={{ display: 'flex', borderBottom: '2px solid #000' }}>
               <div style={{ width: isMobile ? 50 : 80, flexShrink: 0, padding: '6px 8px', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', fontFamily: C }}>{isMobile ? '#' : 'SLOTS'}</div>
               <div style={{ display: 'flex' }}>
-                {days.map(d => {
-                  const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                {days.map(day => {
+                  const key = dateKey(day);
                   const isT = key === todayKey;
-                  const dow = new Date(year, month, d).getDay();
+                  const dow = day.getDay();
                   const we = dow === 0 || dow === 6;
                   const off = !inSeason(key);
                   const isSel = selDay === key;
+                  const isMonth = view === "month";
                   return (
-                    <div key={d}
-                      onClick={() => inSeason(key) ? setSelDay(selDay === key ? null : key) : null}
-                      style={{ width: CW, textAlign: 'center', padding: '3px 0', fontSize: isMobile ? 10 : 11, fontFamily: H, fontWeight: isT ? 800 : isSel ? 700 : 400, color: off ? '#d0ccc0' : isT ? '#000' : we ? '#aaa' : '#888', background: isSel ? 'rgba(0,0,0,0.08)' : isT ? 'rgba(0,0,0,0.04)' : 'transparent', cursor: off ? 'default' : 'pointer', borderBottom: isSel ? '2px solid #000' : '2px solid transparent', flexShrink: 0 }}>
-                      <div style={{ fontSize: 7, color: off ? '#d0ccc0' : MU, fontFamily: C }}>{dayName(key).slice(0, isMobile ? 2 : 3)}</div>
-                      <div>{d}</div>
+                    <div key={key} onClick={() => inSeason(key) ? setSelDay(selDay === key ? null : key) : null}
+                      style={{ width: CW, textAlign: 'center', padding: isMonth ? '3px 0' : '6px 0', fontSize: isMobile ? 10 : isMonth ? 10 : 13, fontFamily: H, fontWeight: isT ? 800 : isSel ? 700 : 400, color: off ? '#d0ccc0' : isT ? '#000' : we ? '#555' : '#888', background: isSel ? 'rgba(0,0,0,0.08)' : isT ? 'rgba(0,0,0,0.04)' : 'transparent', cursor: off ? 'default' : 'pointer', borderBottom: isSel ? '3px solid #000' : '3px solid transparent', flexShrink: 0 }}>
+                      {!isMonth && <div style={{ fontSize: isMobile ? 8 : 10, color: off ? '#d0ccc0' : MU, fontFamily: C, letterSpacing: '0.1em' }}>{dayName(key).toUpperCase()}</div>}
+                      <div style={{ fontSize: isMonth ? (isMobile ? 9 : 11) : isMobile ? 16 : 22, fontWeight: isT || isSel ? 700 : 400, lineHeight: 1.2, marginTop: isMonth ? 0 : 2 }}>{day.getDate()}</div>
+                      {isMonth && <div style={{ fontSize: 7, color: we ? '#555' : MU, fontFamily: C }}>{dayName(key).slice(0, 1)}</div>}
                     </div>
                   );
                 })}
@@ -305,31 +314,35 @@ export default function GuestBooking() {
             {ROOMS.map((room, ri) => (
               <div key={room.id} style={{ display: 'flex', borderBottom: `1px solid ${BD}` }}>
                 <div style={{ width: isMobile ? 50 : 80, flexShrink: 0, padding: '8px', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', color: MU, fontFamily: H }}>{ri + 1}</div>
-                <div style={{ display: 'flex', alignItems: 'center', minHeight: isMobile ? 34 : 38 }}>
-                  {days.map(d => {
-                    const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                <div style={{ display: 'flex', alignItems: 'center', minHeight: ROW_H }}>
+                  {days.map(day => {
+                    const key = dateKey(day);
                     const k = room.id + '_' + key;
                     const b = map[k];
                     const off = !inSeason(key);
                     const isCI = b && b.checkIn === key;
                     const isSel = selDay === key;
+                    const isMonth = view === "month";
 
-                    if (off) return <div key={d} style={{ width: CW, height: isMobile ? 34 : 38, flexShrink: 0, background: 'repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px)' }} />;
+                    if (off) return <div key={key} style={{ width: CW, height: ROW_H, flexShrink: 0, background: 'repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px)' }} />;
 
                     if (b) {
                       const isPre = b.status === 'prebooking';
-                      const borderColor = isPre ? LAV : YELLOW;
+                      const bg = isPre ? LAV_BG : YELLOW_BG;
+                      const lft = isCI ? (isMonth ? 2 : 6) : 0;
+                      const rgt = isMonth ? 5 : 5;
+                      const vpad = isMonth ? 3 : 8;
                       return (
-                        <div key={d} onClick={() => setSelDay(selDay === key ? null : key)} style={{ width: CW, height: isMobile ? 34 : 38, flexShrink: 0, display: 'flex', alignItems: 'center', cursor: 'pointer', position: 'relative', background: isSel ? 'rgba(0,0,0,0.04)' : 'transparent' }}>
-                          <div style={{ position: 'absolute', left: isCI ? 2 : 0, right: 0, top: 4, bottom: 4, background: isPre ? LAV_BG : YELLOW_BG, border: `2px solid ${borderColor}`, boxShadow: `2px 2px 0 #000`, borderLeft: isCI ? `2px solid ${borderColor}` : 'none' }}>
-                            {isCI && <div style={{ fontSize: isMobile ? 7 : 8, fontWeight: 700, padding: '1px 3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isPre ? LS : YS, fontFamily: C }}>{b.guest.split(' ')[0].toUpperCase()}</div>}
+                        <div key={key} onClick={() => setSelDay(selDay === key ? null : key)} style={{ width: CW, height: ROW_H, flexShrink: 0, display: 'flex', alignItems: 'center', cursor: 'pointer', position: 'relative', background: isSel ? 'rgba(0,0,0,0.06)' : 'transparent' }}>
+                          <div style={{ position: 'absolute', left: lft, right: rgt, top: vpad, bottom: vpad, background: bg, border: '2px solid #000', boxShadow: '3px 3px 0 #000' }}>
+                            {isCI && !isMonth && <div style={{ fontSize: isMobile ? 8 : 10, fontWeight: 700, padding: '3px 6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: FG, fontFamily: C }}>{b.guest.split(' ')[0].toUpperCase()}</div>}
                           </div>
                         </div>
                       );
                     }
 
                     return (
-                      <div key={d} onClick={() => setSelDay(selDay === key ? null : key)} style={{ width: CW, height: isMobile ? 34 : 38, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: isSel ? 'rgba(0,0,0,0.04)' : 'transparent' }}>
+                      <div key={key} onClick={() => setSelDay(selDay === key ? null : key)} style={{ width: CW, height: ROW_H, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: isSel ? 'rgba(0,0,0,0.04)' : 'transparent' }}>
                         <div style={{ width: 2, height: 2, borderRadius: '50%', background: '#d0ccc0' }} />
                       </div>
                     );
@@ -390,7 +403,7 @@ export default function GuestBooking() {
 
       {/* Footer */}
       <div style={{ padding: `24px ${px}px 40px`, textAlign: 'center' }}>
-        <img src={EYE} alt="" style={{ height: 20, opacity: 0.12 }} />
+        <img src="/eye.gif" alt="" style={{ height: 28, opacity: 0.15 }} />
         <div style={{ fontSize: 8, color: MU, marginTop: 8, letterSpacing: '0.1em' }}>
           <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: MU, textDecoration: 'none' }}>{CONTACT_EMAIL}</a>
         </div>

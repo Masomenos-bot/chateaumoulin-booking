@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chateaumoulin · Book your stay</title>
+<style>
+  :root{
+    --bg:#F5F3ED; --fg:#000; --mu:#000; --bd:#e0dcd0; --cw:52px;
+    --rose:#E8A0B4; --lav:#8B9DC3; --yel:#F5C518;
+    --H:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    --C:'Courier New',Courier,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--C)}
+  ::-webkit-scrollbar{height:8px;width:4px}
+  ::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+
+  /* Header */
+  .header{padding:24px 40px;border-bottom:3px solid #000;display:flex;justify-content:space-between;align-items:center;background:#fff}
+  .brand{display:flex;align-items:center;gap:20px}
+  .brand-title{font-size:28px;font-weight:700;letter-spacing:0.16em;font-family:var(--H);line-height:1}
+  .brand-sub{font-size:10px;color:var(--fg);letter-spacing:0.22em;margin-top:6px;font-family:var(--C)}
+  .btn-new{padding:14px 28px;border:3px solid #000;background:var(--yel);color:#000;cursor:pointer;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:0.14em;box-shadow:3px 3px 0 #000}
+  .eye{height:48px;width:48px;object-fit:contain}
+
+  /* Nav */
+  .nav{padding:14px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #000;background:#fff}
+  .nav-left{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .nav-btn{background:none;border:2px solid #000;padding:4px 10px;cursor:pointer;font-family:var(--H);font-size:13px;font-weight:700;color:var(--fg)}
+  .nav-label{min-width:150px;text-align:center;font-size:13px;font-weight:700;letter-spacing:0.08em;font-family:var(--H);color:var(--fg);padding:0 6px}
+  .divider{width:1px;height:20px;background:var(--bd);margin:0 8px}
+  .toggle{display:flex;border:2px solid #000}
+  .toggle button{border:none;padding:8px 16px;cursor:pointer;font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:0.12em;background:transparent;color:var(--fg)}
+  .toggle button + button{border-left:2px solid #000}
+  .toggle button.active{background:#000;color:var(--bg)}
+  .legend{display:flex;gap:20px;font-size:10px;letter-spacing:0.12em;font-family:var(--C);align-items:center;color:var(--fg)}
+  .legend span.swatch{display:inline-block;width:14px;height:14px;border:2px solid #000;vertical-align:middle;margin-right:8px}
+
+  /* Main */
+  .main{display:flex;padding:28px 40px;gap:40px}
+  .timeline-wrap{flex:1;min-width:0}
+  .timeline{overflow-x:auto;scroll-behavior:smooth;padding:6px;background:#fff;border:1px solid #000;box-shadow:3px 3px 0 #000}
+  .tl-row{display:flex;border-bottom:1px solid var(--bd)}
+  .tl-header{display:flex;border-bottom:2px solid #000}
+  .tl-slots{width:80px;flex-shrink:0;padding:8px 10px;font-size:9px;font-weight:700;letter-spacing:0.15em;font-family:var(--C);color:var(--fg)}
+  .tl-dates{display:flex;gap:6px}
+  .date-col{width:var(--cw);text-align:center;padding:4px 0;font-size:11px;font-family:var(--H);color:var(--fg);cursor:pointer;border-bottom:2px solid transparent;flex-shrink:0}
+  .date-col .dow{font-size:8px;font-family:var(--C);color:var(--fg)}
+  .date-col.today{background:rgba(0,0,0,0.04);font-weight:800}
+  .date-col.selected{background:rgba(0,0,0,0.08);border-bottom:2px solid #000;font-weight:700}
+  .date-col.off{color:#d0ccc0;cursor:default;opacity:0.4}
+  .date-col.we{opacity:0.75}
+  .room-lbl{width:80px;flex-shrink:0;padding:10px 12px;font-size:12px;font-weight:600;display:flex;align-items:center;color:var(--fg);font-family:var(--H)}
+  .slots{display:flex;align-items:center;min-height:38px;gap:6px;flex:1}
+  .slot{width:var(--cw);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;height:38px;position:relative}
+  .slot.off{background:repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px);cursor:default}
+  .slot.sel{background:rgba(0,0,0,0.04)}
+  .slot .dot{width:2px;height:2px;border-radius:50%;background:#d0ccc0}
+  .booking{width:var(--cw);height:46px;flex-shrink:0;display:flex;align-items:center;cursor:pointer;position:relative;padding:0 2px}
+  .booking.sel{background:rgba(0,0,0,0.04)}
+  .booking-bar{position:absolute;left:0;right:4px;top:6px;bottom:6px;border:2px solid #000;box-shadow:3px 3px 0 #000}
+  .booking-bar.ci{left:4px}
+  .booking-bar.rose{background:var(--rose)}
+  .booking-bar.lav{background:var(--lav)}
+  .booking-bar .name{font-size:8px;font-weight:700;padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--fg);letter-spacing:0.05em;font-family:var(--C)}
+  .tl-inner.week .booking-bar .name{font-size:13px;padding:6px 10px;letter-spacing:0.08em}
+
+  /* Week view: fill width, taller rows */
+  .timeline.week-mode{overflow-x:visible}
+  .tl-inner.week{width:100%;display:block}
+  .tl-inner.week .tl-header{display:grid;grid-template-columns:80px 1fr;align-items:stretch}
+  .tl-inner.week .tl-slots{width:auto}
+  .tl-inner.week .tl-dates{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;min-width:0}
+  .tl-inner.week .date-col{width:auto;padding:10px 0;font-size:14px}
+  .tl-inner.week .date-col .dow{font-size:10px;margin-bottom:4px}
+  .tl-inner.week .tl-row{display:grid;grid-template-columns:80px 1fr;align-items:stretch}
+  .tl-inner.week .room-lbl{width:auto;font-size:14px;padding:12px 14px}
+  .tl-inner.week .slots{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;min-width:0;min-height:72px}
+  .tl-inner.week .slot{width:auto;height:72px}
+  .tl-inner.week .booking{width:auto;height:80px}
+  .tl-inner.week .booking-bar{left:0;right:6px;top:10px;bottom:10px}
+  .tl-inner.week .booking-bar.ci{left:6px}
+
+  .desc{margin-top:24px;padding-top:24px;border-top:1px solid var(--bd);max-width:680px;font-size:13px;line-height:1.9;color:var(--fg);letter-spacing:0.02em;font-family:var(--C)}
+
+  /* Sidebar */
+  .sidebar{width:280px;flex-shrink:0}
+  .sb-block{margin-bottom:24px;padding:16px;background:#fff;border:1px solid #000;box-shadow:3px 3px 0 #000}
+  .sb-title{font-size:9px;font-weight:700;letter-spacing:0.2em;color:var(--fg);margin-bottom:10px;font-family:var(--C);border-bottom:2px solid #000;padding-bottom:8px}
+  .occ-label{font-size:10px;letter-spacing:0.12em;color:var(--fg);margin-bottom:12px;font-family:var(--C);font-weight:700}
+  .occ-bars{display:flex;gap:4px;margin-bottom:10px}
+  .occ-bar{flex:1;height:4px;background:var(--bd)}
+  .occ-bar.on{background:#000}
+  .occ-count{font-size:36px;font-weight:700;margin-bottom:4px;font-family:var(--H);line-height:1;color:var(--fg)}
+  .book-btn{margin-top:14px;width:100%;padding:12px 0;border:2px solid #000;background:var(--yel);color:#000;cursor:pointer;font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:0.12em;box-shadow:3px 3px 0 #000}
+  .book-btn:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none}
+  .card{padding:8px 10px;margin-bottom:8px;cursor:pointer;border:2px solid #000;box-shadow:3px 3px 0 #000}
+  .card.rose{background:var(--rose)}
+  .card.lav{background:var(--lav)}
+  .card .g-name{font-size:12px;font-weight:700;color:var(--fg);font-family:var(--H)}
+  .card .g-meta{font-size:10px;color:var(--fg);margin-top:2px;font-family:var(--C)}
+  .card .g-notes{font-size:9px;color:var(--fg);margin-top:2px;font-family:var(--C);font-style:italic}
+  .sub-title{font-size:9px;font-weight:700;letter-spacing:0.15em;color:var(--fg);font-family:var(--C);margin-bottom:6px}
+  .pricing table{width:100%;border-collapse:collapse;font-size:10px;font-family:var(--C);color:var(--fg)}
+  .pricing th,.pricing td{padding:5px 6px;text-align:center;color:var(--fg)}
+  .pricing tr{border-bottom:1px solid var(--bd)}
+
+  /* Footer blocks */
+  .details{border-top:2px solid #000;padding:28px 40px;display:flex;gap:60px}
+  .details h3{font-size:9px;font-weight:700;letter-spacing:0.22em;border-bottom:2px solid #000;padding-bottom:8px;margin:0 0 16px;font-family:var(--C);color:var(--fg)}
+  .details ul{list-style:none;padding:0;margin:0;font-size:12px;line-height:2;color:var(--fg);font-family:var(--C)}
+  .details li{padding-left:12px;position:relative}
+  .details li::before{content:"—";position:absolute;left:0}
+  .footer{border-top:3px solid #000;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;background:#000;color:var(--bg);font-size:10px;letter-spacing:0.14em;font-family:var(--C)}
+
+  /* Modal */
+  .modal-bg{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center}
+  .modal-bg.hidden{display:none}
+  .modal{background:var(--bg);max-width:540px;width:92%;max-height:90vh;overflow-y:auto;padding:32px;border:2px solid #000;box-shadow:6px 6px 0 #000}
+  .modal-title{font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:10px;margin-bottom:24px;font-family:var(--C);color:var(--fg)}
+  .lbl{display:block;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--fg);margin-bottom:4px;font-family:var(--C)}
+  .inp{width:100%;padding:9px 10px;border:1px solid #000;font-size:13px;font-family:var(--C);background:#FDFBF5;outline:none;color:var(--fg);box-shadow:2px 2px 0 #000}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .field{margin-bottom:14px}
+  .check-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #000;background:#fff;margin-bottom:14px;box-shadow:2px 2px 0 #000;cursor:pointer}
+  .check-row input{width:16px;height:16px;accent-color:#000;cursor:pointer}
+  .check-row label{font-size:12px;font-family:var(--C);color:var(--fg);cursor:pointer;flex:1}
+  .check-row .hint{font-size:10px;color:var(--fg);font-family:var(--C);opacity:0.6;margin-top:2px}
+  .modal-actions{display:flex;justify-content:space-between;margin-top:20px}
+  .btn-cancel{padding:8px 18px;border:1px solid #000;background:transparent;cursor:pointer;font-family:var(--C);font-size:11px;color:var(--fg)}
+  .btn-save{padding:8px 22px;border:2px solid #000;background:#000;color:var(--bg);cursor:pointer;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:0.1em;box-shadow:3px 3px 0 #000}
+  .btn-del{padding:8px 16px;border:1px solid #c00;background:transparent;color:#c00;cursor:pointer;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:0.1em}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <img class="eye" src="public/eye.gif" alt="">
+    <div>
+      <div class="brand-title">CHATEAUMOULIN</div>
+      <div class="brand-sub">BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>
+    </div>
+  </div>
+  <button class="btn-new">+ NEW BOOKING</button>
+</div>
+
+<div class="nav">
+  <div class="nav-left">
+    <button class="nav-btn" id="prev">←</button>
+    <span class="nav-label" id="navLabel">WEEK OF MON 15 JUNE</span>
+    <button class="nav-btn" id="next">→</button>
+    <div class="divider"></div>
+    <div class="toggle">
+      <button class="active" id="wkBtn">WEEK</button>
+      <button id="moBtn">MONTH</button>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--rose)"></span>CONFIRMED</span>
+    <span><span class="swatch" style="background:var(--lav)"></span>PRE-BOOKING</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="timeline-wrap">
+    <div class="timeline" id="timeline"></div>
+    <div class="desc">Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.</div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sb-block" id="occBlock">
+      <div class="sb-title">OCCUPANCY</div>
+      <div class="occ-label" id="occLabel">— SELECT A DATE —</div>
+      <div class="occ-bars" id="occBars"></div>
+      <div class="occ-count" id="occCount">0/5</div>
+      <button class="book-btn" id="bookBtn" disabled>+ BOOK THIS DATE</button>
+    </div>
+
+    <div class="sb-block pricing">
+      <div class="sb-title">PRICING — €/NIGHT/ROOM</div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>T1<div style="font-size:8px;font-weight:400">till May 20</div></th>
+            <th>T2<div style="font-size:8px;font-weight:400">till Jul 1</div></th>
+            <th>T3<div style="font-size:8px;font-weight:400">after Jul 1</div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight:700">1-2n</td><td>200€</td><td>270€</td><td>320€</td></tr>
+          <tr><td style="font-weight:700">3-5n</td><td>185€</td><td>265€</td><td>305€</td></tr>
+          <tr><td style="font-weight:700">6+n</td><td>170€</td><td>255€</td><td>290€</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </aside>
+</div>
+
+<div class="details">
+  <div style="flex:1">
+    <h3>DETAILS</h3>
+    <ul>
+      <li>Only 5 rooms — community vibe, or take over the whole playground</li>
+      <li>Max 2 per room</li>
+      <li>Rooms flow on a first-come, first-served basis</li>
+      <li>Breakfast à la carte — open community style coordinated kitchen</li>
+      <li>Kids welcome from 8+</li>
+      <li>Little ones? Reach out — or go all in and book the full space.</li>
+    </ul>
+  </div>
+  <div style="flex:1">
+    <h3>PAYMENT & CANCELLATION</h3>
+    <ul>
+      <li>30% deposit due at reservation via Stripe</li>
+      <li>Balance payable on arrival</li>
+      <li>Free cancellation until end of booking tier window</li>
+      <li>30% deposit retained for late cancellations</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <span>CHATEAUMOULIN · MASOMENOS WORLD · 2026</span>
+  <span>chateaumoulin@masomenos.fr</span>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal-bg hidden" id="modalBg">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modalTitle">NEW BOOKING</div>
+
+    <div class="grid-2">
+      <div><label class="lbl">First name</label><input class="inp" id="f_firstName" placeholder="Marie"></div>
+      <div><label class="lbl">Last name</label><input class="inp" id="f_lastName" placeholder="Dupont"></div>
+    </div>
+
+    <div class="check-row" onclick="if(event.target.id!=='f_initials')document.getElementById('f_initials').click()">
+      <input type="checkbox" id="f_initials">
+      <div>
+        <label for="f_initials">Only show my initials on the booking block</label>
+        <div class="hint">When checked, the timeline will show only first-letter initials (e.g. "MD") instead of the first name.</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div><label class="lbl">Rooms</label>
+        <select class="inp" id="f_rooms">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 (full estate)</option>
+        </select>
+      </div>
+      <div><label class="lbl">Guests</label><input class="inp" type="number" id="f_guests" min="1" max="10" value="2"></div>
+      <div><label class="lbl">Status</label>
+        <select class="inp" id="f_status">
+          <option value="prebooking">Pre-booking</option><option value="confirmed">Confirmed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div><label class="lbl">Check-in</label><input class="inp" type="date" id="f_ci" min="2026-06-15" max="2026-09-14"></div>
+      <div><label class="lbl">Check-out</label><input class="inp" type="date" id="f_co" min="2026-06-16" max="2026-09-15"></div>
+    </div>
+
+    <div class="check-row" onclick="if(event.target.id!=='f_children')document.getElementById('f_children').click()">
+      <input type="checkbox" id="f_children">
+      <div>
+        <label for="f_children">Travelling with children</label>
+        <div class="hint">Kids welcome from 8+. Tick if any of the guests are under 18.</div>
+      </div>
+    </div>
+
+    <div class="field" id="f_kidsWrap" style="display:none"><label class="lbl">Children ages</label><input class="inp" id="f_kidsAges" placeholder="e.g. 8, 10, 12"></div>
+
+    <div class="field"><label class="lbl">Notes</label><textarea class="inp" id="f_notes" style="min-height:50px;resize:vertical"></textarea></div>
+
+    <div class="modal-actions">
+      <div></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
+        <button class="btn-save" id="btnSave">REQUEST BOOKING</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Data ---
+  const ROOMS=[1,2,3,4,5];
+  const MS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const SS="2026-06-15", SE="2026-09-15";
+  const TODAY=new Date(2026,5,15); // Simulated: today = June 15, 2026 (season start)
+  const SEASON_START=new Date(2026,5,15); // June 15 — timeline landing
+  const bookings=[
+    {id:"b1",rooms:[1],firstName:"Marie",lastName:"Dupont",initials:false,guests:2,ci:"2026-06-20",co:"2026-06-25",status:"confirmed",notes:""},
+    {id:"b2",rooms:[2],firstName:"James",lastName:"Wheeler",initials:true,guests:2,ci:"2026-06-18",co:"2026-06-22",status:"confirmed",notes:""},
+    {id:"b3",rooms:[3,4],firstName:"Lucia",lastName:"Fernandez",initials:false,guests:4,ci:"2026-06-25",co:"2026-06-30",status:"prebooking",notes:"Arriving late ~22h"},
+    {id:"b4",rooms:[1,2],firstName:"Karim",lastName:"Bensaid",initials:true,guests:3,ci:"2026-07-01",co:"2026-07-06",status:"prebooking",notes:""},
+    {id:"b5",rooms:[1,2,3,4,5],firstName:"Anna",lastName:"Schmidt",initials:false,guests:8,ci:"2026-07-10",co:"2026-07-20",status:"prebooking",notes:"Full estate"},
+  ];
+  const displayName=b=>b.initials?((b.firstName[0]||"")+(b.lastName[0]||"")).toUpperCase():b.firstName;
+  const fullName=b=>b.firstName+(b.lastName?" "+b.lastName:"");
+
+  // --- State ---
+  let view="week";
+  let weekStart=new Date(SEASON_START); // Start on June 15
+  let year=SEASON_START.getFullYear(),month=SEASON_START.getMonth();
+  let selDay=null;
+  let modalData=null;
+
+  // --- Helpers ---
+  const pad=n=>String(n).padStart(2,"0");
+  const dk=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+  const parseD=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+  const addD=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r};
+  const daysIn=(y,m)=>new Date(y,m+1,0).getDate();
+  const inS=k=>k>=SS&&k<SE;
+  const todayKey=dk(TODAY);
+
+  function displayDays(){
+    if(view==="week")return Array.from({length:7},(_,i)=>addD(weekStart,i));
+    return Array.from({length:daysIn(year,month)},(_,i)=>new Date(year,month,i+1));
+  }
+  function navLabel(){
+    if(view==="week"){
+      const end=addD(weekStart,7);
+      return `${pad(weekStart.getDate())}/${pad(weekStart.getMonth()+1)} — ${pad(end.getDate())}/${pad(end.getMonth()+1)}`;
+    }
+    return `${MS[month].toUpperCase()} ${year}`;
+  }
+
+  // --- Render ---
+  function render(){
+    document.getElementById("navLabel").textContent=navLabel();
+    document.getElementById("wkBtn").classList.toggle("active",view==="week");
+    document.getElementById("moBtn").classList.toggle("active",view==="month");
+    renderTimeline();
+    renderSidebar();
+  }
+
+  function renderTimeline(){
+    const days=displayDays();
+    const isWeek=view==="week";
+    const innerWidth=days.length*52+days.length*6+80;
+    let h=`<div class="tl-inner ${isWeek?"week":"month"}" style="${isWeek?"":"min-width:"+innerWidth+"px"}">`;
+    h+='<div class="tl-header"><div class="tl-slots">SLOTS</div><div class="tl-dates">';
+    days.forEach(dt=>{
+      const key=dk(dt);const off=!inS(key);const isT=key===todayKey;const isSel=selDay===key;const dow=dt.getDay();const we=dow===0||dow===6;
+      const cls=["date-col"];if(off)cls.push("off");if(isT)cls.push("today");if(isSel)cls.push("selected");if(we&&!off)cls.push("we");
+      h+=`<div class="${cls.join(" ")}" data-key="${key}" ${off?"":`onclick="pickDay('${key}')"`}>
+          <div class="dow">${DN[dow]}</div><div>${dt.getDate()}</div></div>`;
+    });
+    h+='</div></div>';
+    // map bookings by room+date
+    const map={};
+    bookings.forEach(b=>{
+      b.rooms.forEach(r=>{
+        let c=parseD(b.ci);const e=parseD(b.co);
+        while(c<e){map[r+"_"+dk(c)]=b;c=addD(c,1)}
+      });
+    });
+    ROOMS.forEach(r=>{
+      h+=`<div class="tl-row"><div class="room-lbl">${r}</div><div class="slots">`;
+      days.forEach(dt=>{
+        const key=dk(dt);const off=!inS(key);const b=map[r+"_"+key];const isCI=b&&b.ci===key;const isSel=selDay===key;
+        if(off){h+=`<div class="slot off"></div>`;return}
+        if(b){
+          const cls="booking-bar "+(b.status==="prebooking"?"lav":"rose")+(isCI?" ci":"");
+          h+=`<div class="booking ${isSel?"sel":""}" onclick="openModal('${b.id}')"><div class="${cls}"><div class="name">${displayName(b).toUpperCase()}</div></div></div>`;
+        } else {
+          h+=`<div class="slot ${isSel?"sel":""}" onclick="pickDay('${key}')"><div class="dot"></div></div>`;
+        }
+      });
+      h+='</div></div>';
+    });
+    h+='</div>'; // close .tl-inner
+    document.getElementById("timeline").innerHTML=h;
+  }
+
+  function renderSidebar(){
+    const refDay=selDay||todayKey;
+    const dayB=bookings.filter(b=>b.ci<=refDay&&b.co>refDay);
+    const occ=new Set(dayB.flatMap(b=>b.rooms));
+    const cnt=occ.size;const free=5-cnt;
+
+    // Occupancy
+    const label=selDay?(()=>{const d=parseD(selDay);return DN[d.getDay()].toUpperCase()+" · "+d.getDate()+" "+MS[d.getMonth()].toUpperCase()+" 2026"})():"— SELECT A DATE —";
+    document.getElementById("occLabel").textContent=label;
+    document.getElementById("occCount").textContent=cnt+"/5";
+    document.getElementById("occBars").innerHTML=ROOMS.map(r=>`<div class="occ-bar${occ.has(r)?" on":""}"></div>`).join("");
+    const bookBtn=document.getElementById("bookBtn");
+    if(free===0){bookBtn.textContent="FULLY BOOKED";bookBtn.disabled=true}
+    else{
+      bookBtn.textContent=`+ BOOK THIS DATE${free<5?` (${free} room${free>1?"s":""} free)`:""}`;
+      bookBtn.disabled=!selDay;
+    }
+
+  }
+
+  // --- Actions ---
+  function pickDay(k){selDay=(selDay===k?null:k);render()}
+  document.getElementById("prev").onclick=()=>{selDay=null;if(view==="week"){weekStart=addD(weekStart,-7)}else{if(month===0){month=11;year--}else month--}render()};
+  document.getElementById("next").onclick=()=>{selDay=null;if(view==="week"){weekStart=addD(weekStart,7)}else{if(month===11){month=0;year++}else month++}render()};
+  document.getElementById("wkBtn").onclick=()=>{selDay=null;view="week";weekStart=new Date(SEASON_START);render()};
+  document.getElementById("moBtn").onclick=()=>{selDay=null;view="month";render()};
+
+  // --- Modal ---
+  function openModal(bid){
+    const b=bookings.find(x=>x.id===bid);
+    if(b){
+      modalData={...b};
+      document.getElementById("modalTitle").textContent="BOOKING DETAILS";
+    } else {
+      modalData={id:null,firstName:"",lastName:"",initials:false,rooms:[1],guests:2,ci:selDay||"",co:selDay?dk(addD(parseD(selDay),2)):"",status:"prebooking",notes:"",withChildren:false,kidsAges:""};
+      document.getElementById("modalTitle").textContent="REQUEST A BOOKING";
+    }
+    document.getElementById("f_firstName").value=modalData.firstName||"";
+    document.getElementById("f_lastName").value=modalData.lastName||"";
+    document.getElementById("f_initials").checked=!!modalData.initials;
+    document.getElementById("f_rooms").value=(modalData.rooms||[1]).length;
+    document.getElementById("f_guests").value=modalData.guests||2;
+    document.getElementById("f_status").value=modalData.status||"prebooking";
+    document.getElementById("f_ci").value=modalData.ci||"";
+    document.getElementById("f_co").value=modalData.co||"";
+    document.getElementById("f_notes").value=modalData.notes||"";
+    document.getElementById("f_children").checked=!!modalData.withChildren;
+    document.getElementById("f_kidsAges").value=modalData.kidsAges||"";
+    document.getElementById("f_kidsWrap").style.display=modalData.withChildren?"block":"none";
+    document.getElementById("modalBg").classList.remove("hidden");
+  }
+  function closeModal(){document.getElementById("modalBg").classList.add("hidden");modalData=null}
+  document.getElementById("f_children").addEventListener("change",e=>{
+    document.getElementById("f_kidsWrap").style.display=e.target.checked?"block":"none";
+    if(!e.target.checked)document.getElementById("f_kidsAges").value="";
+  });
+  document.getElementById("modalBg").onclick=closeModal;
+  document.getElementById("btnSave").onclick=()=>{
+    const fn=document.getElementById("f_firstName").value.trim();
+    const ln=document.getElementById("f_lastName").value.trim();
+    if(!fn){alert("First name required");return}
+    const nR=parseInt(document.getElementById("f_rooms").value);
+    const ci=document.getElementById("f_ci").value;
+    const co=document.getElementById("f_co").value;
+    if(!ci||!co){alert("Check-in and check-out required");return}
+    const withChildren=document.getElementById("f_children").checked;
+    const payload={
+      firstName:fn,lastName:ln,
+      initials:document.getElementById("f_initials").checked,
+      rooms:Array.from({length:nR},(_,i)=>i+1),
+      guests:parseInt(document.getElementById("f_guests").value)||1,
+      status:document.getElementById("f_status").value,
+      ci,co,
+      withChildren,
+      kidsAges:withChildren?document.getElementById("f_kidsAges").value.trim():"",
+      notes:document.getElementById("f_notes").value
+    };
+    if(modalData.id){
+      const idx=bookings.findIndex(b=>b.id===modalData.id);
+      bookings[idx]={...bookings[idx],...payload};
+    } else {
+      bookings.push({id:"b"+Date.now(),...payload});
+    }
+    closeModal();render();
+  };
+  document.querySelector(".btn-new").onclick=()=>openModal(null);
+  document.getElementById("bookBtn").onclick=()=>{if(!selDay)return;openModal(null)};
+
+  render();
+</script>
+</body>
+</html>
