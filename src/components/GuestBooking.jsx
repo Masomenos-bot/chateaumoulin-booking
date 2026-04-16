@@ -389,6 +389,7 @@ export default function GuestBooking() {
       {showForm && (
         <div className="cm-modal-bg" onClick={() => setShowForm(false)}>
           <div className="cm-modal" onClick={e => e.stopPropagation()}>
+            <button className="cm-modal-close" onClick={() => setShowForm(false)}>&times;</button>
             <div className="cm-modal-title">{editBooking ? 'BOOKING DETAILS' : 'REQUEST A BOOKING'}</div>
 
             <div className="cm-grid-2">

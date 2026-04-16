@@ -346,6 +346,7 @@ function AdminContent() {
       {modal && (
         <div className="cm-modal-bg" onClick={() => setModal(null)}>
           <div className="cm-modal" onClick={e => e.stopPropagation()}>
+            <button className="cm-modal-close" onClick={() => setModal(null)}>&times;</button>
             <AdminForm
               data={modal.type === "edit" ? modal.data : modal.data}
               isEdit={modal.type === "edit"}
