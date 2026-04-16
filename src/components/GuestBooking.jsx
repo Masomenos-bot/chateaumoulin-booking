@@ -43,7 +43,7 @@ export default function GuestBooking() {
   const [view, setView] = useState("week");
 
   const [f, setF] = useState({
-    firstName: '', lastName: '', initials: false,
+    firstName: '', lastName: '', email: '', initials: false,
     numRooms: 1, guests: 2, status: 'prebooking',
     checkIn: '', checkOut: '',
     withChildren: false, kidsAges: '',
@@ -95,7 +95,7 @@ export default function GuestBooking() {
     return true;
   }, [f.checkIn, f.checkOut, nR, bookings]);
 
-  const canSubmit = f.firstName && f.checkIn && f.checkOut && inSeason(f.checkIn) && nights > 0 && available;
+  const canSubmit = f.firstName && f.email && f.checkIn && f.checkOut && inSeason(f.checkIn) && nights > 0 && available;
 
   function assignRooms() {
     return ROOMS.filter(r => {
@@ -141,7 +141,7 @@ export default function GuestBooking() {
 
   function openBookingForm(dKey) {
     setF({
-      firstName: '', lastName: '', initials: false,
+      firstName: '', lastName: '', email: '', initials: false,
       numRooms: 1, guests: 2, status: 'prebooking',
       checkIn: dKey || '', checkOut: dKey ? dateKey(addDays(parseDate(dKey), 2)) : '',
       withChildren: false, kidsAges: '',
@@ -155,6 +155,7 @@ export default function GuestBooking() {
     setF({
       firstName: b.firstName || b.guest?.split(' ')[0] || '',
       lastName: b.lastName || b.guest?.split(' ').slice(1).join(' ') || '',
+      email: b.email || '',
       initials: b.initials || false,
       numRooms: (b.roomIds || []).length || 1,
       guests: b.guests || 1,
@@ -393,6 +394,11 @@ export default function GuestBooking() {
             <div className="cm-grid-2">
               <div><label className="cm-lbl">First name</label><input className="cm-inp" value={f.firstName} onChange={e => set('firstName', e.target.value)} placeholder="Marie" /></div>
               <div><label className="cm-lbl">Last name</label><input className="cm-inp" value={f.lastName} onChange={e => set('lastName', e.target.value)} placeholder="Dupont" /></div>
+            </div>
+
+            <div className="cm-field">
+              <label className="cm-lbl">Email</label>
+              <input className="cm-inp" type="email" value={f.email} onChange={e => set('email', e.target.value)} placeholder="marie@example.com" />
             </div>
 
             <div className="cm-check-row" onClick={e => { if (e.target.tagName !== 'INPUT') set('initials', !f.initials); }}>
