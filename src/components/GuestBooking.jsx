@@ -244,7 +244,7 @@ export default function GuestBooking() {
                   const isPre = b.status === 'prebooking';
                   const barCls = 'cm-booking-bar ' + (isPre ? 'lav' : 'rose') + (isCI ? ' ci' : '');
                   return (
-                    <div key={key} className={`cm-booking ${isSel ? 'sel' : ''}`} onClick={() => openBookingDetail(b)}>
+                    <div key={key} className={`cm-booking ${isSel ? 'sel' : ''}`} style={{ cursor: 'default' }}>
                       <div className={barCls}>
                         <div className="name">{displayName(b).toUpperCase()}</div>
                       </div>
@@ -303,15 +303,12 @@ export default function GuestBooking() {
           <div className={`cm-timeline ${isWeek ? 'week-mode' : ''}`}>
             {renderTimeline()}
           </div>
-          <div className="cm-desc">
-            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
-          </div>
         </div>
 
         {/* ─── Sidebar ─── */}
         <aside className="cm-sidebar">
           {/* Occupancy */}
-          <div className="cm-sb-block">
+          <div className="cm-sb-block cm-occupancy">
             <div className="cm-sb-title">OCCUPANCY</div>
             <div className="cm-occ-label">{occLabel}</div>
             <div className="cm-occ-bars">
@@ -331,6 +328,11 @@ export default function GuestBooking() {
                 + BOOK THIS DATE{freeCount < 5 ? ` (${freeCount} room${freeCount > 1 ? 's' : ''} free)` : ''}
               </button>
             )}
+          </div>
+
+          {/* Description */}
+          <div className="cm-desc">
+            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
           </div>
 
           {/* Pricing */}

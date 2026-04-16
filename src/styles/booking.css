@@ -168,10 +168,9 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-eye { height: 28px; width: 28px }
   .cm-btn-new { padding: 8px 14px; font-size: 9px; border-width: 2px }
   .cm-nav { padding: 10px 14px }
-  .cm-main { flex-direction: column-reverse; padding: 16px 14px; gap: 16px }
-  .cm-sidebar { width: 100%; order: 2 }
-  .cm-timeline-wrap { order: 1 }
-  .cm-desc { font-size: 11px; line-height: 1.7 }
+  .cm-main { flex-direction: column; padding: 16px 14px; gap: 16px }
+  .cm-sidebar { width: 100% }
+  .cm-desc { font-size: 11px; line-height: 1.7; margin-top: 0; padding-top: 0; border-top: none }
   .cm-details { flex-direction: column; padding: 20px 14px; gap: 24px }
   /* Timeline compact rows */
   .cm-tl-inner.week .cm-slots { min-height: 40px }
