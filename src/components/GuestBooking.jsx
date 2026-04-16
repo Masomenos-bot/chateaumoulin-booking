@@ -350,7 +350,7 @@ export default function GuestBooking() {
             <table>
               <thead>
                 <tr>
-                  <th style={{ textAlign: 'left', fontWeight: 700, letterSpacing: '0.1em' }}>BOOK</th>
+                  <th style={{ textAlign: 'left', fontWeight: 700, letterSpacing: '0.1em', verticalAlign: 'top' }}>BOOK</th>
                   <th>T1<div style={{ fontSize: 8, fontWeight: 400 }}>till May 20</div></th>
                   <th>T2<div style={{ fontSize: 8, fontWeight: 400 }}>till Jul 1</div></th>
                   <th>T3<div style={{ fontSize: 8, fontWeight: 400 }}>after Jul 1</div></th>
@@ -365,7 +365,7 @@ export default function GuestBooking() {
           </div>
 
           {/* Description */}
-          <div className="cm-desc">
+          <div className="cm-sb-block cm-desc">
             Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
           </div>
         </aside>
@@ -376,12 +376,12 @@ export default function GuestBooking() {
         <div style={{ flex: 1 }}>
           <h3>DETAILS</h3>
           <ul>
-            <li>Only 5 rooms — community vibe, or take over the whole playground</li>
+            <li>Only 5 rooms - community vibe, or take over the whole playground</li>
             <li>Max 2 per room</li>
             <li>Rooms flow on a first-come, first-served basis</li>
-            <li>Breakfast à la carte — open community style coordinated kitchen</li>
+            <li>Breakfast à la carte - open community style coordinated kitchen</li>
             <li>Kids welcome from 8+</li>
-            <li>Little ones? Reach out — or go all in and book the full space.</li>
+            <li>Little ones? Reach out - or go all in and book the full space.</li>
           </ul>
         </div>
         <div style={{ flex: 1 }}>
