@@ -36,6 +36,10 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-nav-btn { background: none; border: 2px solid #000; padding: 4px 10px; cursor: pointer; font-family: var(--H); font-size: 13px; font-weight: 700; color: var(--fg) }
 .cm-nav-label { min-width: 150px; text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; font-family: var(--H); color: var(--fg); padding: 0 6px }
 .cm-divider { width: 1px; height: 20px; background: var(--bd); margin: 0 8px }
+.cm-months { display: flex; border: 2px solid #000 }
+.cm-months button { border: none; padding: 8px 14px; cursor: pointer; font-family: var(--C); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; background: transparent; color: var(--fg) }
+.cm-months button + button { border-left: 2px solid #000 }
+.cm-months button.active { background: #000; color: var(--bg) }
 .cm-toggle { display: flex; border: 2px solid #000 }
 .cm-toggle button { border: none; padding: 8px 16px; cursor: pointer; font-family: var(--C); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; background: transparent; color: var(--fg) }
 .cm-toggle button + button { border-left: 2px solid #000 }
@@ -202,6 +206,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-modal-actions .cm-btn-cancel { flex: 1 }
   .cm-modal-actions .cm-btn-save { flex: 2 }
   .cm-legend { display: none }
+  .cm-months { display: none }
   .cm-nav-left { gap: 4px }
   .cm-nav-label { min-width: 100px; font-size: 11px }
 }

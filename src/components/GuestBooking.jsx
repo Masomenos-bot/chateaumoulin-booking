@@ -286,6 +286,16 @@ export default function GuestBooking() {
           <span className="cm-nav-label">{navLabel}</span>
           <button className="cm-nav-btn" onClick={next}>→</button>
           <div className="cm-divider" />
+          <div className="cm-months">
+            {[['JUN', 5], ['JUL', 6], ['AUG', 7], ['SEP', 8]].map(([lbl, mi]) => (
+              <button
+                key={lbl}
+                className={curMonth === mi ? 'active' : ''}
+                onClick={() => { setSelDay(null); setWeekStart(new Date(2026, mi, mi === 5 ? 15 : 1)); if (view === 'month') setView('month'); }}
+              >{lbl}</button>
+            ))}
+          </div>
+          <div className="cm-divider" />
           <div className="cm-toggle">
             <button className={view === 'week' ? 'active' : ''} onClick={() => { setSelDay(null); setView('week'); setWeekStart(parseDate("2026-06-15")); }}>WEEK</button>
             <button className={view === 'month' ? 'active' : ''} onClick={() => { setSelDay(null); setView('month'); }}>MONTH</button>
@@ -330,11 +340,6 @@ export default function GuestBooking() {
             )}
           </div>
 
-          {/* Description */}
-          <div className="cm-desc">
-            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
-          </div>
-
           {/* Pricing */}
           <div className="cm-sb-block cm-pricing">
             <div className="cm-sb-title">PRICING — €/NIGHT/ROOM</div>
@@ -353,6 +358,11 @@ export default function GuestBooking() {
                 <tr><td style={{ fontWeight: 700 }}>6+n</td><td>170€</td><td>255€</td><td>290€</td></tr>
               </tbody>
             </table>
+          </div>
+
+          {/* Description */}
+          <div className="cm-desc">
+            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
           </div>
         </aside>
       </div>
