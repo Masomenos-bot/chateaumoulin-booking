@@ -350,7 +350,7 @@ export default function GuestBooking() {
             <table>
               <thead>
                 <tr>
-                  <th></th>
+                  <th style={{ textAlign: 'left', fontWeight: 700, letterSpacing: '0.1em' }}>BOOK</th>
                   <th>T1<div style={{ fontSize: 8, fontWeight: 400 }}>till May 20</div></th>
                   <th>T2<div style={{ fontSize: 8, fontWeight: 400 }}>till Jul 1</div></th>
                   <th>T3<div style={{ fontSize: 8, fontWeight: 400 }}>after Jul 1</div></th>
