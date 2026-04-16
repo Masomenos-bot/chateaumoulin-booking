@@ -12,6 +12,7 @@
   --rose: #E8A0B4;
   --lav: #8B9DC3;
   --yel: #F5C518;
+  --mint: #A8D4B8;
   --H: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --C: 'Courier New', Courier, monospace;
 }
@@ -90,7 +91,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-tl-inner.week .cm-booking-bar .name { font-size: 13px; padding: 6px 10px; letter-spacing: 0.08em }
 
 /* ─── Description ────────────────────────────────────── */
-.cm-desc { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--bd); max-width: 680px; font-size: 13px; line-height: 1.9; color: var(--fg); letter-spacing: 0.02em; font-family: var(--C) }
+.cm-desc { margin-top: 24px; margin-bottom: 24px; padding-top: 24px; border-top: 1px solid var(--bd); max-width: 680px; font-size: 13px; line-height: 1.9; color: #000; letter-spacing: 0.02em; font-family: var(--C) }
 
 /* ─── Sidebar ────────────────────────────────────────── */
 .cm-sidebar { width: 280px; flex-shrink: 0 }
@@ -101,7 +102,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-occ-bar { flex: 1; height: 4px; background: var(--bd) }
 .cm-occ-bar.on { background: #000 }
 .cm-occ-count { font-size: 36px; font-weight: 700; margin-bottom: 4px; font-family: var(--H); line-height: 1; color: var(--fg) }
-.cm-book-btn { margin-top: 14px; width: 100%; padding: 12px 0; border: 2px solid #000; background: var(--yel); color: #000; cursor: pointer; font-family: var(--C); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; box-shadow: 3px 3px 0 #000 }
+.cm-book-btn { margin-top: 14px; width: 100%; padding: 12px 0; border: 3px solid #000; background: var(--mint); color: #000; cursor: pointer; font-family: var(--C); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; box-shadow: 3px 3px 0 #000 }
 .cm-book-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none }
 
 /* Cards */
@@ -169,8 +170,10 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-btn-new { padding: 8px 14px; font-size: 9px; border-width: 2px }
   .cm-nav { padding: 10px 14px }
   .cm-main { flex-direction: column; padding: 16px 14px; gap: 16px }
-  .cm-sidebar { width: 100% }
-  .cm-desc { font-size: 11px; line-height: 1.7; margin-top: 0; padding-top: 0; border-top: none }
+  .cm-sidebar { width: 100%; display: flex; flex-direction: column }
+  .cm-occupancy { order: 1 }
+  .cm-pricing { order: 2 }
+  .cm-desc { font-size: 11px; line-height: 1.7; margin-top: 0; margin-bottom: 16px; padding-top: 0; border-top: none; order: 3 }
   .cm-details { flex-direction: column; padding: 20px 14px; gap: 24px }
   /* Timeline compact rows */
   .cm-tl-inner.week .cm-slots { min-height: 40px }
