@@ -177,8 +177,12 @@ export default function GuestBooking() {
     ? `${pad(weekStart.getDate())}/${pad(weekStart.getMonth() + 1)} — ${pad(weekEnd.getDate())}/${pad(weekEnd.getMonth() + 1)}`
     : `${MONTHS[curMonth].toUpperCase()} ${curYear}`;
 
-  const prev = () => { setSelDay(null); isWeek ? setWeekStart(d => addDays(d, -7)) : setWeekStart(new Date(curYear, curMonth - 1, 1)); };
-  const next = () => { setSelDay(null); isWeek ? setWeekStart(d => addDays(d, 7)) : setWeekStart(new Date(curYear, curMonth + 1, 1)); };
+  const seasonMin = parseDate(SEASON_START);
+  const seasonMax = parseDate(SEASON_END);
+  const canPrev = isWeek ? weekStart > seasonMin : curMonth > 5;
+  const canNext = isWeek ? addDays(weekStart, 7) < seasonMax : curMonth < 8;
+  const prev = () => { if (!canPrev) return; setSelDay(null); isWeek ? setWeekStart(d => addDays(d, -7)) : setWeekStart(new Date(curYear, curMonth - 1, 1)); };
+  const next = () => { if (!canNext) return; setSelDay(null); isWeek ? setWeekStart(d => addDays(d, 7)) : setWeekStart(new Date(curYear, curMonth + 1, 1)); };
   const pickDay = (k) => setSelDay(selDay === k ? null : k);
 
   // Sidebar: occupancy for selected day
@@ -282,9 +286,9 @@ export default function GuestBooking() {
       {/* ─── Nav ─── */}
       <div className="cm-nav">
         <div className="cm-nav-left">
-          <button className="cm-nav-btn" onClick={prev}>←</button>
+          <button className="cm-nav-btn" onClick={prev} disabled={!canPrev} style={!canPrev ? {opacity:0.3,cursor:'default'} : {}}>←</button>
           <span className="cm-nav-label">{navLabel}</span>
-          <button className="cm-nav-btn" onClick={next}>→</button>
+          <button className="cm-nav-btn" onClick={next} disabled={!canNext} style={!canNext ? {opacity:0.3,cursor:'default'} : {}}>→</button>
           <div className="cm-divider" />
           <div className="cm-months">
             {[['JUN', 5], ['JUL', 6], ['AUG', 7], ['SEP', 8]].map(([lbl, mi]) => (
