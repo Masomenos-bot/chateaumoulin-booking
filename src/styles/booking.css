@@ -168,9 +168,20 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-eye { height: 28px; width: 28px }
   .cm-btn-new { padding: 8px 14px; font-size: 9px; border-width: 2px }
   .cm-nav { padding: 10px 14px }
-  .cm-main { flex-direction: column; padding: 16px 14px; gap: 16px }
-  .cm-sidebar { width: 100% }
+  .cm-main { flex-direction: column-reverse; padding: 16px 14px; gap: 16px }
+  .cm-sidebar { width: 100%; order: 2 }
+  .cm-timeline-wrap { order: 1 }
+  .cm-desc { font-size: 11px; line-height: 1.7 }
   .cm-details { flex-direction: column; padding: 20px 14px; gap: 24px }
+  /* Timeline compact rows */
+  .cm-tl-inner.week .cm-slots { min-height: 40px }
+  .cm-tl-inner.week .cm-slot { height: 40px }
+  .cm-tl-inner.week .cm-booking { height: 46px }
+  .cm-tl-inner.week .cm-booking-bar { top: 5px; bottom: 5px }
+  .cm-tl-inner.week .cm-booking-bar .name { font-size: 10px; padding: 3px 5px }
+  .cm-tl-inner.week .cm-room-lbl { padding: 6px 10px; font-size: 12px }
+  .cm-tl-inner.week .cm-date-col { padding: 6px 0; font-size: 12px }
+  .cm-tl-inner.week .cm-date-col .dow { font-size: 8px; margin-bottom: 2px }
   .cm-footer { padding: 14px; font-size: 8px; flex-direction: column; gap: 6px; text-align: center }
   .cm-modal-bg { align-items: flex-end }
   .cm-modal { width: 100%; max-width: 100%; border-radius: 16px 16px 0 0; max-height: 92vh; padding: 20px 16px 28px; margin: 0; box-shadow: none; border-bottom: none }
