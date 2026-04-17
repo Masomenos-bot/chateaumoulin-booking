@@ -95,7 +95,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-tl-inner.week .cm-booking-bar .name { font-size: 13px; padding: 6px 10px; letter-spacing: 0.08em }
 
 /* ─── Description ────────────────────────────────────── */
-.cm-desc { font-size: 15.5px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); border-top: none }
+.cm-desc { font-size: 15.5px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); border-top: none; font-weight: 700; margin-top: 24px }
 
 /* ─── Sidebar ────────────────────────────────────────── */
 .cm-sidebar { width: 280px; flex-shrink: 0 }
