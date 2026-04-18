@@ -77,8 +77,8 @@ export async function handler(event) {
         });
 
         const nights = Math.round((new Date(booking.check_out) - new Date(booking.check_in)) / 86400000);
-        const depositAmount = (booking.total_price * 0.3 / 100).toFixed(2);
-        const firstName = (booking.first_name || booking.guest_name.split(' ')[0] || 'Guest');
+        const depositAmount = session.amount_total ? (session.amount_total / 100).toFixed(2) : '—';
+        const firstName = (booking.first_name || booking.guest_name?.split(' ')[0] || 'Guest');
         const imgBase = 'https://raw.githubusercontent.com/Masomenos-bot/chateaumoulin-booking/main/public';
 
         const emailHtml = `
@@ -110,7 +110,7 @@ export async function handler(event) {
           <td style="padding:28px 0 0;">
             <table cellpadding="0" cellspacing="0">
               <tr>
-                <td style="background-color:#F5C518; padding:5px 12px; border:3px solid #000; box-shadow: 4px 4px 0 #000; display:inline-block;">
+                <td style="background-color:#F5C518; padding:5px 12px; border:3px solid #000; border-right:6px solid #000; border-bottom:6px solid #000; display:inline-block;">
                   <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">CONFIRMED</span>
                 </td>
                 <td style="padding-left:10px;">
@@ -125,7 +125,7 @@ export async function handler(event) {
         <tr>
           <td style="padding:24px 0 0;">
             <p style="font-family:'Courier New',Courier,monospace; font-size:14px; color:#000; margin:0; line-height:1.7;">
-              Dear Jo,
+              Dear ${firstName},
             </p>
             <p style="font-family:'Courier New',Courier,monospace; font-size:13px; color:#000; margin:12px 0 0; line-height:1.7;">
               Your booking has been confirmed. Looking forward welcoming you at Chateaumoulin. Thank you for being part of the Masomenos World community!
@@ -193,7 +193,7 @@ export async function handler(event) {
         <tr>
           <td align="center" style="padding:32px 0 0; text-align:center;">
             <div style="text-align:center;">
-              <img src="${imgBase}/globe.gif" alt="Masomenos" width="48" height="48" style="display:inline-block; margin-bottom:12px; border-radius:50%;" />
+              <img src="${imgBase}/bonvoyage.gif" alt="Bon Voyage" width="120" height="120" style="display:inline-block; margin-bottom:12px;" />
             </div>
             <div style="text-align:center;">
               <img src="${imgBase}/masomenos-logo.png" alt="masomenos" height="16" style="display:inline-block;" />
