@@ -105,15 +105,25 @@ export async function handler(event) {
         </tr>
         <tr><td><div style="border-top:1px solid #000;"></div></td></tr>
 
-        <!-- Confirmation badge -->
+        <!-- Confirmation badge with shadow -->
         <tr>
           <td style="padding:28px 0 0;">
-            <table cellpadding="0" cellspacing="0">
+            <table cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td style="background-color:#F5C518; padding:5px 12px; border:3px solid #000; border-right:6px solid #000; border-bottom:6px solid #000; display:inline-block;">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">CONFIRMED</span>
+                <td>
+                  <table cellpadding="0" cellspacing="0" border="0"><tr>
+                    <td style="background:#000; padding:0 0 4px 0;">
+                      <table cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background:#000; padding:0 4px 0 0;">
+                          <div style="background-color:#F5C518; padding:5px 12px; border:3px solid #000;">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">CONFIRMED</span>
+                          </div>
+                        </td>
+                      </tr></table>
+                    </td>
+                  </tr></table>
                 </td>
-                <td style="padding-left:10px;">
+                <td style="padding-left:10px; vertical-align:middle;">
                   <span style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#000;">#${bookingId.slice(0, 8).toUpperCase()}</span>
                 </td>
               </tr>
@@ -128,54 +138,61 @@ export async function handler(event) {
               Dear ${firstName},
             </p>
             <p style="font-family:'Courier New',Courier,monospace; font-size:13px; color:#000; margin:12px 0 0; line-height:1.7;">
-              Your booking has been confirmed. Looking forward welcoming you at Chateaumoulin. Thank you for being part of the Masomenos World community!
+              Your booking is confirmed. Chateaumoulin is waiting for you. Thank you for being part of the Masomenos World community!
             </p>
+          </td>
+        </tr>
+
+        <!-- Booking details card with shadow -->
+        <tr>
+          <td style="padding:24px 0 0;">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+              <td style="background:#000; padding:0 0 4px 0;">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+                  <td style="background:#000; padding:0 4px 0 0;">
+                    <div style="background:#fff; border:2px solid #000; padding:20px;">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding-bottom:18px;" width="50%">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">CHECK-IN</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${checkInDate}</span>
+                          </td>
+                          <td style="padding-bottom:18px;" width="50%">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">CHECK-OUT</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${checkOutDate}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:18px;">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">NIGHTS</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${nights}</span>
+                          </td>
+                          <td style="padding-bottom:18px;">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">ROOMS</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${booking.room_ids.length}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding-bottom:4px;">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">GUESTS</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${booking.guests}</span>
+                          </td>
+                          <td style="padding-bottom:4px;">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">DEPOSIT PAID</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000; font-weight:700;">${depositAmount} &euro;</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr></table>
+              </td>
+            </tr></table>
           </td>
         </tr>
 
         <!-- Divider -->
         <tr><td style="padding:24px 0 0;"><div style="border-top:1px solid #e0dcd0;"></div></td></tr>
-
-        <!-- Booking details -->
-        <tr>
-          <td style="padding:24px 0 0;">
-            <table width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="padding-bottom:18px;" width="50%">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">CHECK-IN</span>
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${checkInDate}</span>
-                </td>
-                <td style="padding-bottom:18px;" width="50%">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">CHECK-OUT</span>
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${checkOutDate}</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding-bottom:18px;">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">NIGHTS</span>
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${nights}</span>
-                </td>
-                <td style="padding-bottom:18px;">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">ROOMS</span>
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${booking.room_ids.length}</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding-bottom:18px;">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">GUESTS</span>
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${booking.guests}</span>
-                </td>
-                <td style="padding-bottom:18px;">
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">DEPOSIT PAID</span>
-                  <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000; font-weight:700;">${depositAmount} &euro;</span>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- Divider -->
-        <tr><td><div style="border-top:1px solid #e0dcd0;"></div></td></tr>
 
         <!-- Footer -->
         <tr>
