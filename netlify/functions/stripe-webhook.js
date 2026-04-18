@@ -210,7 +210,7 @@ export async function handler(event) {
         <tr>
           <td align="center" style="padding:32px 0 0; text-align:center;">
             <div style="text-align:center;">
-              <img src="${imgBase}/bonvoyage.gif" alt="Bon Voyage" width="120" height="120" style="display:inline-block; margin-bottom:12px;" />
+              <img src="${imgBase}/bonvoyage.gif" alt="Bon Voyage" width="84" height="84" style="display:inline-block; margin-bottom:12px;" />
             </div>
             <div style="text-align:center;">
               <img src="${imgBase}/masomenos-logo.png" alt="masomenos" height="16" style="display:inline-block;" />
