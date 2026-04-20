@@ -48,11 +48,13 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-legend .swatch { display: inline-block; width: 14px; height: 14px; border: 2px solid #000; vertical-align: middle; margin-right: 8px }
 
 /* ─── Main Layout ────────────────────────────────────── */
-.cm-main { display: flex; padding: 28px 40px; gap: 40px; flex-wrap: wrap }
-.cm-timeline-wrap { flex: 1; min-width: 0 }
+.cm-main { display: grid; grid-template-columns: 1fr 280px; grid-template-rows: auto auto; gap: 28px 40px; padding: 28px 40px; align-items: stretch }
+.cm-timeline-wrap { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; min-width: 0 }
+.cm-sidebar { grid-column: 2; grid-row: 1 }
+.cm-video-desc { grid-column: 1 / -1; grid-row: 2 }
 
 /* ─── Timeline ───────────────────────────────────────── */
-.cm-timeline { overflow-x: auto; scroll-behavior: smooth; padding: 6px; background: #fff; border: 1px solid #000; box-shadow: 3px 3px 0 #000 }
+.cm-timeline { overflow-x: auto; scroll-behavior: smooth; padding: 6px; background: #fff; border: 1px solid #000; box-shadow: 3px 3px 0 #000; flex: 1; display: flex; flex-direction: column }
 .cm-tl-row { display: flex; border-bottom: 1px solid var(--bd) }
 .cm-tl-header { display: flex; border-bottom: 2px solid #000 }
 .cm-tl-slots { width: 80px; flex-shrink: 0; padding: 8px 10px; font-size: 9px; font-weight: 700; letter-spacing: 0.15em; font-family: var(--C); color: var(--fg) }
@@ -97,10 +99,10 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 /* ─── Description ────────────────────────────────────── */
 .cm-video-desc { flex-basis: 100%; padding: 0; overflow: hidden }
 .cm-video { margin: 0 }
-.cm-desc-text { font-size: 15.5px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); font-weight: 700; padding: 20px 16px }
+.cm-desc-text { font-size: 17px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); font-weight: 400; padding: 20px 16px }
 
 /* ─── Sidebar ────────────────────────────────────────── */
-.cm-sidebar { width: 280px; flex-shrink: 0 }
+.cm-sidebar { }
 .cm-sb-block { margin-bottom: 24px; padding: 16px; background: #fff; border: 1px solid #000; box-shadow: 3px 3px 0 #000 }
 .cm-sb-title { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; color: var(--fg); margin-bottom: 10px; font-family: var(--C); border-bottom: 2px solid #000; padding-bottom: 8px }
 .cm-occ-label { font-size: 10px; letter-spacing: 0.12em; color: var(--fg); margin-bottom: 12px; font-family: var(--C); font-weight: 700 }
@@ -174,11 +176,11 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-eye { height: 28px; width: 28px }
   .cm-btn-new { padding: 8px 14px; font-size: 9px; border-width: 2px }
   .cm-nav { padding: 10px 14px }
-  .cm-main { flex-direction: column; padding: 16px 14px; gap: 16px }
+  .cm-main { display: flex; flex-direction: column; padding: 16px 14px; gap: 16px }
   .cm-timeline-wrap { order: 1 }
   .cm-sidebar { width: 100%; order: 2 }
   .cm-video-desc { order: 3 }
-  .cm-desc-text { font-size: 14px; line-height: 1.7 }
+  .cm-desc-text { font-size: 15px; line-height: 1.7 }
   .cm-details { flex-direction: column; padding: 20px 14px; gap: 24px }
   /* Timeline compact rows */
   .cm-tl-inner.week .cm-slots { min-height: 40px }
