@@ -55,7 +55,8 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 
 /* ─── Timeline ───────────────────────────────────────── */
 .cm-timeline { overflow-x: auto; scroll-behavior: smooth; padding: 6px; background: #fff; border: 1px solid #000; box-shadow: 3px 3px 0 #000; flex: 1; display: flex; flex-direction: column }
-.cm-tl-row { display: flex; border-bottom: 1px solid var(--bd) }
+.cm-tl-inner { display: flex; flex-direction: column; flex: 1 }
+.cm-tl-row { display: flex; border-bottom: 1px solid var(--bd); flex: 1 }
 .cm-tl-header { display: flex; border-bottom: 2px solid #000 }
 .cm-tl-slots { width: 80px; flex-shrink: 0; padding: 8px 10px; font-size: 9px; font-weight: 700; letter-spacing: 0.15em; font-family: var(--C); color: var(--fg) }
 .cm-tl-dates { display: flex; gap: 6px }
@@ -66,12 +67,12 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-date-col.off { color: #d0ccc0; cursor: default; opacity: 0.4 }
 .cm-date-col.we { opacity: 0.75 }
 .cm-room-lbl { width: 80px; flex-shrink: 0; padding: 10px 12px; font-size: 12px; font-weight: 600; display: flex; align-items: center; color: var(--fg); font-family: var(--H) }
-.cm-slots { display: flex; align-items: center; min-height: 38px; gap: 6px; flex: 1 }
-.cm-slot { width: var(--cw); flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; height: 38px; position: relative }
+.cm-slots { display: flex; align-items: stretch; min-height: 38px; gap: 6px; flex: 1 }
+.cm-slot { width: var(--cw); flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; min-height: 38px; position: relative }
 .cm-slot.off { background: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px); cursor: default }
 .cm-slot.sel { background: rgba(0,0,0,0.04) }
 .cm-slot .dot { width: 2px; height: 2px; border-radius: 50%; background: #d0ccc0 }
-.cm-booking { width: var(--cw); height: 46px; flex-shrink: 0; display: flex; align-items: center; cursor: pointer; position: relative; padding: 0 2px }
+.cm-booking { width: var(--cw); min-height: 38px; flex-shrink: 0; display: flex; align-items: center; cursor: pointer; position: relative; padding: 0 2px }
 .cm-booking.sel { background: rgba(0,0,0,0.04) }
 .cm-booking-bar { position: absolute; left: 0; right: 4px; top: 6px; bottom: 6px; border: 2px solid #000; box-shadow: 3px 3px 0 #000 }
 .cm-booking-bar.ci { left: 4px }
@@ -81,17 +82,17 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 
 /* Week view overrides — fill width, taller rows */
 .cm-timeline.week-mode { overflow-x: visible }
-.cm-tl-inner.week { width: 100%; display: block }
+.cm-tl-inner.week { width: 100%; display: flex; flex-direction: column; flex: 1 }
 .cm-tl-inner.week .cm-tl-header { display: grid; grid-template-columns: 80px 1fr; align-items: stretch }
 .cm-tl-inner.week .cm-tl-slots { width: auto }
 .cm-tl-inner.week .cm-tl-dates { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; min-width: 0 }
 .cm-tl-inner.week .cm-date-col { width: auto; padding: 10px 0; font-size: 14px }
 .cm-tl-inner.week .cm-date-col .dow { font-size: 10px; margin-bottom: 4px }
-.cm-tl-inner.week .cm-tl-row { display: grid; grid-template-columns: 80px 1fr; align-items: stretch }
+.cm-tl-inner.week .cm-tl-row { display: grid; grid-template-columns: 80px 1fr; align-items: stretch; flex: 1 }
 .cm-tl-inner.week .cm-room-lbl { width: auto; font-size: 14px; padding: 12px 14px }
-.cm-tl-inner.week .cm-slots { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; min-width: 0; min-height: 72px }
-.cm-tl-inner.week .cm-slot { width: auto; height: 72px }
-.cm-tl-inner.week .cm-booking { width: auto; height: 80px }
+.cm-tl-inner.week .cm-slots { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; min-width: 0; min-height: 50px; align-items: stretch }
+.cm-tl-inner.week .cm-slot { width: auto; height: auto; min-height: 50px }
+.cm-tl-inner.week .cm-booking { width: auto; height: auto; min-height: 50px }
 .cm-tl-inner.week .cm-booking-bar { left: 0; right: 6px; top: 10px; bottom: 10px }
 .cm-tl-inner.week .cm-booking-bar.ci { left: 6px }
 .cm-tl-inner.week .cm-booking-bar .name { font-size: 13px; padding: 6px 10px; letter-spacing: 0.08em }
