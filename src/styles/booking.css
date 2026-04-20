@@ -48,10 +48,10 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-legend .swatch { display: inline-block; width: 14px; height: 14px; border: 2px solid #000; vertical-align: middle; margin-right: 8px }
 
 /* ─── Main Layout ────────────────────────────────────── */
-.cm-main { display: grid; grid-template-columns: 1fr 280px; grid-template-rows: auto auto; gap: 28px 40px; padding: 28px 40px; align-items: start }
+.cm-main { display: grid; grid-template-columns: 1fr 280px; grid-template-rows: auto auto; gap: 28px 40px; padding: 28px 40px; align-items: stretch }
 .cm-timeline-wrap { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; min-width: 0 }
 .cm-sidebar { grid-column: 2; grid-row: 1 }
-.cm-video-desc { grid-column: 1 / -1; grid-row: 2; padding: 0; overflow: visible }
+.cm-video-desc { grid-column: 1 / -1; grid-row: 2; padding: 0; overflow: hidden }
 
 /* ─── Timeline ───────────────────────────────────────── */
 .cm-timeline { overflow-x: auto; scroll-behavior: smooth; padding: 6px; background: #fff; border: 1px solid #000; box-shadow: 3px 3px 0 #000; flex: 1; display: flex; flex-direction: column }
@@ -98,7 +98,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-tl-inner.week .cm-booking-bar .name { font-size: 13px; padding: 6px 10px; letter-spacing: 0.08em }
 
 /* ─── Description ────────────────────────────────────── */
-.cm-video { margin: 0; overflow: hidden }
+.cm-video { margin: 0 }
 .cm-desc-text { font-size: 17px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); font-weight: 400; padding: 20px 16px }
 
 /* ─── Sidebar ────────────────────────────────────────── */

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useBookings } from '../hooks/useBookings';
 import { redirectToCheckout } from '../lib/stripe';
 import {
@@ -49,28 +49,6 @@ export default function GuestBooking() {
     withChildren: false, kidsAges: '',
     notes: '',
   });
-
-  const sidebarRef = useRef(null);
-  const timelineRef = useRef(null);
-
-  // Sync timeline height to sidebar on desktop
-  useEffect(() => {
-    if (isMobile || !sidebarRef.current || !timelineRef.current) {
-      if (timelineRef.current) timelineRef.current.style.maxHeight = '';
-      return;
-    }
-    const sync = () => {
-      if (sidebarRef.current && timelineRef.current) {
-        const h = sidebarRef.current.offsetHeight;
-        timelineRef.current.style.maxHeight = h + 'px';
-        timelineRef.current.style.overflow = 'hidden';
-      }
-    };
-    sync();
-    const ro = new ResizeObserver(sync);
-    ro.observe(sidebarRef.current);
-    return () => ro.disconnect();
-  }, [isMobile, view, bookings]);
 
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
   const bookedOn = todayKey;
@@ -335,14 +313,14 @@ export default function GuestBooking() {
 
       {/* ─── Main ─── */}
       <div className="cm-main">
-        <div className="cm-timeline-wrap" ref={timelineRef}>
+        <div className="cm-timeline-wrap">
           <div className={`cm-timeline ${isWeek ? 'week-mode' : ''}`}>
             {renderTimeline()}
           </div>
         </div>
 
         {/* ─── Sidebar ─── */}
-        <aside className="cm-sidebar" ref={sidebarRef}>
+        <aside className="cm-sidebar">
           {/* Occupancy */}
           <div className="cm-sb-block cm-occupancy">
             <div className="cm-sb-title">OCCUPANCY</div>
@@ -397,8 +375,7 @@ export default function GuestBooking() {
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                 allow="autoplay; fullscreen; picture-in-picture"
                 allowFullScreen
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true"
+                referrerPolicy="no-referrer"
                 loading="lazy"
                 title="Chateaumoulin"
               />
