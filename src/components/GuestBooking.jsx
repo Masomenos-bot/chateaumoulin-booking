@@ -317,10 +317,6 @@ export default function GuestBooking() {
           <div className={`cm-timeline ${isWeek ? 'week-mode' : ''}`}>
             {renderTimeline()}
           </div>
-          {/* Description */}
-          <div className="cm-sb-block cm-desc">
-            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
-          </div>
         </div>
 
         {/* ─── Sidebar ─── */}
@@ -369,6 +365,11 @@ export default function GuestBooking() {
           </div>
 
         </aside>
+
+        {/* Description */}
+        <div className="cm-sb-block cm-desc">
+          Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
+        </div>
       </div>
 
       {/* ─── Details ─── */}

@@ -48,7 +48,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-legend .swatch { display: inline-block; width: 14px; height: 14px; border: 2px solid #000; vertical-align: middle; margin-right: 8px }
 
 /* ─── Main Layout ────────────────────────────────────── */
-.cm-main { display: flex; padding: 28px 40px; gap: 40px }
+.cm-main { display: flex; padding: 28px 40px; gap: 40px; flex-wrap: wrap }
 .cm-timeline-wrap { flex: 1; min-width: 0 }
 
 /* ─── Timeline ───────────────────────────────────────── */
@@ -95,7 +95,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-tl-inner.week .cm-booking-bar .name { font-size: 13px; padding: 6px 10px; letter-spacing: 0.08em }
 
 /* ─── Description ────────────────────────────────────── */
-.cm-desc { font-size: 15.5px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); border-top: none; font-weight: 700; margin-top: 24px }
+.cm-desc { font-size: 15.5px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); border-top: none; font-weight: 700; flex-basis: 100% }
 
 /* ─── Sidebar ────────────────────────────────────────── */
 .cm-sidebar { width: 280px; flex-shrink: 0 }
@@ -173,9 +173,8 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-btn-new { padding: 8px 14px; font-size: 9px; border-width: 2px }
   .cm-nav { padding: 10px 14px }
   .cm-main { flex-direction: column; padding: 16px 14px; gap: 16px }
-  .cm-sidebar { width: 100%; display: flex; flex-direction: column }
-  .cm-occupancy { order: 1 }
-  .cm-pricing { order: 2 }
+  .cm-timeline-wrap { order: 1 }
+  .cm-sidebar { width: 100%; order: 2 }
   .cm-desc { font-size: 14px; line-height: 1.7; order: 3 }
   .cm-details { flex-direction: column; padding: 20px 14px; gap: 24px }
   /* Timeline compact rows */
