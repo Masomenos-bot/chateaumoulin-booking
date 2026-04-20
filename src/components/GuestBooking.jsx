@@ -366,6 +366,21 @@ export default function GuestBooking() {
 
         </aside>
 
+        {/* Video */}
+        <div className="cm-video-wrap">
+          <div className="cm-sb-block cm-video">
+            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+              <iframe
+                src="https://player.vimeo.com/video/1184350491?badge=0&autopause=0&player_id=0"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+                title="Chateaumoulin"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Description */}
         <div className="cm-sb-block cm-desc">
           Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.

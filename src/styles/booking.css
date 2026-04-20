@@ -95,6 +95,8 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 .cm-tl-inner.week .cm-booking-bar .name { font-size: 13px; padding: 6px 10px; letter-spacing: 0.08em }
 
 /* ─── Description ────────────────────────────────────── */
+.cm-video-wrap { flex-basis: 100% }
+.cm-video { padding: 0; overflow: hidden }
 .cm-desc { font-size: 15.5px; line-height: 2; color: #000; letter-spacing: 0.02em; font-family: var(--C); border-top: none; font-weight: 700; flex-basis: 100% }
 
 /* ─── Sidebar ────────────────────────────────────────── */
@@ -175,7 +177,8 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
   .cm-main { flex-direction: column; padding: 16px 14px; gap: 16px }
   .cm-timeline-wrap { order: 1 }
   .cm-sidebar { width: 100%; order: 2 }
-  .cm-desc { font-size: 14px; line-height: 1.7; order: 3 }
+  .cm-video-wrap { order: 3 }
+  .cm-desc { font-size: 14px; line-height: 1.7; order: 4 }
   .cm-details { flex-direction: column; padding: 20px 14px; gap: 24px }
   /* Timeline compact rows */
   .cm-tl-inner.week .cm-slots { min-height: 40px }
