@@ -382,7 +382,7 @@ export default function GuestBooking() {
             </div>
           </div>
           <div className="cm-desc-text">
-            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France, created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
+            Part house, part creative playground, Chateaumoulin is a hosted estate in the south of France (Pic Saint-Loup / Montpellier), created for Masomenos World community members to gather and experience Masomenos lifestyle. 2026 edition will run from mid-June to mid-September, with different community members hosting throughout, each bringing their own flavour to the space.
           </div>
         </div>
       </div>
