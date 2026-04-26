@@ -1,42 +1,12 @@
-import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
 );
-
-function calcPricing(booking) {
-  const nights = Math.round((new Date(booking.check_out) - new Date(booking.check_in)) / 86400000);
-  const nRooms = (booking.room_ids || []).length;
-
-  let ppn;
-  if (booking.contributor_rate) {
-    ppn = booking.contributor_rate;
-  } else {
-    const bookedOn = booking.booked_on || new Date().toISOString().slice(0, 10);
-    const TIERS = [{ deadline: '2026-05-20' }, { deadline: '2026-07-01' }, { deadline: null }];
-    const RATES = [
-      { '1-2': 200, '3-5': 185, '6+': 170 },
-      { '1-2': 270, '3-5': 265, '6+': 255 },
-      { '1-2': 320, '3-5': 305, '6+': 290 },
-    ];
-    let ti = TIERS.length - 1;
-    for (let i = 0; i < TIERS.length; i++) {
-      if (TIERS[i].deadline && bookedOn < TIERS[i].deadline) { ti = i; break; }
-    }
-    const bucket = nights <= 2 ? '1-2' : nights <= 5 ? '3-5' : '6+';
-    ppn = RATES[ti][bucket];
-  }
-
-  const total = nights * ppn * nRooms;
-  const deposit = Math.round(total * 0.30);
-  return { nights, nRooms, ppn, total, deposit };
-}
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -65,33 +35,34 @@ export async function handler(event) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Booking has no email' }) };
     }
 
+    const nights = Math.round((new Date(booking.check_out) - new Date(booking.check_in)) / 86400000);
+    const nRooms = (booking.room_ids || []).length;
     const isInvited = booking.invited === true;
-    const { nights, nRooms, total, deposit } = calcPricing(booking);
 
-    // Create Stripe session only for paying guests
-    let stripeUrl = '';
+    // Calculate total for display
+    let total = 0;
     if (!isInvited) {
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        customer_email: booking.email,
-        line_items: [{
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: 'Chateaumoulin — Booking deposit (30%)',
-              description: `Booking #${bookingId.slice(0, 8)}`,
-            },
-            unit_amount: deposit * 100,
-          },
-          quantity: 1,
-        }],
-        mode: 'payment',
-        success_url: `${process.env.URL || 'http://localhost:3000'}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.URL || 'http://localhost:3000'}/cancel`,
-        metadata: { booking_id: bookingId },
-      });
-      stripeUrl = session.url;
+      let ppn;
+      if (booking.contributor_rate) {
+        ppn = booking.contributor_rate;
+      } else {
+        const bookedOn = booking.booked_on || new Date().toISOString().slice(0, 10);
+        const TIERS = [{ deadline: '2026-05-20' }, { deadline: '2026-07-01' }, { deadline: null }];
+        const RATES = [
+          { '1-2': 200, '3-5': 185, '6+': 170 },
+          { '1-2': 270, '3-5': 265, '6+': 255 },
+          { '1-2': 320, '3-5': 305, '6+': 290 },
+        ];
+        let ti = TIERS.length - 1;
+        for (let i = 0; i < TIERS.length; i++) {
+          if (TIERS[i].deadline && bookedOn < TIERS[i].deadline) { ti = i; break; }
+        }
+        const bucket = nights <= 2 ? '1-2' : nights <= 5 ? '3-5' : '6+';
+        ppn = RATES[ti][bucket];
+      }
+      total = nights * ppn * nRooms;
     }
+    const deposit = Math.round(total * 0.30);
 
     const checkInDate = new Date(booking.check_in).toLocaleDateString('en-US', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
@@ -103,36 +74,11 @@ export async function handler(event) {
     const firstName = (booking.first_name || booking.guest_name?.split(' ')[0] || 'Guest');
     const imgBase = 'https://raw.githubusercontent.com/Masomenos-bot/chateaumoulin-booking/main/public';
 
-    // Greeting text differs for invited vs paying
-    const greetingText = isInvited
-      ? `We're happy to let you know that a stay at Chateaumoulin has been reserved for you as our guest. No payment needed — just pack your bags.`
-      : `We've reserved the following dates for you at Chateaumoulin. To confirm your booking, please pay the 30% deposit using the link below.`;
-
-    // Deposit row differs for invited vs paying
-    const depositRow = isInvited
-      ? `<span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">DEPOSIT</span>
-         <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#999; text-decoration:line-through;">${deposit} &euro;</span>
+    // Deposit display
+    const depositDisplay = isInvited
+      ? `<span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#999; text-decoration:line-through;">${deposit} &euro;</span>
          <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.1em; color:#000; margin-left:6px;">INVITED</span>`
-      : `<span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">DEPOSIT (30%)</span>
-         <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000; font-weight:700;">${deposit} &euro;</span>`;
-
-    // Pay button only for paying guests
-    const payButton = isInvited ? '' : `
-        <tr>
-          <td style="padding:28px 0 0;" align="center">
-            <table cellpadding="0" cellspacing="0" border="0"><tr>
-              <td style="background:#000; padding:0 0 4px 0;">
-                <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="background:#000; padding:0 4px 0 0;">
-                    <a href="${stripeUrl}" target="_blank" style="display:block; background-color:#A8D4B8; padding:14px 40px; border:3px solid #000; text-decoration:none;">
-                      <span style="font-family:'Courier New',Courier,monospace; font-size:12px; font-weight:700; letter-spacing:0.14em; color:#000; text-transform:uppercase;">PAY DEPOSIT &middot; ${deposit} &euro;</span>
-                    </a>
-                  </td>
-                </tr></table>
-              </td>
-            </tr></table>
-          </td>
-        </tr>`;
+      : `<span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000; font-weight:700;">${deposit} &euro;</span>`;
 
     const emailHtml = `
 <!DOCTYPE html>
@@ -158,7 +104,7 @@ export async function handler(event) {
         </tr>
         <tr><td><div style="border-top:1px solid #000;"></div></td></tr>
 
-        <!-- Badge -->
+        <!-- Confirmed badge -->
         <tr>
           <td style="padding:28px 0 0;">
             <table cellpadding="0" cellspacing="0" border="0">
@@ -168,8 +114,8 @@ export async function handler(event) {
                     <td style="background:#000; padding:0 0 4px 0;">
                       <table cellpadding="0" cellspacing="0" border="0"><tr>
                         <td style="background:#000; padding:0 4px 0 0;">
-                          <div style="background-color:#8B9DC3; padding:5px 12px; border:3px solid #000;">
-                            <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">${isInvited ? 'INVITED' : 'QUOTE'}</span>
+                          <div style="background-color:#F5C518; padding:5px 12px; border:3px solid #000;">
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">CONFIRMED</span>
                           </div>
                         </td>
                       </tr></table>
@@ -191,7 +137,7 @@ export async function handler(event) {
               Dear ${firstName},
             </p>
             <p style="font-family:'Courier New',Courier,monospace; font-size:13px; color:#000; margin:12px 0 0; line-height:1.7;">
-              ${greetingText}
+              Your booking is confirmed. Chateaumoulin is waiting for you. Thank you for being part of the Masomenos World community!
             </p>
           </td>
         </tr>
@@ -227,11 +173,12 @@ export async function handler(event) {
                         </tr>
                         <tr>
                           <td style="padding-bottom:4px;">
-                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">TOTAL</span>
-                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${total} &euro;</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">GUESTS</span>
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:12px; color:#000;">${booking.guests}</span>
                           </td>
                           <td style="padding-bottom:4px;">
-                            ${depositRow}
+                            <span style="font-family:'Courier New',Courier,monospace; font-size:9px; font-weight:700; letter-spacing:0.15em; color:#000; text-transform:uppercase; display:block; margin-bottom:4px;">DEPOSIT PAID</span>
+                            ${depositDisplay}
                           </td>
                         </tr>
                       </table>
@@ -242,8 +189,6 @@ export async function handler(event) {
             </tr></table>
           </td>
         </tr>
-
-        ${payButton}
 
         <!-- Divider -->
         <tr><td style="padding:24px 0 0;"><div style="border-top:1px solid #e0dcd0;"></div></td></tr>
@@ -279,15 +224,14 @@ export async function handler(event) {
 </html>
     `;
 
-    const subjectPrefix = isInvited ? 'You\'re Invited' : 'Your Booking Quote';
     const emailResponse = await resend.emails.send({
       from: 'Chateaumoulin <chateaumoulin@world.masomenos.fr>',
       to: booking.email,
-      subject: `${subjectPrefix} — Chateaumoulin #${bookingId.slice(0, 8).toUpperCase()}`,
+      subject: `Booking Confirmed — Chateaumoulin #${bookingId.slice(0, 8).toUpperCase()}`,
       html: emailHtml,
     });
 
-    console.log(`Quote email sent to ${booking.email}`, emailResponse);
+    console.log(`Confirmation email sent to ${booking.email}`, emailResponse);
 
     return {
       statusCode: 200,
@@ -295,7 +239,7 @@ export async function handler(event) {
       body: JSON.stringify({ success: true, email: booking.email }),
     };
   } catch (error) {
-    console.error('Send quote error:', error);
+    console.error('Send confirmation error:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),

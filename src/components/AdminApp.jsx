@@ -566,7 +566,7 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
           {isEdit && onDelete && (
             <button className="cm-btn-del" onClick={() => onDelete(f.id)}>DELETE</button>
           )}
-          {isEdit && !f.invited && f.email && f.status === "prebooking" && (
+          {isEdit && f.email && f.status === "prebooking" && (
             <button
               className="cm-btn-save"
               style={{ background: "var(--lav)", color: "#000", boxShadow: "3px 3px 0 #000" }}
@@ -583,9 +583,9 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
                   });
                   const data = await res.json();
                   if (res.ok) {
-                    setQuoteMsg({ ok: true, text: `Quote sent to ${data.email}` });
+                    setQuoteMsg({ ok: true, text: `${f.invited ? "Invitation" : "Quote"} sent to ${data.email}` });
                   } else {
-                    setQuoteMsg({ ok: false, text: data.error || "Failed to send quote" });
+                    setQuoteMsg({ ok: false, text: data.error || "Failed to send" });
                   }
                 } catch (err) {
                   setQuoteMsg({ ok: false, text: err.message });
@@ -593,7 +593,37 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
                 setQuoteSending(false);
               }}
             >
-              {quoteSending ? "SENDING..." : "SEND QUOTE"}
+              {quoteSending ? "SENDING..." : (f.invited ? "SEND INVITE" : "SEND QUOTE")}
+            </button>
+          )}
+          {isEdit && f.email && f.status === "confirmed" && (
+            <button
+              className="cm-btn-save"
+              style={{ background: "var(--yel)", color: "#000", boxShadow: "3px 3px 0 #000" }}
+              disabled={quoteSending}
+              onClick={async (e) => {
+                e.preventDefault();
+                setQuoteSending(true);
+                setQuoteMsg(null);
+                try {
+                  const res = await fetch("/.netlify/functions/send-confirmation", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ bookingId: f.id }),
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    setQuoteMsg({ ok: true, text: `Confirmation sent to ${data.email}` });
+                  } else {
+                    setQuoteMsg({ ok: false, text: data.error || "Failed to send" });
+                  }
+                } catch (err) {
+                  setQuoteMsg({ ok: false, text: err.message });
+                }
+                setQuoteSending(false);
+              }}
+            >
+              {quoteSending ? "SENDING..." : "SEND CONFIRMATION"}
             </button>
           )}
         </div>
