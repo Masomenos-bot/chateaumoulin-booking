@@ -34,6 +34,8 @@ function toFrontend(row) {
     initials: row.show_initials || false,
     withChildren: row.with_children || false,
     kidsAges: row.kids_ages || '',
+    invited: row.invited || false,
+    contributorRate: row.contributor_rate || null,
   };
 }
 
@@ -54,6 +56,8 @@ function toBackend(booking) {
     show_initials: booking.initials || false,
     with_children: booking.withChildren || false,
     kids_ages: booking.kidsAges || '',
+    invited: booking.invited || false,
+    contributor_rate: booking.contributorRate || null,
   };
 }
 

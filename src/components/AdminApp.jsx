@@ -391,6 +391,8 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
         withChildren: data.withChildren || false,
         kidsAges: data.kidsAges || "",
         notes: data.notes || "",
+        invited: data.invited || false,
+        contributorRate: data.contributorRate || "",
       };
     }
     return {
@@ -400,14 +402,20 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
       bookedOn: dateKey(TODAY),
       withChildren: false, kidsAges: "",
       notes: "",
+      invited: false, contributorRate: "",
     };
   });
+
+  const [quoteSending, setQuoteSending] = useState(false);
+  const [quoteMsg, setQuoteMsg] = useState(null);
 
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
   const nR = f.numRooms || 1;
   const nights = (f.checkIn && f.checkOut) ? nightsBetween(f.checkIn, f.checkOut) : 0;
-  const ppn = nights > 0 && f.bookedOn ? getPrice(f.bookedOn, nights) : 0;
-  const total = nights * ppn * nR;
+  const hasContrib = f.contributorRate && parseFloat(f.contributorRate) > 0;
+  const ppn = hasContrib ? parseFloat(f.contributorRate) : (nights > 0 && f.bookedOn ? getPrice(f.bookedOn, nights) : 0);
+  const total = f.invited ? 0 : nights * ppn * nR;
+  const deposit = Math.round(total * 0.30);
   const ti = f.bookedOn ? getTier(f.bookedOn) : 0;
   const mx = nR * 2;
 
@@ -445,6 +453,8 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
       initials: f.initials,
       withChildren: f.withChildren,
       kidsAges: f.kidsAges,
+      invited: f.invited,
+      contributorRate: hasContrib ? parseFloat(f.contributorRate) : null,
     });
   }
 
@@ -509,9 +519,33 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
         </div>
       )}
 
-      {nights > 0 && (
+      <div className="cm-check-row" onClick={e => { if (e.target.tagName !== "INPUT") set("invited", !f.invited); }}>
+        <input type="checkbox" checked={f.invited} onChange={e => set("invited", e.target.checked)} />
+        <div>
+          <label>Invited guest</label>
+          <div className="hint">No payment required — guest stays for free.</div>
+        </div>
+      </div>
+
+      {!f.invited && (
+        <div className="cm-check-row" style={{ flexWrap: "wrap" }} onClick={e => { if (e.target.tagName !== "INPUT" && e.target.tagName !== "LABEL") { const next = !hasContrib; set("contributorRate", next ? "150" : ""); } }}>
+          <input type="checkbox" checked={!!hasContrib} onChange={e => set("contributorRate", e.target.checked ? "150" : "")} />
+          <div style={{ flex: 1 }}>
+            <label>Contributor rate</label>
+            <div className="hint">Custom price per night instead of standard pricing.</div>
+          </div>
+          {hasContrib && (
+            <div style={{ width: "100%", marginTop: 8 }} onClick={e => e.stopPropagation()}>
+              <input className="cm-inp" type="number" min={0} value={f.contributorRate} onChange={e => set("contributorRate", e.target.value)} placeholder="€/night" style={{ width: 120 }} />
+              <span style={{ fontSize: 10, fontFamily: "var(--C)", marginLeft: 8, color: "var(--fg)" }}>€/night/room</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {nights > 0 && !f.invited && (
         <div className="cm-price-bar">
-          <span>{nR}rm × {nights}n × €{ppn} — {TIERS[ti].label}</span>
+          <span>{nR}rm × {nights}n × €{ppn}{hasContrib ? " (contributor)" : ` — ${TIERS[ti].label}`}</span>
           <span className="total">€{total}</span>
         </div>
       )}
@@ -521,10 +555,46 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
         <textarea className="cm-inp" style={{ minHeight: 50, resize: "vertical" }} value={f.notes} onChange={e => set("notes", e.target.value)} />
       </div>
 
+      {quoteMsg && (
+        <div style={{ padding: "10px 12px", background: quoteMsg.ok ? "rgba(168,212,184,0.2)" : "rgba(198,40,40,0.06)", borderLeft: `3px solid ${quoteMsg.ok ? "#A8D4B8" : "#C62828"}`, fontSize: 11, marginBottom: 14, color: "var(--fg)", fontFamily: "var(--C)" }}>
+          {quoteMsg.text}
+        </div>
+      )}
+
       <div className="cm-modal-actions">
-        <div>
+        <div style={{ display: "flex", gap: 10 }}>
           {isEdit && onDelete && (
             <button className="cm-btn-del" onClick={() => onDelete(f.id)}>DELETE</button>
+          )}
+          {isEdit && !f.invited && f.email && f.status === "prebooking" && (
+            <button
+              className="cm-btn-save"
+              style={{ background: "var(--lav)", color: "#000", boxShadow: "3px 3px 0 #000" }}
+              disabled={quoteSending}
+              onClick={async (e) => {
+                e.preventDefault();
+                setQuoteSending(true);
+                setQuoteMsg(null);
+                try {
+                  const res = await fetch("/.netlify/functions/send-quote", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ bookingId: f.id }),
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    setQuoteMsg({ ok: true, text: `Quote sent to ${data.email}` });
+                  } else {
+                    setQuoteMsg({ ok: false, text: data.error || "Failed to send quote" });
+                  }
+                } catch (err) {
+                  setQuoteMsg({ ok: false, text: err.message });
+                }
+                setQuoteSending(false);
+              }}
+            >
+              {quoteSending ? "SENDING..." : "SEND QUOTE"}
+            </button>
           )}
         </div>
         <div style={{ display: "flex", gap: 10 }}>
