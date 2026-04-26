@@ -245,6 +245,24 @@ export async function handler(event) {
 
         ${payButton}
 
+        <!-- Extras note -->
+        <tr>
+          <td style="padding:20px 0 0;">
+            <p style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#000; margin:0; line-height:1.7;">
+              Drinks, snacks, and any other treats enjoyed on-site would be on you — all settled on the spot, no surprises.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Request modification -->
+        <tr>
+          <td style="padding:16px 0 0;">
+            <p style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#000; margin:0; line-height:1.7;">
+              Need to adjust your dates? <a href="mailto:chateaumoulin@masomenos.fr?subject=Date%20modification%20request%20%E2%80%94%20%23${bookingId.slice(0, 8).toUpperCase()}&body=Hi%2C%0A%0AI%E2%80%99d%20like%20to%20modify%20the%20dates%20for%20my%20booking%20%23${bookingId.slice(0, 8).toUpperCase()}.%0A%0ANew%20preferred%20dates%3A%0ACheck-in%3A%20%0ACheck-out%3A%20%0A%0AThanks!" style="color:#000; text-decoration:underline; font-weight:700;">Request a date change</a>
+            </p>
+          </td>
+        </tr>
+
         <!-- Divider -->
         <tr><td style="padding:24px 0 0;"><div style="border-top:1px solid #e0dcd0;"></div></td></tr>
 
