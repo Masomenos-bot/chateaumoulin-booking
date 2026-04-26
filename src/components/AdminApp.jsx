@@ -491,7 +491,7 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
       <div className="cm-grid-3">
         <div><label className="cm-lbl">Check-in</label><input className="cm-inp" type="date" value={f.checkIn} min="2026-06-15" max="2026-09-14" onChange={e => set("checkIn", e.target.value)} /></div>
         <div><label className="cm-lbl">Check-out</label><input className="cm-inp" type="date" value={f.checkOut} min="2026-06-16" max="2026-09-15" onChange={e => set("checkOut", e.target.value)} /></div>
-        <div><label className="cm-lbl">Booked on</label><input className="cm-inp" type="date" value={f.bookedOn} onChange={e => set("bookedOn", e.target.value)} /></div>
+        <div><label className="cm-lbl">Booked on</label><input className="cm-inp" type="date" value={f.bookedOn} min="2026-01-01" max="2026-12-31" onChange={e => set("bookedOn", e.target.value)} /></div>
       </div>
 
       <div className="cm-check-row" onClick={e => { if (e.target.tagName !== "INPUT") set("withChildren", !f.withChildren); }}>
