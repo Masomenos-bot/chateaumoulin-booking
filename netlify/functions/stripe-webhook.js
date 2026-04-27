@@ -203,7 +203,7 @@ export async function handler(event) {
                 <table cellpadding="0" cellspacing="0" border="0"><tr>
                   <td style="background:#000; padding:0 4px 0 0;">
                     <a href="${process.env.MAP_URL || 'https://map.chateaumoulin.masomenos.fr'}/?b=${booking.booking_number}" target="_blank" style="display:block; background-color:#D4E8D0; padding:14px 40px; border:3px solid #000; text-decoration:none;">
-                      <span style="font-family:'Courier New',Courier,monospace; font-size:12px; font-weight:700; letter-spacing:0.14em; color:#000; text-transform:uppercase;">EXPLORE YOUR MAP</span>
+                      <span style="font-family:'Courier New',Courier,monospace; font-size:12px; font-weight:700; letter-spacing:0.14em; color:#000; text-transform:uppercase;">VIEW ON MAP</span>
                     </a>
                   </td>
                 </tr></table>
