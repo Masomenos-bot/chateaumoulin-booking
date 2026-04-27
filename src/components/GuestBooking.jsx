@@ -280,7 +280,10 @@ export default function GuestBooking() {
             <div className="cm-brand-sub">BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>
           </div>
         </div>
-        <button className="cm-btn-new" onClick={() => openBookingForm(null)}>+ NEW BOOKING</button>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <a href="https://mapchateaumoulin.netlify.app/" target="_blank" rel="noopener noreferrer" className="cm-btn-new" style={{ background: '#D4E8D0', textDecoration: 'none' }}>VIEW ON MAP</a>
+          <button className="cm-btn-new" onClick={() => openBookingForm(null)}>+ NEW BOOKING</button>
+        </div>
       </div>
 
       {/* ─── Nav ─── */}
