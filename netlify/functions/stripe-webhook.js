@@ -191,6 +191,28 @@ export async function handler(event) {
           </td>
         </tr>
 
+        <!-- Map access -->
+        ${booking.booking_number ? `
+        <tr>
+          <td style="padding:28px 0 0;" align="center">
+            <p style="font-family:'Courier New',Courier,monospace; font-size:11px; color:#000; margin:0 0 14px; line-height:1.7;">
+              Your personal map of the estate is ready — explore the grounds, find your room, and discover what's around.
+            </p>
+            <table cellpadding="0" cellspacing="0" border="0"><tr>
+              <td style="background:#000; padding:0 0 4px 0;">
+                <table cellpadding="0" cellspacing="0" border="0"><tr>
+                  <td style="background:#000; padding:0 4px 0 0;">
+                    <a href="${process.env.MAP_URL || 'https://map.chateaumoulin.masomenos.fr'}/?b=${booking.booking_number}" target="_blank" style="display:block; background-color:#D4E8D0; padding:14px 40px; border:3px solid #000; text-decoration:none;">
+                      <span style="font-family:'Courier New',Courier,monospace; font-size:12px; font-weight:700; letter-spacing:0.14em; color:#000; text-transform:uppercase;">EXPLORE YOUR MAP</span>
+                    </a>
+                  </td>
+                </tr></table>
+              </td>
+            </tr></table>
+          </td>
+        </tr>
+        ` : ''}
+
         <!-- Divider -->
         <tr><td style="padding:24px 0 0;"><div style="border-top:1px solid #e0dcd0;"></div></td></tr>
 

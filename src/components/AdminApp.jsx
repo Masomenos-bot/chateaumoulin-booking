@@ -349,6 +349,7 @@ function AdminContent() {
               isEdit={modal.type === "edit"}
               bookings={bookings}
               onSave={save}
+              onSaveQuiet={saveBooking}
               onDelete={modal.type === "edit" ? del : null}
               onCancel={() => setModal(null)}
             />
@@ -373,7 +374,7 @@ function BookingCard({ b, onClick }) {
 }
 
 /* ─── Admin Booking Form (modal) ─────────────────────── */
-function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
+function AdminForm({ data, isEdit, bookings, onSave, onSaveQuiet, onDelete, onCancel }) {
   const [f, setF] = useState(() => {
     if (isEdit && data) {
       return {
@@ -594,6 +595,50 @@ function AdminForm({ data, isEdit, bookings, onSave, onDelete, onCancel }) {
               }}
             >
               {quoteSending ? "SENDING..." : (f.invited ? "SEND INVITE" : "SEND QUOTE")}
+            </button>
+          )}
+          {isEdit && f.email && f.status === "prebooking" && (
+            <button
+              className="cm-btn-save"
+              style={{ background: "var(--yel)", color: "#000", boxShadow: "3px 3px 0 #000" }}
+              disabled={quoteSending}
+              onClick={async (e) => {
+                e.preventDefault();
+                setQuoteSending(true);
+                setQuoteMsg(null);
+                try {
+                  // Save as confirmed first
+                  const confirmed = {
+                    ...(f.id ? { id: f.id } : {}),
+                    roomIds: assignRooms(),
+                    firstName: f.firstName, lastName: f.lastName,
+                    guest: (f.firstName + " " + f.lastName).trim(),
+                    email: f.email, guests: Math.min(f.guests || 1, mx),
+                    ages: f.kidsAges || "", checkIn: f.checkIn, checkOut: f.checkOut,
+                    status: "confirmed", bookedOn: f.bookedOn, notes: f.notes,
+                    initials: f.initials, withChildren: f.withChildren, kidsAges: f.kidsAges,
+                    invited: f.invited, contributorRate: hasContrib ? parseFloat(f.contributorRate) : null,
+                  };
+                  await onSaveQuiet(confirmed);
+                  // Then send confirmation email
+                  const res = await fetch("/.netlify/functions/send-confirmation", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ bookingId: f.id }),
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    setQuoteMsg({ ok: true, text: `Confirmed & sent to ${data.email}` });
+                  } else {
+                    setQuoteMsg({ ok: false, text: data.error || "Failed to send" });
+                  }
+                } catch (err) {
+                  setQuoteMsg({ ok: false, text: err.message });
+                }
+                setQuoteSending(false);
+              }}
+            >
+              {quoteSending ? "CONFIRMING..." : "CONFIRM & NOTIFY"}
             </button>
           )}
           {isEdit && f.email && f.status === "confirmed" && (

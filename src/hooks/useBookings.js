@@ -36,6 +36,7 @@ function toFrontend(row) {
     kidsAges: row.kids_ages || '',
     invited: row.invited || false,
     contributorRate: row.contributor_rate || null,
+    bookingNumber: row.booking_number || null,
   };
 }
 
