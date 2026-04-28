@@ -275,7 +275,7 @@ export default function GuestBooking() {
       <div className="cm-topbar">
         <div className="cm-topbar-left">
           <img className="cm-globe" src="/globe.gif" alt="" />
-          <span className="cm-wordmark">masomenos</span>
+          <img className="cm-wordmark" src="/masomenos-logo.png" alt="masomenos" />
         </div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <a href="https://mapchateaumoulin.netlify.app/" target="_blank" rel="noopener noreferrer" className="cm-btn-new" style={{ background: 'var(--rose)', textDecoration: 'none' }}>VIEW ON MAP</a>
