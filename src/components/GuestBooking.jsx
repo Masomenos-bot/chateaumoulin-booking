@@ -42,6 +42,16 @@ export default function GuestBooking() {
   const [weekStart, setWeekStart] = useState(parseDate("2026-06-15"));
   const [view, setView] = useState("week");
 
+  // Auto-open booking form if ?action=new is in URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('action') === 'new') {
+      setShowForm(true);
+      setEditBooking(null);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   const [f, setF] = useState({
     firstName: '', lastName: '', email: '', initials: false,
     numRooms: 1, guests: 2, status: 'prebooking',
