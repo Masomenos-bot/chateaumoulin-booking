@@ -46,8 +46,7 @@ export default function GuestBooking() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('action') === 'new') {
-      setShowForm(true);
-      setEditBooking(null);
+      openBookingForm(null);
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
