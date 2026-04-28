@@ -23,16 +23,16 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px }
 
 /* ─── Top bar (masomenos brand) ────────────────────── */
-.cm-topbar { padding: 14px 40px; border-bottom: 2px solid #000; display: flex; justify-content: space-between; align-items: center; background: #fff }
+.cm-topbar { padding: 14px 28px; border-bottom: 2px solid #000; display: flex; justify-content: space-between; align-items: center; background: #fff }
 .cm-topbar-left { display: flex; align-items: center; gap: 12px }
 .cm-globe { width: 34px; height: 34px; object-fit: contain; border-radius: 50% }
 .cm-wordmark { height: 20px; display: block; object-fit: contain }
 .cm-btn-new { padding: 9px 20px; border: 2px solid #000; background: var(--yel); color: #000; cursor: pointer; font-family: var(--C); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; box-shadow: 3px 3px 0 #000 }
 
 /* ─── Page title ───────────────────────────────────── */
-.cm-page-title { padding: 26px 40px 22px; background: var(--bg); display: flex; align-items: center; gap: 18px }
+.cm-page-title { padding: 26px 28px 22px; background: var(--bg); display: flex; align-items: center; gap: 18px }
 .cm-page-title-text { font-family: var(--H); font-size: 22px; font-weight: 700; letter-spacing: 0.12em; color: var(--fg) }
-.cm-eye { height: 40px; width: 40px; object-fit: contain }
+.cm-eye { height: 48px; width: 48px; object-fit: contain }
 
 /* ─── Nav ────────────────────────────────────────────── */
 .cm-nav { padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #000; background: #fff }
@@ -173,12 +173,17 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 
 /* ─── Mobile ─────────────────────────────────────────── */
 @media (max-width: 767px) {
-  .cm-header { padding: 12px 14px }
-  .cm-brand { gap: 10px }
-  .cm-brand-title { font-size: 15px }
-  .cm-brand-sub { display: none }
-  .cm-eye { height: 28px; width: 28px }
-  .cm-btn-new { padding: 8px 14px; font-size: 9px; border-width: 2px }
+  /* ── Topbar mobile ── */
+  .cm-topbar { padding: 10px 14px }
+  .cm-topbar-left { gap: 8px }
+  .cm-globe { width: 26px; height: 26px }
+  .cm-wordmark { height: 14px }
+  .cm-btn-new { padding: 6px 10px; font-size: 9px; letter-spacing: 0.08em; box-shadow: 2px 2px 0 #000 }
+  /* ── Page title mobile ── */
+  .cm-page-title { padding: 16px 14px 12px; gap: 12px }
+  .cm-page-title-text { font-size: 16px; letter-spacing: 0.08em }
+  .cm-eye { width: 30px; height: 30px }
+  /* ── Nav mobile ── */
   .cm-nav { padding: 10px 14px }
   .cm-main { display: flex; flex-direction: column; padding: 16px 14px; gap: 16px }
   .cm-timeline-wrap { order: 1 }
