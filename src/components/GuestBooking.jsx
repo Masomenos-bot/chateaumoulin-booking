@@ -271,19 +271,21 @@ export default function GuestBooking() {
 
   return (
     <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
-      {/* ─── Header ─── */}
-      <div className="cm-header">
-        <div className="cm-brand">
-          <img className="cm-eye" src="/eye.gif" alt="" />
-          <div>
-            <div className="cm-brand-title">CHATEAUMOULIN</div>
-            <div className="cm-brand-sub">BOOKING · SEASON 2026 · JUN 15 — SEP 15</div>
-          </div>
+      {/* ─── Top bar (masomenos brand) ─── */}
+      <div className="cm-topbar">
+        <div className="cm-topbar-left">
+          <img className="cm-globe" src="/globe.gif" alt="" />
+          <span className="cm-wordmark">masomenos</span>
         </div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <a href="https://mapchateaumoulin.netlify.app/" target="_blank" rel="noopener noreferrer" className="cm-btn-new" style={{ background: 'var(--rose)', textDecoration: 'none' }}>VIEW ON MAP</a>
           <button className="cm-btn-new" onClick={() => openBookingForm(null)}>+ NEW BOOKING</button>
         </div>
+      </div>
+      {/* ─── Page title ─── */}
+      <div className="cm-page-title">
+        <img className="cm-eye" src="/eye.gif" alt="" />
+        <span className="cm-page-title-text">CHATEAUMOULIN BOOKINGS</span>
       </div>
 
       {/* ─── Nav ─── */}

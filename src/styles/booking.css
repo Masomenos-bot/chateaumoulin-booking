@@ -22,13 +22,17 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--C)
 ::-webkit-scrollbar { height: 8px; width: 4px }
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px }
 
-/* ─── Header ─────────────────────────────────────────── */
-.cm-header { padding: 24px 40px; border-bottom: 3px solid #000; display: flex; justify-content: space-between; align-items: center; background: #fff }
-.cm-brand { display: flex; align-items: center; gap: 20px }
-.cm-brand-title { font-size: 28px; font-weight: 700; letter-spacing: 0.16em; font-family: var(--H); line-height: 1 }
-.cm-brand-sub { font-size: 10px; color: var(--fg); letter-spacing: 0.22em; margin-top: 6px; font-family: var(--C) }
-.cm-btn-new { padding: 14px 28px; border: 3px solid #000; background: var(--yel); color: #000; cursor: pointer; font-family: var(--C); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; box-shadow: 3px 3px 0 #000 }
-.cm-eye { height: 48px; width: 48px; object-fit: contain }
+/* ─── Top bar (masomenos brand) ────────────────────── */
+.cm-topbar { padding: 14px 40px; border-bottom: 2px solid #000; display: flex; justify-content: space-between; align-items: center; background: #fff }
+.cm-topbar-left { display: flex; align-items: center; gap: 12px }
+.cm-globe { width: 34px; height: 34px; object-fit: contain; border-radius: 50% }
+.cm-wordmark { font-family: var(--H); font-size: 22px; font-weight: 400; letter-spacing: 0.02em; color: var(--fg) }
+.cm-btn-new { padding: 9px 20px; border: 2px solid #000; background: var(--yel); color: #000; cursor: pointer; font-family: var(--C); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; box-shadow: 3px 3px 0 #000 }
+
+/* ─── Page title ───────────────────────────────────── */
+.cm-page-title { padding: 26px 40px 22px; background: var(--bg); display: flex; align-items: center; gap: 18px }
+.cm-page-title-text { font-family: var(--H); font-size: 22px; font-weight: 700; letter-spacing: 0.12em; color: var(--fg) }
+.cm-eye { height: 44px; width: 44px; object-fit: contain }
 
 /* ─── Nav ────────────────────────────────────────────── */
 .cm-nav { padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #000; background: #fff }
