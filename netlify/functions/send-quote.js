@@ -168,7 +168,7 @@ export async function handler(event) {
                     <td style="background:#000; padding:0 0 4px 0;">
                       <table cellpadding="0" cellspacing="0" border="0"><tr>
                         <td style="background:#000; padding:0 4px 0 0;">
-                          <div style="background-color:#8B9DC3; padding:5px 12px; border:3px solid #000;">
+                          <div style="background-color:#B5A3D4; padding:5px 12px; border:3px solid #000;">
                             <span style="font-family:'Courier New',Courier,monospace; font-size:10px; font-weight:700; letter-spacing:0.12em; color:#000; text-transform:uppercase;">${isInvited ? 'INVITED' : 'QUOTE'}</span>
                           </div>
                         </td>
